@@ -4,6 +4,7 @@ import fr.traqueur.commands.api.arguments.ArgumentConverter;
 import fr.traqueur.commands.api.arguments.TabCompleter;
 import fr.traqueur.morebees.BeePlugin;
 import fr.traqueur.morebees.models.BeeType;
+import fr.traqueur.morebees.settings.GlobalSettings;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -19,11 +20,11 @@ public class BeeTypeArgument implements ArgumentConverter<BeeType>, TabCompleter
 
     @Override
     public BeeType apply(String s) {
-        return this.plugin.getSettings().bees().stream().filter(beeType -> beeType.type().equalsIgnoreCase(s)).findFirst().orElse(null);
+        return this.plugin.getSettings(GlobalSettings.class).bees().stream().filter(beeType -> beeType.type().equalsIgnoreCase(s)).findFirst().orElse(null);
     }
 
     @Override
     public List<String> onCompletion(CommandSender sender, List<String> args) {
-        return  this.plugin.getSettings().bees().stream().map(BeeType::type).collect(Collectors.toList());
+        return  this.plugin.getSettings(GlobalSettings.class).bees().stream().map(BeeType::type).collect(Collectors.toList());
     }
 }

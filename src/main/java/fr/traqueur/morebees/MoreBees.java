@@ -10,8 +10,13 @@ import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.managers.BeeManager;
 import fr.traqueur.morebees.models.BeeType;
 import fr.traqueur.morebees.serialization.BeeTypeDataTypeImpl;
+import fr.traqueur.morebees.settings.BreedSettings;
+import fr.traqueur.morebees.settings.GlobalSettings;
 import fr.traqueur.morebees.settings.Settings;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public final class MoreBees extends BeePlugin {
 
@@ -19,16 +24,17 @@ public final class MoreBees extends BeePlugin {
             .setNameFormatter(NameFormatters.LOWER_KEBAB_CASE)
             .build();
 
+    private final Map<Class<? extends Settings>, Settings> settings = new HashMap<>();
+
     private CommandManager<@NotNull BeePlugin> commandManager;
-    private Settings settings;
 
     public void onEnable() {
 
         long startTime = System.currentTimeMillis();
 
-        this.saveDefault("config.yml", Settings.class, Settings.DEFAULT.get());
-        this.settings = YamlConfigurations.load(this.getDataPath().resolve("config.yml"), Settings.class, CONFIGURATION_PROPERTIES);
-        Logger.init(this.getSLF4JLogger(), this.settings.debug());
+        this.saveDefault("config.yml", GlobalSettings.class, GlobalSettings.DEFAULT.get());
+        GlobalSettings settings = YamlConfigurations.load(this.getDataPath().resolve("config.yml"), GlobalSettings.class, CONFIGURATION_PROPERTIES);
+        Logger.init(this.getSLF4JLogger(), settings.debug());
 
         this.saveDefaultConfig();
         this.reloadConfig();
@@ -40,7 +46,7 @@ public final class MoreBees extends BeePlugin {
         this.registerManager(BeeManager.class, new BeeManagerImpl());
 
         this.commandManager = new CommandManager<>(this);
-        commandManager.setDebug(this.settings.debug());
+        commandManager.setDebug(settings.debug());
         commandManager.setLogger(new fr.traqueur.commands.api.logging.Logger() {
             @Override
             public void error(String message) {
@@ -68,18 +74,22 @@ public final class MoreBees extends BeePlugin {
     }
 
     @Override
-    public Settings getSettings() {
-        return settings;
-    }
-
-    @Override
     public CommandManager<@NotNull BeePlugin> getCommandManager() {
         return commandManager;
     }
 
     @Override
+    public <T extends Settings> T getSettings(Class<T> clazz) {
+        if (settings.containsKey(clazz)) {
+            return clazz.cast(settings.get(clazz));
+        }
+        throw new IllegalArgumentException("Class " + clazz.getName() + " does not exist");
+    }
+
+    @Override
     public void saveDefaultConfig() {
         this.saveDefault("messages.yml", Messages.Config.class, Messages.DEFAULT);
+        this.saveDefault("breeds.yml", BreedSettings.class, BreedSettings.DEFAULT.get());
     }
 
     private <T> void saveDefault(String path, Class<T> clazz, T instance) {
@@ -91,7 +101,9 @@ public final class MoreBees extends BeePlugin {
     @Override
     public void reloadConfig() {
         super.reloadConfig();
-        this.settings = YamlConfigurations.load(this.getDataPath().resolve("config.yml"), Settings.class, CONFIGURATION_PROPERTIES);
+        this.settings.put(GlobalSettings.class, YamlConfigurations.load(this.getDataPath().resolve("config.yml"), GlobalSettings.class, CONFIGURATION_PROPERTIES));
+        this.settings.put(BreedSettings.class, YamlConfigurations.load(this.getDataPath().resolve("breeds.yml"), BreedSettings.class, CONFIGURATION_PROPERTIES));
+
         Messages.Config messages = YamlConfigurations.load(this.getDataPath().resolve("messages.yml"), Messages.Config.class, CONFIGURATION_PROPERTIES);
         Messages.init(messages);
     }

@@ -2,6 +2,7 @@ package fr.traqueur.morebees.serialization;
 
 import fr.traqueur.morebees.BeePlugin;
 import fr.traqueur.morebees.models.BeeType;
+import fr.traqueur.morebees.settings.GlobalSettings;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +25,6 @@ public class BeeTypeDataTypeImpl extends BeeTypeDataType {
 
     @Override
     public @NotNull BeeType fromPrimitive(@NotNull String primitive, @NotNull PersistentDataAdapterContext context) {
-        return plugin.getSettings().bees().stream().filter(beeType -> beeType.type().equals(primitive)).findFirst().orElseThrow();
+        return plugin.getSettings(GlobalSettings.class).bees().stream().filter(beeType -> beeType.type().equals(primitive)).findFirst().orElseThrow();
     }
 }
