@@ -3,21 +3,25 @@ package fr.traqueur.morebees;
 import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.hooks.ModelEngineHook;
 import fr.traqueur.morebees.managers.BeeManager;
+import fr.traqueur.morebees.models.BeeType;
 import fr.traqueur.morebees.serialization.BeeTypeDataType;
 import fr.traqueur.morebees.serialization.Keys;
+import fr.traqueur.morebees.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Bee;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.EntityTransformEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -56,15 +60,45 @@ public class BeeListener implements Listener {
         Block spawnBlock = clickedBlock.getRelative(event.getBlockFace());
         Location spawnLocation = spawnBlock.getLocation().add(0.5, 0, 0.5);
 
+        this.handleSpawn(event, event.getPlayer(), item, spawnLocation, false);
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEntityEvent event) {
+        if(event.getRightClicked().getType() != EntityType.BEE) {
+            return;
+        }
+        ItemStack item = event.getHand() == EquipmentSlot.OFF_HAND ? event.getPlayer().getInventory().getItemInOffHand() : event.getPlayer().getInventory().getItemInMainHand();
+
+        Location spawnLocation = event.getRightClicked().getLocation();
+        this.handleSpawn(event, event.getPlayer(), item, spawnLocation, true);
+    }
+
+    private void handleSpawn(Cancellable event, Player player, ItemStack item, Location spawnLocation, boolean baby) {
         BeeManager beeManager = plugin.getManager(BeeManager.class);
-        beeManager.getBeeTypeFromEgg(event.getItem()).ifPresent(type -> {
+        Optional<BeeType> beeType = beeManager.getBeeTypeFromEgg(item);
+
+        if (beeType.isPresent()) {
             event.setCancelled(true);
+            beeManager.spawnBee(spawnLocation, beeType.get(), CreatureSpawnEvent.SpawnReason.SPAWNER_EGG, baby);
 
-            beeManager.spawnBee(spawnLocation, type);
-
-            if(event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+            if (player.getGameMode() != GameMode.CREATIVE) {
                 item.setAmount(item.getAmount() - 1);
             }
+        }
+    }
+
+    @EventHandler
+    public void onBreed(EntityBreedEvent event) {
+        BeeManager beeManager = plugin.getManager(BeeManager.class);
+        Optional<BeeType> motherType = beeManager.getBeeTypeFromEntity(event.getMother());
+        Optional<BeeType> fatherType = beeManager.getBeeTypeFromEntity(event.getFather());
+
+        Util.ifBothPresent(motherType, fatherType, (mother, father) -> {
+            event.setCancelled(true);
+            Location spawnLocation = event.getEntity().getLocation();
+            BeeType child = beeManager.computeBreed(mother, father);
+            beeManager.spawnBee(spawnLocation, child, CreatureSpawnEvent.SpawnReason.BREEDING, true);
         });
     }
 
