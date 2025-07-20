@@ -4,37 +4,29 @@ import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.hooks.ModelEngineHook;
 import fr.traqueur.morebees.managers.BeeManager;
 import fr.traqueur.morebees.models.BeeType;
-import fr.traqueur.morebees.serialization.BeeTypeDataType;
-import fr.traqueur.morebees.serialization.Keys;
 import fr.traqueur.morebees.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Bee;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.EntityTransformEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.Optional;
 import java.util.Set;
 
 public class BeeListener implements Listener {
-
-    private static final Set<CreatureSpawnEvent.SpawnReason> SPAWN_REASONS = Set.of(
-            CreatureSpawnEvent.SpawnReason.BEEHIVE,
-            CreatureSpawnEvent.SpawnReason.BREEDING,
-            CreatureSpawnEvent.SpawnReason.SPAWNER_EGG
-    );
 
     private final BeePlugin plugin;
 
@@ -86,6 +78,25 @@ public class BeeListener implements Listener {
                 item.setAmount(item.getAmount() - 1);
             }
         }
+    }
+
+    @EventHandler
+    public void onSpawn(CreatureSpawnEvent event) {
+        if(event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.BEEHIVE) {
+            return;
+        }
+        Entity entity = event.getEntity();
+        if(entity.getType() != EntityType.BEE) {
+            return;
+        }
+        if(!(entity instanceof Bee bee)) {
+            return;
+        }
+        BeeManager beeManager = plugin.getManager(BeeManager.class);
+        beeManager.getBeeTypeFromEntity(bee).ifPresent(beeType -> {
+            Optional<ModelEngineHook> hookOptional = Hooks.MODEL_ENGINE.get();
+            hookOptional.ifPresent(hook -> hook.overrideModel(bee, beeType));
+        });
     }
 
     @EventHandler
