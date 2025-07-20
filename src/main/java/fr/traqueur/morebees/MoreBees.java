@@ -4,6 +4,12 @@ import de.exlll.configlib.NameFormatters;
 import de.exlll.configlib.YamlConfigurationProperties;
 import de.exlll.configlib.YamlConfigurations;
 import fr.traqueur.commands.spigot.CommandManager;
+import fr.traqueur.morebees.commands.MoreBeesRootCommand;
+import fr.traqueur.morebees.commands.arguments.BeeTypeArgument;
+import fr.traqueur.morebees.hooks.Hooks;
+import fr.traqueur.morebees.managers.BeeManager;
+import fr.traqueur.morebees.models.BeeType;
+import fr.traqueur.morebees.serialization.BeeTypeDataTypeImpl;
 import fr.traqueur.morebees.settings.Settings;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,20 +19,27 @@ public final class MoreBees extends BeePlugin {
             .setNameFormatter(NameFormatters.LOWER_KEBAB_CASE)
             .build();
 
+    private CommandManager<@NotNull BeePlugin> commandManager;
     private Settings settings;
 
     public void onEnable() {
 
         long startTime = System.currentTimeMillis();
 
-        this.saveDefault("config.yml", Settings.class, Settings.DEFAULT);
+        this.saveDefault("config.yml", Settings.class, Settings.DEFAULT.get());
         this.settings = YamlConfigurations.load(this.getDataPath().resolve("config.yml"), Settings.class, CONFIGURATION_PROPERTIES);
         Logger.init(this.getSLF4JLogger(), this.settings.debug());
 
         this.saveDefaultConfig();
         this.reloadConfig();
 
-        CommandManager<@NotNull BeePlugin> commandManager = new CommandManager<>(this);
+        Hooks.initAll(this);
+
+        BeeTypeDataTypeImpl.init(this);
+
+        this.registerManager(BeeManager.class, new BeeManagerImpl());
+
+        this.commandManager = new CommandManager<>(this);
         commandManager.setDebug(this.settings.debug());
         commandManager.setLogger(new fr.traqueur.commands.api.logging.Logger() {
             @Override
@@ -39,6 +52,10 @@ public final class MoreBees extends BeePlugin {
                 Logger.info(message);
             }
         });
+
+        commandManager.registerConverter(BeeType.class, new BeeTypeArgument(this));
+
+        commandManager.registerCommand(new MoreBeesRootCommand(this));
 
 
         Logger.success("MoreBees has been enabled in <yellow>{}ms", (System.currentTimeMillis() - startTime));
@@ -56,8 +73,12 @@ public final class MoreBees extends BeePlugin {
     }
 
     @Override
+    public CommandManager<@NotNull BeePlugin> getCommandManager() {
+        return commandManager;
+    }
+
+    @Override
     public void saveDefaultConfig() {
-        super.saveDefaultConfig();
         this.saveDefault("messages.yml", Messages.Config.class, Messages.DEFAULT);
     }
 

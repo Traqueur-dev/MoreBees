@@ -38,6 +38,7 @@ allprojects { subproject ->
             url = "https://oss.sonatype.org/content/groups/public/"
         }
         maven { url = "https://jitpack.io" }
+        maven { url = "https://mvn.lumine.io/repository/maven-public/" }
     }
 
     dependencies {
@@ -46,6 +47,8 @@ allprojects { subproject ->
         addLibraryDependency(subproject, "de.exlll:configlib-yaml:4.6.1")
         implementation("com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.1")
         implementation("com.github.Traqueur-dev.CommandsAPI:core:4.2.1")
+
+        compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.8")
     }
 
     def targetJavaVersion = 21
@@ -85,7 +88,7 @@ dependencies {
 
 tasks {
     runServer {
-        minecraftVersion("1.21")
+        minecraftVersion("1.21.4")
     }
 }
 
