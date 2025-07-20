@@ -10,6 +10,7 @@ import fr.traqueur.morebees.util.Formatter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +26,7 @@ public class SpawnCommand extends Command<@NotNull BeePlugin> {
         this.setDescription(Messages.SPAWN_COMMAND_DESC.raw());
 
         this.addArgs("beetype", BeeType.class);
+        this.addOptionalArgs("baby", Boolean.class);
         this.setGameOnly(true);
     }
 
@@ -32,10 +34,12 @@ public class SpawnCommand extends Command<@NotNull BeePlugin> {
     public void execute(CommandSender sender, Arguments arguments) {
         BeeType beeType = arguments.get("beetype");
         Player player = (Player) sender;
+        Optional<Boolean> babyOptional = arguments.getOptional("baby");
+        boolean baby = babyOptional.orElse(false);
 
         BeeManager beeManager = getPlugin().getManager(BeeManager.class);
 
-        beeManager.spawnBee(player.getLocation(), beeType);
+        beeManager.spawnBee(player.getLocation(), beeType, CreatureSpawnEvent.SpawnReason.COMMAND, baby);
         Messages.SPAWN_COMMAND_SUCCESS.send(sender, Formatter.format("beetype", beeType.displayName()));
     }
 }
