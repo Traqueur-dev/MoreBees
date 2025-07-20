@@ -1,0 +1,6 @@
+group 'api'
+
+shadowJar {
+    destinationDirectory = rootProject.apiFolder
+    archiveFileName = rootProject.name + "-API-" + rootProject.version + ".jar"
+}

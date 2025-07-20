@@ -1,0 +1,114 @@
+plugins {
+    id 'java'
+    id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("com.gradleup.shadow") version "9.0.0-beta10"
+}
+
+group = 'fr.traqueur'
+
+project.ext {
+    targetFolder = file("target")
+    apiFolder = file("target-api")
+    libraries = []
+}
+
+allprojects {
+    version = rootProject.property('version')
+
+    apply from: rootProject.file('gradle/add-library-dependency.gradle')
+    apply plugin: 'java'
+    apply plugin: 'com.gradleup.shadow'
+
+    repositories {
+        mavenCentral()
+        maven {
+            name = "papermc-repo"
+            url = "https://repo.papermc.io/repository/maven-public/"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/groups/public/"
+        }
+        maven { url = "https://jitpack.io" }
+    }
+
+    dependencies {
+        compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+
+        addLibraryDependency(project, "de.exlll:configlib-yaml:4.6.1")
+        implementation("com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.1")
+        implementation("com.github.Traqueur-dev.CommandsAPI:core:4.2.1")
+    }
+
+    def targetJavaVersion = 21
+    java {
+        def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+        if (JavaVersion.current() < javaVersion) {
+            toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+
+        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+            options.release.set(targetJavaVersion)
+        }
+    }
+
+    build {
+        dependsOn shadowJar
+    }
+
+    shadowJar {
+        archiveBaseName.set(project.name)
+        archiveVersion.set(rootProject.version)
+        archiveClassifier.set('')
+
+        relocate "fr.traqueur.commands", "fr.traqueur.morebees.api.commands"
+    }
+}
+
+dependencies {
+    implementation(project(":api"))
+}
+
+tasks {
+    runServer {
+        minecraftVersion("1.21")
+    }
+}
+
+def targetJavaVersion = 21
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release.set(targetJavaVersion)
+    }
+}
+
+processResources {
+    filteringCharset = 'UTF-8'
+
+    doFirst {
+        filesMatching('plugin.yml') {
+            expand(
+                    name: rootProject.name,
+                    version: version,
+                    libraries: "\n" + (rootProject.ext.libraries ?: []).collect { "  - \"$it\"" }.join("\n")
+            )
+        }
+    }
+}

@@ -1,0 +1,21 @@
+if (!rootProject.ext.has('libraries')) {
+    rootProject.ext.libraries = []
+}
+
+ext.addLibraryDependency = { Project project, String dependency ->
+    if (!project.hasProperty("addedDependencies")) {
+        project.ext.addedDependencies = []
+    }
+
+    if (!project.addedDependencies.contains(dependency)) {
+        project.addedDependencies << dependency
+
+        if (!rootProject.ext.libraries.contains(dependency)) {
+            rootProject.ext.libraries << dependency
+        }
+
+        project.dependencies {
+            compileOnly dependency
+        }
+    }
+}
