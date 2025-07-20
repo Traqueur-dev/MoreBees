@@ -8,13 +8,10 @@ import fr.traqueur.morebees.managers.BeeManager;
 import fr.traqueur.morebees.models.BeeType;
 import fr.traqueur.morebees.util.Formatter;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Optional;
 
 public class SpawnCommand extends Command<@NotNull BeePlugin> {

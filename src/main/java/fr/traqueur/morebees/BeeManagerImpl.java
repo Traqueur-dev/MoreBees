@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,13 +76,19 @@ public class BeeManagerImpl implements BeeManager {
 
     @Override
     public BeeType computeBreed(BeeType mother, BeeType father) {
-        List<String> parentsIds = List.of(
-                mother.type(),
-                father.type()
-        );
+        List<String> parentsIds = new ArrayList<>();
+        parentsIds.add(mother.type());
+        parentsIds.add(father.type());
+        parentsIds.sort(String::compareTo);
+
         Breed breed = this.getPlugin().getSettings(BreedSettings.class).breeds()
                 .stream()
-                .filter(breedChecked -> new HashSet<>(breedChecked.parents()).containsAll(parentsIds))
+                .filter(breedChecked -> {
+                    List<String> configParents = new ArrayList<>(breedChecked.parents());
+                    if (configParents.size() != 2) return false;
+                    configParents.sort(String::compareTo);
+                    return configParents.equals(parentsIds);
+                })
                 .findFirst()
                 .orElse(null);
 
@@ -94,11 +100,7 @@ public class BeeManagerImpl implements BeeManager {
                     .orElse(null);
         }
 
-        if (Math.random() < 0.5) {
-            return mother;
-        }
-
-        return father;
+        return Math.random() < 0.5 ? mother : father;
     }
 
 

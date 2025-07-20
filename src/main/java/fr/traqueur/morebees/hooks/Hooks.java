@@ -2,7 +2,6 @@ package fr.traqueur.morebees.hooks;
 
 import fr.traqueur.morebees.BeePlugin;
 import fr.traqueur.morebees.Logger;
-
 import org.bukkit.Bukkit;
 
 import java.util.HashSet;

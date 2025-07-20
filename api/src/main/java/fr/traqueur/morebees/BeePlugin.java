@@ -1,7 +1,6 @@
 package fr.traqueur.morebees;
 
 import fr.traqueur.commands.spigot.CommandManager;
-import fr.traqueur.morebees.settings.GlobalSettings;
 import fr.traqueur.morebees.settings.Settings;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
