@@ -17,7 +17,10 @@ public enum Messages {
 
     EGG_COMMAND_DESC("<gray>Gives you a bee egg."),
     EGG_COMMAND_AMOUNT_INVALID("<red>Invalid amount for %amount%! Please choose a number between 1 and %max-amount%."),
-    EGG_COMMAND_SUCCESS("<green>Successfully given %amount% %beetype% egg(s) to %player%!"),;
+    EGG_COMMAND_SUCCESS("<green>Successfully given %amount% %beetype% egg(s) to %player%!"),
+
+    SPAWN_COMMAND_DESC("<gray>Spawn a bee at the player location."),
+    SPAWN_COMMAND_SUCCESS("<green>Successfully spawned a %beetype% bee at your location!"),;
 
     private String message;
 

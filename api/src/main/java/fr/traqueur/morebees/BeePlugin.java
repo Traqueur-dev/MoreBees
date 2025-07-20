@@ -2,6 +2,7 @@ package fr.traqueur.morebees;
 
 import fr.traqueur.commands.spigot.CommandManager;
 import fr.traqueur.morebees.settings.Settings;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,6 +13,8 @@ import java.util.NoSuchElementException;
 public abstract class BeePlugin extends JavaPlugin {
 
     public abstract Settings getSettings();
+
+    public abstract CommandManager<@NotNull BeePlugin> getCommandManager();
 
     public <T> T getManager(Class<T> clazz) {
         RegisteredServiceProvider<T> provider = getServer().getServicesManager().getRegistration(clazz);
@@ -26,5 +29,10 @@ public abstract class BeePlugin extends JavaPlugin {
         Logger.debug("Registered manager for {} successfully", clazz.getSimpleName());
     }
 
-    public abstract CommandManager<@NotNull BeePlugin> getCommandManager();
+    public void registerListener(Listener listener) {
+        getServer().getPluginManager().registerEvents(listener, this);
+        Logger.debug("Registered listener {} successfully", listener.getClass().getSimpleName());
+    }
+
+
 }
