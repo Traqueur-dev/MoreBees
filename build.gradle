@@ -12,7 +12,15 @@ project.ext {
     libraries = []
 }
 
-allprojects {
+subprojects { subproject ->
+    apply from: rootProject.file('gradle/add-library-dependency.gradle')
+    apply plugin: 'java'
+    dependencies {
+        addLibraryDependency(subproject, "de.exlll:configlib-yaml:4.6.1")
+    }
+}
+
+allprojects { subproject ->
     version = rootProject.property('version')
 
     apply from: rootProject.file('gradle/add-library-dependency.gradle')
@@ -35,7 +43,7 @@ allprojects {
     dependencies {
         compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 
-        addLibraryDependency(project, "de.exlll:configlib-yaml:4.6.1")
+        addLibraryDependency(subproject, "de.exlll:configlib-yaml:4.6.1")
         implementation("com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.1")
         implementation("com.github.Traqueur-dev.CommandsAPI:core:4.2.1")
     }
