@@ -17,7 +17,8 @@ public class MoreBeesRootCommand extends Command<@NotNull BeePlugin> {
         this.setPermission("morebees.command.help");
         this.addSubCommand(
                 new EggCommand(plugin),
-                new ReloadCommand(plugin)
+                new ReloadCommand(plugin),
+                new SpawnCommand(plugin)
         );
     }
 

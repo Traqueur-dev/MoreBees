@@ -16,6 +16,17 @@ public class ModelEngineHook implements Hook {
     }
 
     public void overrideModel(Entity entity, BeeType beeType) {
+        if(beeType.model().equalsIgnoreCase("default")) {
+            return;
+        }
+
+        if (ModelEngineAPI.getAPI().getModelRegistry().get(beeType.model()) == null) {
+            Logger.warning("The model {} does not exist, skipping model override for entity {}", beeType.model(), entity.getUniqueId());
+            return;
+        }
+
+        entity.setInvisible(true);
+
         ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(entity);
         ActiveModel activeModel = ModelEngineAPI.createActiveModel(beeType.model());
         modeledEntity.addModel(activeModel, true);

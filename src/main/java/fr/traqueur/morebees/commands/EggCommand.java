@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public class EggCommand extends Command<@NotNull BeePlugin> {
     /**
@@ -34,7 +35,8 @@ public class EggCommand extends Command<@NotNull BeePlugin> {
     public void execute(CommandSender sender, Arguments arguments) {
         Player targetPlayer = arguments.get("player");
         BeeType beeType = arguments.get("beetype");
-        int amount = arguments.getAsInt("amount", 1);
+        Optional<Integer> amountOpt = arguments.getOptional("amount");
+        int amount = amountOpt.orElse(1);
 
         if(amount < 1 || amount > 64) {
             Messages.EGG_COMMAND_AMOUNT_INVALID.send(sender, Formatter.all("amount", amount, "max-amount", 64));
