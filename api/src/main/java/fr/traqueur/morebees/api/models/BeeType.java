@@ -22,4 +22,9 @@ public record BeeType(String type, int modelId, String displayName, Material foo
         return item;
     }
 
+    public boolean isFood(ItemStack item) {
+        Material type = item.getType();
+        return type == food;
+    }
+
 }

@@ -7,6 +7,7 @@ import fr.traqueur.commands.spigot.CommandManager;
 import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.Logger;
 import fr.traqueur.morebees.api.Messages;
+import fr.traqueur.morebees.api.nms.EntityService;
 import fr.traqueur.morebees.commands.MoreBeesRootCommand;
 import fr.traqueur.morebees.commands.arguments.BeeTypeArgument;
 import fr.traqueur.morebees.api.hooks.Hooks;
@@ -43,8 +44,18 @@ public final class MoreBees extends BeePlugin {
 
         NMSVersion.initialize();
         if(NMSVersion.CURRENT == null) {
-            Logger.severe("Unsupported Minecraft version detected: " + Bukkit.getMinecraftVersion());
+            Logger.severe("Unsupported Minecraft version detected: {}", Bukkit.getMinecraftVersion());
             Logger.severe("Please update MoreBees to a compatible version.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        EntityService entityService;
+        try {
+            entityService = EntityService.initialize(this);
+        } catch (Exception e) {
+            Logger.severe("Unsupported Minecraft version detected: {}", Bukkit.getMinecraftVersion());
+            Logger.severe("Failed to initialize EntityService: ", e);
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -56,7 +67,7 @@ public final class MoreBees extends BeePlugin {
 
         BeeTypeDataTypeImpl.init(this);
 
-        this.registerManager(BeeManager.class, new BeeManagerImpl());
+        this.registerManager(BeeManager.class, new BeeManagerImpl(entityService));
 
         this.commandManager = new CommandManager<>(this);
         commandManager.setDebug(settings.debug());

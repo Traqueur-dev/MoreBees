@@ -11,6 +11,7 @@ import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.settings.BreedSettings;
 import fr.traqueur.morebees.api.settings.GlobalSettings;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.EntityType;
@@ -23,17 +24,22 @@ import org.bukkit.persistence.PersistentDataContainer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class BeeManagerImpl implements BeeManager {
 
-    private final EntityService service;
+    private final List<UUID> spawnFromBeehiveBees;
+    private final EntityService entityService;
 
-    public BeeManagerImpl() {
-        this.service = EntityService.initialize(this.getPlugin());
-
-        System.out.println(service.getClass().getSimpleName());
-
+    public BeeManagerImpl(EntityService service) {
+        this.entityService = service;
+        this.spawnFromBeehiveBees = new ArrayList<>();
         this.getPlugin().registerListener(new BeeListener(this.getPlugin()));
+    }
+
+    @Override
+    public boolean isSpawnFromBeehive(UUID beeUUID) {
+        return this.spawnFromBeehiveBees.contains(beeUUID);
     }
 
     @Override
@@ -62,7 +68,7 @@ public class BeeManagerImpl implements BeeManager {
 
     @Override
     public void spawnBee(Location location, BeeType beeType, CreatureSpawnEvent.SpawnReason reason, boolean baby) {
-        Bee bee = location.getWorld().createEntity(location, Bee.class);
+        Bee bee = this.entityService.createBee(location.getWorld(), beeType);
 
         PersistentDataContainer data = bee.getPersistentDataContainer();
         Keys.BEETYPE.set(data, BeeTypeDataType.INSTANCE, beeType);
@@ -77,7 +83,12 @@ public class BeeManagerImpl implements BeeManager {
             bee.setCustomNameVisible(true);
             bee.customName(MiniMessageHelper.parse(beeType.displayName()));
         }
-
+        if (reason == CreatureSpawnEvent.SpawnReason.BEEHIVE) {
+            this.spawnFromBeehiveBees.add(bee.getUniqueId());
+            Bukkit.getScheduler().runTaskLater(this.getPlugin(), () -> {
+                this.spawnFromBeehiveBees.remove(bee.getUniqueId());
+            }, 2L);
+        }
         bee.spawnAt(location, reason);
     }
 

@@ -92,10 +92,14 @@ public class BeeListener implements Listener {
         if(!(entity instanceof Bee bee)) {
             return;
         }
+
         BeeManager beeManager = plugin.getManager(BeeManager.class);
         beeManager.getBeeTypeFromEntity(bee).ifPresent(beeType -> {
-            Optional<ModelEngineHook> hookOptional = Hooks.MODEL_ENGINE.get();
-            hookOptional.ifPresent(hook -> hook.overrideModel(bee, beeType));
+            if(beeManager.isSpawnFromBeehive(bee.getUniqueId())) {
+                return;
+            }
+            entity.remove();
+            beeManager.spawnBee(bee.getLocation(), beeType, CreatureSpawnEvent.SpawnReason.BEEHIVE, !bee.isAdult());
         });
     }
 
