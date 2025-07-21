@@ -1,0 +1,20 @@
+plugins {
+    id "base"
+}
+
+gradle.projectsEvaluated {
+    subprojects { subproject ->
+        shadowJar {
+            destinationDirectory = rootProject.nmsFolder
+            archiveFileName = rootProject.name + "-NMS-" + subproject.version + "-" + rootProject.version + ".jar"
+        }
+    }
+}
+
+subprojects {
+    dependencies {
+        compileOnly project(':api')
+    }
+}
+
+
