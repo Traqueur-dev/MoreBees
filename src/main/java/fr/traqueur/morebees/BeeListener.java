@@ -1,8 +1,6 @@
 package fr.traqueur.morebees;
 
 import fr.traqueur.morebees.api.BeePlugin;
-import fr.traqueur.morebees.api.hooks.Hooks;
-import fr.traqueur.morebees.api.hooks.ModelEngineHook;
 import fr.traqueur.morebees.api.managers.BeeManager;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.util.Util;
