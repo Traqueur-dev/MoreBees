@@ -13,6 +13,7 @@ import fr.traqueur.morebees.serialization.BeeTypeDataTypeImpl;
 import fr.traqueur.morebees.settings.BreedSettings;
 import fr.traqueur.morebees.settings.GlobalSettings;
 import fr.traqueur.morebees.settings.Settings;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -62,7 +63,6 @@ public final class MoreBees extends BeePlugin {
         commandManager.registerConverter(BeeType.class, new BeeTypeArgument(this));
 
         commandManager.registerCommand(new MoreBeesRootCommand(this));
-
 
         Logger.success("MoreBees has been enabled in <yellow>{}ms", (System.currentTimeMillis() - startTime));
     }

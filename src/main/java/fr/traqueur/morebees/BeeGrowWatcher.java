@@ -12,10 +12,12 @@ import java.util.List;
 
 public class BeeGrowWatcher implements Runnable{
 
+    private final BeePlugin plugin;
     private final ModelEngineHook hook;
     private final List<WeakReference<Bee>> trackedBees;
 
-    public BeeGrowWatcher(ModelEngineHook hook) {
+    public BeeGrowWatcher(BeePlugin plugin, ModelEngineHook hook) {
+        this.plugin = plugin;
         this.hook = hook;
         this.trackedBees = new ArrayList<>();
     }
@@ -37,7 +39,7 @@ public class BeeGrowWatcher implements Runnable{
                 continue;
             }
             iterator.remove();
-            hook.grow(bee);
+            Bukkit.getScheduler().runTask(this.plugin,() -> hook.grow(bee));
         }
     }
 }
