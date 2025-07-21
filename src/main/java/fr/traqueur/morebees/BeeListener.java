@@ -1,10 +1,11 @@
 package fr.traqueur.morebees;
 
-import fr.traqueur.morebees.hooks.Hooks;
-import fr.traqueur.morebees.hooks.ModelEngineHook;
-import fr.traqueur.morebees.managers.BeeManager;
-import fr.traqueur.morebees.models.BeeType;
-import fr.traqueur.morebees.util.Util;
+import fr.traqueur.morebees.api.BeePlugin;
+import fr.traqueur.morebees.api.hooks.Hooks;
+import fr.traqueur.morebees.api.hooks.ModelEngineHook;
+import fr.traqueur.morebees.api.managers.BeeManager;
+import fr.traqueur.morebees.api.models.BeeType;
+import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -24,7 +25,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Optional;
-import java.util.Set;
 
 public class BeeListener implements Listener {
 

@@ -1,9 +1,9 @@
 package fr.traqueur.morebees;
 
-import fr.traqueur.morebees.hooks.ModelEngineHook;
+import fr.traqueur.morebees.api.BeePlugin;
+import fr.traqueur.morebees.api.hooks.ModelEngineHook;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Bee;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

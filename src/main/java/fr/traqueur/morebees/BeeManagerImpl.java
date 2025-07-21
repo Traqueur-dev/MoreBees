@@ -1,16 +1,16 @@
 package fr.traqueur.morebees;
 
-import fr.traqueur.morebees.hooks.Hooks;
-import fr.traqueur.morebees.hooks.ModelEngineHook;
-import fr.traqueur.morebees.managers.BeeManager;
-import fr.traqueur.morebees.models.BeeType;
-import fr.traqueur.morebees.models.Breed;
-import fr.traqueur.morebees.nms.EntityService;
-import fr.traqueur.morebees.serialization.BeeTypeDataType;
-import fr.traqueur.morebees.serialization.Keys;
-import fr.traqueur.morebees.settings.BreedSettings;
-import fr.traqueur.morebees.settings.GlobalSettings;
-import fr.traqueur.morebees.util.MiniMessageHelper;
+import fr.traqueur.morebees.api.hooks.Hooks;
+import fr.traqueur.morebees.api.hooks.ModelEngineHook;
+import fr.traqueur.morebees.api.managers.BeeManager;
+import fr.traqueur.morebees.api.models.BeeType;
+import fr.traqueur.morebees.api.models.Breed;
+import fr.traqueur.morebees.api.nms.EntityService;
+import fr.traqueur.morebees.api.serialization.BeeTypeDataType;
+import fr.traqueur.morebees.api.serialization.Keys;
+import fr.traqueur.morebees.api.settings.BreedSettings;
+import fr.traqueur.morebees.api.settings.GlobalSettings;
+import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import org.bukkit.Location;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.EntityType;
