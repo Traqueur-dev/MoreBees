@@ -2,10 +2,10 @@ package fr.traqueur.morebees.commands;
 
 import fr.traqueur.commands.api.arguments.Arguments;
 import fr.traqueur.commands.spigot.Command;
-import fr.traqueur.morebees.BeePlugin;
-import fr.traqueur.morebees.Messages;
-import fr.traqueur.morebees.models.BeeType;
-import fr.traqueur.morebees.util.Formatter;
+import fr.traqueur.morebees.api.BeePlugin;
+import fr.traqueur.morebees.api.Messages;
+import fr.traqueur.morebees.api.models.BeeType;
+import fr.traqueur.morebees.api.util.Formatter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;

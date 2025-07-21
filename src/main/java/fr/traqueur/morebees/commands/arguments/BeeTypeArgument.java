@@ -2,9 +2,9 @@ package fr.traqueur.morebees.commands.arguments;
 
 import fr.traqueur.commands.api.arguments.ArgumentConverter;
 import fr.traqueur.commands.api.arguments.TabCompleter;
-import fr.traqueur.morebees.BeePlugin;
-import fr.traqueur.morebees.models.BeeType;
-import fr.traqueur.morebees.settings.GlobalSettings;
+import fr.traqueur.morebees.api.BeePlugin;
+import fr.traqueur.morebees.api.models.BeeType;
+import fr.traqueur.morebees.api.settings.GlobalSettings;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
