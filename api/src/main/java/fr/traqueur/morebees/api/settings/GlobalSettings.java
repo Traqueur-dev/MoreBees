@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public record GlobalSettings(boolean debug, @Comment("Field \"model\" permits to use a custom model from model engine use \"default\" if you don't want") List<BeeType> bees) implements Settings {
+public record GlobalSettings(boolean debug,
+                             @Comment("Define the name of the flying animation for all bee model") String flyAnimation,
+                             @Comment("Field \"model\" permits to use a custom model from model engine use \"default\" if you don't want") List<BeeType> bees) implements Settings {
 
     public static final Supplier<GlobalSettings> DEFAULT = () -> {
         List<BeeType> bees = new ArrayList<>();
@@ -17,7 +19,7 @@ public record GlobalSettings(boolean debug, @Comment("Field \"model\" permits to
         bees.add(new BeeType("diamond-bee", -1,"<aqua>Diamond Bee",Material.DIAMOND, Material.DIAMOND_BLOCK, "default"));
         bees.add(new BeeType("gold-bee",-1,"<gold>Gold Bee", Material.GOLD_INGOT, Material.GOLD_BLOCK, "default"));
         bees.add(new BeeType("iron-bee", -1,"<gray>Iron Bee", Material.IRON_INGOT, Material.IRON_BLOCK, "default"));
-        return new GlobalSettings(true, bees);
+        return new GlobalSettings(true, "flying", bees);
     };
 
 }

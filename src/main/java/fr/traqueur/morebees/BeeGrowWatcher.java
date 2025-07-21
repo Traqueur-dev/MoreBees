@@ -1,7 +1,7 @@
 package fr.traqueur.morebees;
 
 import fr.traqueur.morebees.api.BeePlugin;
-import fr.traqueur.morebees.api.hooks.ModelEngineHook;
+import fr.traqueur.morebees.hooks.ModelEngineHook;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Bee;
 
