@@ -18,8 +18,8 @@ public class ModelEngineHook implements Hook {
 
     @Override
     public void onEnable(BeePlugin plugin) {
-        this.beeGrowWatcher = new BeeGrowWatcher(this);
-        plugin.getServer().getScheduler().runTaskTimer(plugin, this.beeGrowWatcher, 20L, 100L);
+        this.beeGrowWatcher = new BeeGrowWatcher(plugin,this);
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this.beeGrowWatcher, 20L, 100L);
         Logger.success("ModelEngine hook enabled successfully!");
     }
 
