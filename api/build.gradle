@@ -1,5 +1,9 @@
 group 'api'
 
+dependencies {
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+}
+
 shadowJar {
     destinationDirectory = rootProject.apiFolder
     archiveFileName = rootProject.name + "-API-" + rootProject.version + ".jar"

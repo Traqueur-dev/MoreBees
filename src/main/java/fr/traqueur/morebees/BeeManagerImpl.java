@@ -5,6 +5,7 @@ import fr.traqueur.morebees.hooks.ModelEngineHook;
 import fr.traqueur.morebees.managers.BeeManager;
 import fr.traqueur.morebees.models.BeeType;
 import fr.traqueur.morebees.models.Breed;
+import fr.traqueur.morebees.nms.EntityService;
 import fr.traqueur.morebees.serialization.BeeTypeDataType;
 import fr.traqueur.morebees.serialization.Keys;
 import fr.traqueur.morebees.settings.BreedSettings;
@@ -25,7 +26,13 @@ import java.util.Optional;
 
 public class BeeManagerImpl implements BeeManager {
 
+    private final EntityService service;
+
     public BeeManagerImpl() {
+        this.service = EntityService.initialize(this.getPlugin());
+
+        System.out.println(service.getClass().getSimpleName());
+
         this.getPlugin().registerListener(new BeeListener(this.getPlugin()));
     }
 

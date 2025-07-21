@@ -9,6 +9,7 @@ import fr.traqueur.morebees.commands.arguments.BeeTypeArgument;
 import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.managers.BeeManager;
 import fr.traqueur.morebees.models.BeeType;
+import fr.traqueur.morebees.nms.NMSVersion;
 import fr.traqueur.morebees.serialization.BeeTypeDataTypeImpl;
 import fr.traqueur.morebees.settings.BreedSettings;
 import fr.traqueur.morebees.settings.GlobalSettings;
@@ -36,6 +37,14 @@ public final class MoreBees extends BeePlugin {
         this.saveDefault("config.yml", GlobalSettings.class, GlobalSettings.DEFAULT.get());
         GlobalSettings settings = YamlConfigurations.load(this.getDataPath().resolve("config.yml"), GlobalSettings.class, CONFIGURATION_PROPERTIES);
         Logger.init(this.getSLF4JLogger(), settings.debug());
+
+        NMSVersion.initialize();
+        if(NMSVersion.CURRENT == null) {
+            Logger.severe("Unsupported Minecraft version detected: " + Bukkit.getMinecraftVersion());
+            Logger.severe("Please update MoreBees to a compatible version.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
 
         this.saveDefaultConfig();
         this.reloadConfig();
