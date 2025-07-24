@@ -13,7 +13,6 @@ import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.serialization.BeeTypeDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.settings.GlobalSettings;
-import fr.traqueur.morebees.api.settings.Settings;
 import org.bukkit.entity.Bee;
 import org.bukkit.persistence.PersistentDataContainer;
 
