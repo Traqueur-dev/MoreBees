@@ -36,6 +36,7 @@ public class BeeGrowWatcher implements Runnable{
                 continue;
             }
             if(!bee.isAdult()) {
+                System.out.println(bee.getAge());
                 continue;
             }
             iterator.remove();
