@@ -6,6 +6,7 @@ import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Entity;
@@ -55,13 +56,42 @@ public class BeeListener implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if(event.getRightClicked().getType() != EntityType.BEE) {
+        if(!(event.getRightClicked() instanceof Bee bee)) {
             return;
         }
-        ItemStack item = event.getHand() == EquipmentSlot.OFF_HAND ? event.getPlayer().getInventory().getItemInOffHand() : event.getPlayer().getInventory().getItemInMainHand();
-
+        if(EquipmentSlot.OFF_HAND == event.getHand()) {
+            return;
+        }
+        ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
         Location spawnLocation = event.getRightClicked().getLocation();
-        this.handleSpawn(event, event.getPlayer(), item, spawnLocation, true);
+        BeeManager beeManager = plugin.getManager(BeeManager.class);
+        Optional<BeeType> eggBeeType = beeManager.getBeeTypeFromEgg(item);
+        if (eggBeeType.isPresent()) {
+            this.handleSpawn(event, event.getPlayer(), item, spawnLocation, true);
+            return;
+        }
+
+        Optional<BeeType> entityType = beeManager.getBeeTypeFromEntity(bee);
+        entityType.ifPresent(beeType -> {
+            event.setCancelled(true);
+            if(!beeType.isFood(item)) {
+               return;
+            }
+            if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+                item.setAmount(item.getAmount() - 1);
+            }
+
+            if(bee.canBreed()) {
+                bee.getWorld().spawnParticle(Particle.HEART,
+                        bee.getLocation().add(0, 0.1, 0),
+                        7, 0.5, 0.5, 0.5, 0);
+                bee.setLoveModeTicks(600);
+                bee.setBreedCause(event.getPlayer().getUniqueId());
+            } else if (!bee.isAdult()) {
+                bee.setAge(bee.getAge() - ((int) (bee.getAge() * 0.1)));
+            }
+
+        });
     }
 
     private void handleSpawn(Cancellable event, Player player, ItemStack item, Location spawnLocation, boolean baby) {
@@ -105,7 +135,7 @@ public class BeeListener implements Listener {
         }
 
         Util.ifBothPresent(motherType, fatherType, (mother, father) -> {
-            BeeType child = beeManager.computeBreed(mother, father);
+            BeeType child = beeManager.computeChildType(mother, father);
             beeManager.patchBee(bee, child);
         });
     }

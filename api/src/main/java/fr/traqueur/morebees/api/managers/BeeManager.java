@@ -5,11 +5,11 @@ import fr.traqueur.morebees.api.models.BeeType;
 import org.bukkit.Location;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public interface BeeManager extends Manager {
 
@@ -21,5 +21,5 @@ public interface BeeManager extends Manager {
 
     void patchBee(Bee bee, BeeType beeType);
 
-    BeeType computeBreed(BeeType mother, BeeType father);
+    BeeType computeChildType(BeeType mother, BeeType father);
 }

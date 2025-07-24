@@ -1,7 +1,6 @@
 package fr.traqueur.morebees;
 
 import com.destroystokyo.paper.entity.ai.Goal;
-import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.entity.ai.VanillaGoal;
 import fr.traqueur.morebees.api.managers.BeeManager;
 import fr.traqueur.morebees.api.models.BeeType;
@@ -26,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class BeeManagerImpl implements BeeManager {
 
@@ -93,7 +91,7 @@ public class BeeManagerImpl implements BeeManager {
     }
 
     @Override
-    public BeeType computeBreed(BeeType mother, BeeType father) {
+    public BeeType computeChildType(BeeType mother, BeeType father) {
         List<String> parentsIds = new ArrayList<>();
         parentsIds.add(mother.type());
         parentsIds.add(father.type());
