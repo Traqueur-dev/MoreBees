@@ -80,17 +80,7 @@ public class BeeListener implements Listener {
             if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
                 item.setAmount(item.getAmount() - 1);
             }
-
-            if(bee.canBreed()) {
-                bee.getWorld().spawnParticle(Particle.HEART,
-                        bee.getLocation().add(0, 0.1, 0),
-                        7, 0.5, 0.5, 0.5, 0);
-                bee.setLoveModeTicks(600);
-                bee.setBreedCause(event.getPlayer().getUniqueId());
-            } else if (!bee.isAdult()) {
-                bee.setAge(bee.getAge() - ((int) (bee.getAge() * 0.1)));
-            }
-
+            beeManager.feed(event.getPlayer(), bee);
         });
     }
 

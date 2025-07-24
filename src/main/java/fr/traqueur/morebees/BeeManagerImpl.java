@@ -15,6 +15,7 @@ import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.hooks.ModelEngineHook;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -117,6 +118,19 @@ public class BeeManagerImpl implements BeeManager {
         }
 
         return Math.random() < 0.5 ? mother : father;
+    }
+
+    @Override
+    public void feed(@NotNull Player player, Bee bee) {
+        if(bee.canBreed()) {
+            bee.getWorld().spawnParticle(Particle.HEART,
+                    bee.getLocation().add(0, 0.1, 0),
+                    7, 0.5, 0.5, 0.5, 0);
+            bee.setLoveModeTicks(600);
+            bee.setBreedCause(player.getUniqueId());
+        } else if (!bee.isAdult()) {
+            bee.setAge(bee.getAge() - ((int) (bee.getAge() * 0.1)));
+        }
     }
 
 }
