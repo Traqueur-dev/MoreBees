@@ -10,6 +10,7 @@ import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.settings.BreedSettings;
 import fr.traqueur.morebees.api.settings.GlobalSettings;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
+import fr.traqueur.morebees.goals.BeePollinateGoal;
 import fr.traqueur.morebees.goals.BeeTemptGoal;
 import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.hooks.ModelEngineHook;
@@ -87,7 +88,11 @@ public class BeeManagerImpl implements BeeManager {
         if (temptGoal != null) {
             Bukkit.getMobGoals().removeGoal(bee, temptGoal);
         }
-
+        Goal<@NotNull Bee> pollinateGoal = Bukkit.getMobGoals().getGoal(bee, VanillaGoal.BEE_POLLINATE);
+        if (pollinateGoal != null) {
+            Bukkit.getMobGoals().removeGoal(bee, pollinateGoal);
+        }
+        Bukkit.getMobGoals().addGoal(bee, 4, new BeePollinateGoal(this.getPlugin(), bee, beeType::isFlower));
         Bukkit.getMobGoals().addGoal(bee,3, new BeeTemptGoal(this.getPlugin(), bee, 1.25F, beeType::isFood));
     }
 
