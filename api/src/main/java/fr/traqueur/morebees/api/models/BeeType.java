@@ -4,6 +4,7 @@ import fr.traqueur.morebees.api.serialization.BeeTypeDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -27,4 +28,8 @@ public record BeeType(String type, int modelId, String displayName, Material foo
         return type == food;
     }
 
+    public boolean isFlower(Block block) {
+        Material type = block.getType();
+        return type == flower;
+    }
 }
