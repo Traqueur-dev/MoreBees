@@ -1,25 +1,27 @@
 package fr.traqueur.morebees;
 
-import fr.traqueur.morebees.hooks.Hooks;
-import fr.traqueur.morebees.hooks.ModelEngineHook;
+import com.destroystokyo.paper.entity.ai.Goal;
+import com.destroystokyo.paper.entity.ai.GoalKey;
+import com.destroystokyo.paper.entity.ai.VanillaGoal;
 import fr.traqueur.morebees.api.managers.BeeManager;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.models.Breed;
-import fr.traqueur.morebees.api.nms.EntityService;
 import fr.traqueur.morebees.api.serialization.BeeTypeDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.settings.BreedSettings;
 import fr.traqueur.morebees.api.settings.GlobalSettings;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
+import fr.traqueur.morebees.goals.BeeTemptGoal;
+import fr.traqueur.morebees.hooks.Hooks;
+import fr.traqueur.morebees.hooks.ModelEngineHook;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Bee;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +30,8 @@ import java.util.UUID;
 
 public class BeeManagerImpl implements BeeManager {
 
-    private final List<UUID> spawnFromBeehiveBees;
-    private final EntityService entityService;
-
-    public BeeManagerImpl(EntityService service) {
-        this.entityService = service;
-        this.spawnFromBeehiveBees = new ArrayList<>();
+    public BeeManagerImpl() {
         this.getPlugin().registerListener(new BeeListener(this.getPlugin()));
-    }
-
-    @Override
-    public boolean isSpawnFromBeehive(UUID beeUUID) {
-        return this.spawnFromBeehiveBees.contains(beeUUID);
     }
 
     @Override
@@ -68,13 +60,21 @@ public class BeeManagerImpl implements BeeManager {
 
     @Override
     public void spawnBee(Location location, BeeType beeType, CreatureSpawnEvent.SpawnReason reason, boolean baby) {
-        Bee bee = this.entityService.createBee(location.getWorld(), beeType);
-
-        PersistentDataContainer data = bee.getPersistentDataContainer();
-        Keys.BEETYPE.set(data, BeeTypeDataType.INSTANCE, beeType);
+        Bee bee = location.getWorld().createEntity(location, Bee.class);
 
         if(baby)
             bee.setBaby();
+
+        this.patchBee(bee, beeType);
+
+        bee.spawnAt(location, reason);
+    }
+
+    @Override
+    public void patchBee(Bee bee, BeeType beeType) {
+
+        PersistentDataContainer data = bee.getPersistentDataContainer();
+        Keys.BEETYPE.set(data, BeeTypeDataType.INSTANCE, beeType);
 
         Optional<ModelEngineHook> hookOptional = Hooks.MODEL_ENGINE.get();
         boolean textured = hookOptional.map(hook -> hook.overrideModel(bee, beeType)).orElse(false);
@@ -83,13 +83,13 @@ public class BeeManagerImpl implements BeeManager {
             bee.setCustomNameVisible(true);
             bee.customName(MiniMessageHelper.parse(beeType.displayName()));
         }
-        if (reason == CreatureSpawnEvent.SpawnReason.BEEHIVE) {
-            this.spawnFromBeehiveBees.add(bee.getUniqueId());
-            Bukkit.getScheduler().runTaskLater(this.getPlugin(), () -> {
-                this.spawnFromBeehiveBees.remove(bee.getUniqueId());
-            }, 2L);
+
+        Goal<@NotNull Creature> temptGoal = Bukkit.getMobGoals().getGoal(bee, VanillaGoal.TEMPT);
+        if (temptGoal != null) {
+            Bukkit.getMobGoals().removeGoal(bee, temptGoal);
         }
-        bee.spawnAt(location, reason);
+
+        Bukkit.getMobGoals().addGoal(bee,3, new BeeTemptGoal(this.getPlugin(), bee, 1.25F, beeType::isFood));
     }
 
     @Override
@@ -120,6 +120,5 @@ public class BeeManagerImpl implements BeeManager {
 
         return Math.random() < 0.5 ? mother : father;
     }
-
 
 }

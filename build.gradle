@@ -9,7 +9,6 @@ group = 'fr.traqueur'
 project.ext {
     targetFolder = file("target")
     apiFolder = file("target-api")
-    nmsFolder = file("target/nms")
     libraries = []
 }
 subprojects { subproject ->
@@ -81,11 +80,6 @@ allprojects { subproject ->
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     implementation(project(":api"))
-    rootProject.subprojects.findAll {
-        it.parent?.name == 'nms'
-    }.each { nmsProject ->
-        implementation nmsProject
-    }
 
     compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.8")
 }
@@ -123,7 +117,6 @@ tasks.register("cleanTarget") {
     doLast {
         delete rootProject.targetFolder
         delete rootProject.apiFolder
-        delete rootProject.nmsFolder
     }
 }
 

@@ -80,9 +80,6 @@ public class BeeListener implements Listener {
 
     @EventHandler
     public void onSpawn(CreatureSpawnEvent event) {
-        if(event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.BEEHIVE) {
-            return;
-        }
         Entity entity = event.getEntity();
         if(entity.getType() != EntityType.BEE) {
             return;
@@ -93,11 +90,7 @@ public class BeeListener implements Listener {
 
         BeeManager beeManager = plugin.getManager(BeeManager.class);
         beeManager.getBeeTypeFromEntity(bee).ifPresent(beeType -> {
-            if(beeManager.isSpawnFromBeehive(bee.getUniqueId())) {
-                return;
-            }
-            entity.remove();
-            beeManager.spawnBee(bee.getLocation(), beeType, CreatureSpawnEvent.SpawnReason.BEEHIVE, !bee.isAdult());
+            beeManager.patchBee(bee, beeType);
         });
     }
 
@@ -107,11 +100,13 @@ public class BeeListener implements Listener {
         Optional<BeeType> motherType = beeManager.getBeeTypeFromEntity(event.getMother());
         Optional<BeeType> fatherType = beeManager.getBeeTypeFromEntity(event.getFather());
 
+        if(!(event.getEntity() instanceof Bee bee)) {
+            return;
+        }
+
         Util.ifBothPresent(motherType, fatherType, (mother, father) -> {
-            event.setCancelled(true);
-            Location spawnLocation = event.getEntity().getLocation();
             BeeType child = beeManager.computeBreed(mother, father);
-            beeManager.spawnBee(spawnLocation, child, CreatureSpawnEvent.SpawnReason.BREEDING, true);
+            beeManager.patchBee(bee, child);
         });
     }
 
