@@ -1,5 +1,8 @@
 package fr.traqueur.morebees.api.models;
 
+import fr.traqueur.morebees.api.Logger;
+import fr.traqueur.morebees.api.hooks.Hook;
+import fr.traqueur.morebees.api.hooks.ItemProviderHook;
 import fr.traqueur.morebees.api.serialization.BeeTypeDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
@@ -8,7 +11,21 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
-public record BeeType(String type, int modelId, String displayName, Material food, Material flower, String model) {
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+public record BeeType(String type, int modelId, String displayName, List<String> foods, List<String> flowers, @Nullable String model) {
+
+    public BeeType {
+        if(foods.isEmpty()) {
+            Logger.warning("No foods defined for the bee type {}", type);
+        }
+        if(flowers.isEmpty()) {
+            Logger.warning("No flowers defined for the bee type {}", type);
+        }
+    }
 
     public ItemStack egg() {
         ItemStack item = new ItemStack(Material.BEE_SPAWN_EGG);
@@ -25,11 +42,15 @@ public record BeeType(String type, int modelId, String displayName, Material foo
 
     public boolean isFood(ItemStack item) {
         Material type = item.getType();
-        return type == food;
+        Set<ItemProviderHook> hooks = Hook.getByClass(ItemProviderHook.class);
+        String itemName = hooks.stream().map(hook -> hook.getItemName(item)).filter(Objects::nonNull).findFirst().orElse(type.name());
+        return foods.contains(itemName);
     }
 
     public boolean isFlower(Block block) {
         Material type = block.getType();
-        return type == flower;
+        Set<ItemProviderHook> hooks = Hook.getByClass(ItemProviderHook.class);
+        String itemName = hooks.stream().map(hook -> hook.getBlockName(block)).filter(Objects::nonNull).findFirst().orElse(type.name());
+        return flowers.contains(itemName);
     }
 }
