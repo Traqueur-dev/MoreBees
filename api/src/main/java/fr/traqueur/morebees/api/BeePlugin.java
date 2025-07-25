@@ -26,12 +26,12 @@ public abstract class BeePlugin extends JavaPlugin {
 
     public <I extends Manager, T extends I> void registerManager( Class<I> clazz, T instance) {
         getServer().getServicesManager().register(clazz, instance, this, ServicePriority.Normal);
-        Logger.debug("Registered manager for {} successfully", clazz.getSimpleName());
+        Logger.debug("<green>Registered manager for {} successfully", clazz.getSimpleName());
     }
 
     public void registerListener(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
-        Logger.debug("Registered listener {} successfully", listener.getClass().getSimpleName());
+        Logger.debug("<green>Registered listener {} successfully", listener.getClass().getSimpleName());
     }
 
 

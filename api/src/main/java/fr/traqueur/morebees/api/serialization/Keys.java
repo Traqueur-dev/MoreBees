@@ -11,7 +11,12 @@ import java.util.Optional;
 public enum Keys {
 
 
-    BEETYPE;
+    BEETYPE,
+    BEEHIVE,
+
+    INTERNAL_BEEHIVE_BEETYPES,
+    INTERNAL_BEEHIVE_HONEY_COUNTS,
+    ;
 
     private static final BeePlugin PLUGIN = JavaPlugin.getPlugin(BeePlugin.class);
 

@@ -1,7 +1,6 @@
-package fr.traqueur.morebees;
+package fr.traqueur.morebees.hooks.modelengine;
 
 import fr.traqueur.morebees.api.BeePlugin;
-import fr.traqueur.morebees.hooks.ModelEngineHook;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Bee;
 
@@ -36,7 +35,6 @@ public class BeeGrowWatcher implements Runnable{
                 continue;
             }
             if(!bee.isAdult()) {
-                System.out.println(bee.getAge());
                 continue;
             }
             iterator.remove();
