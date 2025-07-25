@@ -7,24 +7,24 @@ import fr.traqueur.morebees.api.managers.BeehiveManager;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Beehive;
-import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Item;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,17 +39,15 @@ public class BeehiveListener implements Listener {
 
     @EventHandler
     public void onDrop(BlockDropItemEvent event) {
-        if(!event.getPlayer().getInventory().getItemInMainHand().containsEnchantment(Enchantment.SILK_TOUCH) && event.getPlayer().getGameMode() != GameMode.CREATIVE) return;
-
         BeehiveManager beehiveManager = this.plugin.getManager(BeehiveManager.class);
-
-        beehiveManager.getBeehiveFromBlock(event.getBlock()).ifPresent(beehive -> {
-            event.getItems().stream().filter(item -> List.of(Material.BEEHIVE, Material.BEE_NEST).contains(item.getItemStack().getType()))
-                .forEach(item -> {
-                    ItemStack itemStack = item.getItemStack();
-                    beehive.patch(itemStack);
-                    item.setItemStack(itemStack);
-                });
+        beehiveManager.getBeehiveFromBlock(event.getBlockState()).ifPresent(beehive -> {
+            for (Item item : event.getItems()) {
+                ItemStack itemStack = item.getItemStack();
+                if(itemStack.getItemMeta() instanceof  BlockStateMeta blockStateMeta && blockStateMeta.getBlockState() instanceof Beehive) {
+                    item.setItemStack(beehive.patch(itemStack));
+                    Logger.debug("Dropped beehive at {}", item.getLocation());
+                }
+            }
         });
     }
 
@@ -57,8 +55,10 @@ public class BeehiveListener implements Listener {
     public void onPlace(BlockPlaceEvent event) {
         BeehiveManager beehiveManager = this.plugin.getManager(BeehiveManager.class);
         ItemStack itemInHand = event.getItemInHand();
+
         beehiveManager.getBeehiveFromItem(itemInHand).ifPresent(beehive -> {
             beehiveManager.saveBeehiveToBlock(event.getBlockPlaced(), beehive);
+            Logger.debug("Placed beehive at {}", event.getBlockPlaced().getLocation());
         });
     }
 
@@ -72,7 +72,7 @@ public class BeehiveListener implements Listener {
             return;
         }
 
-        if(!(event.getBlock().getState() instanceof Beehive beehiveState)) {
+        if(!(event.getBlock().getState() instanceof org.bukkit.block.Beehive beehiveState)) {
             return;
         }
 
@@ -85,9 +85,9 @@ public class BeehiveListener implements Listener {
         }
 
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-            Util.ifBothPresent(beehiveManager.getBeehiveFromBlock(event.getBlock()), beeManager.getBeeTypeFromEntity(bee), (beehive, beeType) -> {
+            Util.ifBothPresent(beehiveManager.getBeehiveFromBlock(event.getBlock().getState()), beeManager.getBeeTypeFromEntity(bee), (beehive, beeType) -> {
                 beehive.addHoney(beeType, 1);
-                Logger.debug("Bee {} added honey to beehive at {}", bee.getUniqueId(), event.getBlock().getLocation());
+                Logger.debug("Bee {} added {} honey to beehive at {}", bee.getUniqueId(), beeType.displayName(), event.getBlock().getLocation());
                 beehiveManager.saveBeehiveToBlock(event.getBlock(), beehive);
             });
         }, 1L);
@@ -100,7 +100,7 @@ public class BeehiveListener implements Listener {
         if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         if(event.getPlayer().getInventory().getItemInMainHand().getType() != Material.SHEARS) return;
-        if(!(event.getClickedBlock().getState() instanceof Beehive beehiveBlock)) return;
+        if(!(event.getClickedBlock().getState() instanceof org.bukkit.block.Beehive beehiveBlock)) return;
         if(!(event.getClickedBlock().getBlockData() instanceof org.bukkit.block.data.type.Beehive beehiveData)) return;
 
         if(beehiveData.getHoneyLevel() < beehiveData.getMaximumHoneyLevel()) {

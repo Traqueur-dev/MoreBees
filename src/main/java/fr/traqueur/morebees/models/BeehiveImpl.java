@@ -4,9 +4,9 @@ import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.models.Beehive;
 import fr.traqueur.morebees.api.serialization.BeehiveDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,11 +47,17 @@ public class BeehiveImpl implements Beehive {
     }
 
     @Override
-    public void patch(ItemStack itemStack) {
-        itemStack.editMeta(itemMeta -> {
+    public ItemStack patch(ItemStack item) {
+        if (item == null || item.getType().isAir()) {
+            return item;
+        }
+
+        ItemStack patchedItem = item.clone();
+        patchedItem.editMeta(itemMeta -> {
             PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-            Keys.BEEHIVE.get(container, BeehiveDataType.INSTANCE, this);
+            Keys.BEEHIVE.set(container, BeehiveDataType.INSTANCE, this);
         });
+        return patchedItem;
     }
 
 }

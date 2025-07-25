@@ -1,7 +1,7 @@
 package fr.traqueur.morebees.api.models;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -14,5 +14,5 @@ public interface Beehive {
 
     void removeHoney(BeeType beeType, int i);
 
-    void patch(ItemStack itemStack);
+    ItemStack patch(ItemStack item);
 }
