@@ -17,6 +17,7 @@ import fr.traqueur.morebees.hooks.ModelEngineHook;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -32,6 +33,16 @@ public class BeeManagerImpl implements BeeManager {
 
     public BeeManagerImpl() {
         this.getPlugin().registerListener(new BeeListener(this.getPlugin()));
+
+        Bukkit.getScheduler().runTask(this.getPlugin(), () -> {
+            for (World world : Bukkit.getWorlds()) {
+                for (Bee bee : world.getEntitiesByClass(Bee.class)) {
+                    this.getBeeTypeFromEntity(bee).ifPresent(beeType -> {
+                        this.patchBee(bee, beeType);
+                    });
+                }
+            }
+        });
     }
 
     @Override
