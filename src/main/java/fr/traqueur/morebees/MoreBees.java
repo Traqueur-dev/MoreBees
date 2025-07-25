@@ -37,6 +37,8 @@ public final class MoreBees extends BeePlugin {
 
         this.saveDefault("config.yml", GlobalSettings.class, GlobalSettings.DEFAULT.get());
         GlobalSettings settings = YamlConfigurations.load(this.getDataPath().resolve("config.yml"), GlobalSettings.class, CONFIGURATION_PROPERTIES);
+        this.settings.put(GlobalSettings.class, settings);
+
         Logger.init(this.getSLF4JLogger(), settings.debug());
 
         this.saveDefaultConfig();
@@ -94,7 +96,7 @@ public final class MoreBees extends BeePlugin {
         this.saveDefault("breeds.yml", BreedSettings.class, BreedSettings.DEFAULT.get());
     }
 
-    private <T> void saveDefault(String path, Class<T> clazz, T instance) {
+    private <T extends Settings> void saveDefault(String path, Class<T> clazz, T instance) {
         if (!this.getDataPath().resolve(path).toFile().exists()) {
             YamlConfigurations.save(this.getDataPath().resolve(path), clazz, instance, CONFIGURATION_PROPERTIES);
         }
@@ -107,6 +109,7 @@ public final class MoreBees extends BeePlugin {
         this.settings.put(BreedSettings.class, YamlConfigurations.load(this.getDataPath().resolve("breeds.yml"), BreedSettings.class, CONFIGURATION_PROPERTIES));
 
         Messages.Config messages = YamlConfigurations.load(this.getDataPath().resolve("messages.yml"), Messages.Config.class, CONFIGURATION_PROPERTIES);
+        this.settings.put(Messages.Config.class, messages);
         Messages.init(messages);
     }
 }

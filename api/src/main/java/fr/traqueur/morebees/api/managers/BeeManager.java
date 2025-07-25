@@ -2,6 +2,7 @@ package fr.traqueur.morebees.api.managers;
 
 import fr.traqueur.morebees.api.Manager;
 import fr.traqueur.morebees.api.models.BeeType;
+import fr.traqueur.morebees.api.models.Mutation;
 import org.bukkit.Location;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.LivingEntity;
@@ -25,4 +26,6 @@ public interface BeeManager extends Manager {
     BeeType computeChildType(BeeType mother, BeeType father);
 
     void feed(@NotNull Player player, Bee bee);
+
+    void mutate(Bee bee, Mutation mutation, Location to);
 }

@@ -5,6 +5,7 @@ import com.destroystokyo.paper.entity.ai.VanillaGoal;
 import fr.traqueur.morebees.api.managers.BeeManager;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.models.Breed;
+import fr.traqueur.morebees.api.models.Mutation;
 import fr.traqueur.morebees.api.serialization.BeeTypeDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.settings.BreedSettings;
@@ -14,10 +15,7 @@ import fr.traqueur.morebees.goals.BeePollinateGoal;
 import fr.traqueur.morebees.goals.BeeTemptGoal;
 import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.hooks.ModelEngineHook;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -126,11 +124,7 @@ public class BeeManagerImpl implements BeeManager {
                 .orElse(null);
 
         if (breed != null && Math.random() < breed.chance()) {
-            return this.getPlugin().getSettings(GlobalSettings.class).bees()
-                    .stream()
-                    .filter(beeType -> beeType.type().equals(breed.child()))
-                    .findFirst()
-                    .orElse(null);
+            return this.getPlugin().getSettings(GlobalSettings.class).getBeeType(breed.child()).orElse(null);
         }
 
         return Math.random() < 0.5 ? mother : father;
@@ -147,6 +141,15 @@ public class BeeManagerImpl implements BeeManager {
         } else if (!bee.isAdult()) {
             bee.setAge(bee.getAge() - ((int) (bee.getAge() * 0.1)));
         }
+    }
+
+    @Override
+    public void mutate(Bee bee, Mutation mutation, Location to) {
+        bee.setHasNectar(false);
+        to.getBlock().setType(Material.AIR);
+        this.getPlugin().getSettings(GlobalSettings.class).getBeeType(mutation.child()).ifPresent(beeType -> {
+            to.getWorld().dropItem(to, beeType.egg());
+        });
     }
 
 }

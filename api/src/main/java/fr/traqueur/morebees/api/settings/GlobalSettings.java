@@ -6,6 +6,7 @@ import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public record GlobalSettings(boolean debug,
@@ -21,5 +22,20 @@ public record GlobalSettings(boolean debug,
         bees.add(new BeeType("iron-bee", 5,"<gray>Iron Bee", List.of(Material.IRON_INGOT.name()), List.of(Material.IRON_BLOCK.name()), null));
         return new GlobalSettings(true, "flying", bees);
     };
+
+    public Optional<BeeType> getBeeType(String type) {
+        return bees.stream()
+                .filter(b -> b.type().equals(type))
+                .findFirst();
+    }
+
+    public boolean contains(String... type) {
+        for (String t : type) {
+            if (bees.stream().noneMatch(b -> b.type().equals(t))) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

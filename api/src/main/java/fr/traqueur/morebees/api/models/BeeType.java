@@ -6,6 +6,7 @@ import fr.traqueur.morebees.api.hooks.ItemProviderHook;
 import fr.traqueur.morebees.api.serialization.BeeTypeDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
+import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
@@ -48,9 +49,6 @@ public record BeeType(String type, int modelId, String displayName, List<String>
     }
 
     public boolean isFlower(Block block) {
-        Material type = block.getType();
-        Set<ItemProviderHook> hooks = Hook.getByClass(ItemProviderHook.class);
-        String itemName = hooks.stream().map(hook -> hook.getBlockName(block)).filter(Objects::nonNull).findFirst().orElse(type.name());
-        return flowers.contains(itemName);
+       return Util.isValidBlock(block, flowers);
     }
 }
