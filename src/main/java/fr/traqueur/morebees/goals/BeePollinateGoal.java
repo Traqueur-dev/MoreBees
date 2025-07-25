@@ -4,6 +4,7 @@ import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.entity.ai.GoalType;
 import fr.traqueur.morebees.api.BeePlugin;
+import net.kyori.adventure.util.TriState;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -104,6 +105,12 @@ public class BeePollinateGoal implements Goal<@NotNull Bee> {
 
     private void pollinateFlower() {
         pollinationTicks++;
+
+        float rotationSpeed = 90f;
+        float currentBodyYaw = bee.getBodyYaw();
+        float newBodyYaw = (currentBodyYaw + rotationSpeed) % 360f;
+        bee.setBodyYaw(newBodyYaw);
+
         if (pollinationTicks >= 100) {
             bee.setHasNectar(true);
             pollinationTicks = 0;
