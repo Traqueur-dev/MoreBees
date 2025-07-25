@@ -42,10 +42,6 @@ public class ModelEngineHook implements Hook {
         entity.setInvisible(true);
 
         ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(entity);
-        if(modeledEntity.getModel(beeType.model()).isPresent()) {
-            return true;
-        }
-
         ActiveModel activeModel = ModelEngineAPI.createActiveModel(beeType.model());
 
         AnimationHandler animationHandler = activeModel.getAnimationHandler();

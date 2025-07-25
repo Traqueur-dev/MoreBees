@@ -3,7 +3,9 @@ package fr.traqueur.morebees;
 import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.managers.BeeManager;
 import fr.traqueur.morebees.api.models.BeeType;
+import fr.traqueur.morebees.api.settings.BreedSettings;
 import fr.traqueur.morebees.api.util.Util;
+import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -141,6 +143,29 @@ public class BeeListener implements Listener {
             BeeType child = beeManager.computeChildType(mother, father);
             beeManager.patchBee(bee, child);
         });
+    }
+
+
+    @EventHandler
+    public void onMove(EntityMoveEvent event) {
+        if(!(event.getEntity() instanceof Bee bee)) {
+            return;
+        }
+
+        if(!bee.hasNectar()) {
+            return;
+        }
+
+        Location to = event.getTo().clone().subtract(0,1,0);
+        if(to.getBlock().isEmpty()) {
+            return;
+        }
+        BeeManager beeManager = this.plugin.getManager(BeeManager.class);
+        beeManager.getBeeTypeFromEntity(bee).
+                flatMap(beeType -> this.plugin.getSettings(BreedSettings.class).getMutation(beeType, to.getBlock()))
+                .ifPresent(mutation -> {
+                    beeManager.mutate(bee, mutation, to);
+                });
     }
 
 }

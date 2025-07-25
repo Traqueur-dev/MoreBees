@@ -1,6 +1,12 @@
 package fr.traqueur.morebees.api.models;
 
+import fr.traqueur.morebees.api.BeePlugin;
+import fr.traqueur.morebees.api.Logger;
+import fr.traqueur.morebees.api.settings.GlobalSettings;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public record Breed(List<String> parents, String child, double chance) {
 
@@ -13,6 +19,13 @@ public record Breed(List<String> parents, String child, double chance) {
         }
         if (chance < 0 || chance > 1) {
             throw new IllegalArgumentException("Chance must be between 0 and 1.");
+        }
+
+        Set<String> types = new HashSet<>(parents);
+        types.add(child);
+
+        if (!BeePlugin.getPlugin(BeePlugin.class).getSettings(GlobalSettings.class).contains(types.toArray(String[]::new))) {
+            Logger.warning("Some bee types in breed {} are not defined in settings: {}", child, types);
         }
     }
 }

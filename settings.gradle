@@ -1,7 +1,3 @@
 rootProject.name = 'MoreBees'
 
 include 'api'
-include 'nms'
-include 'nms:v1_21_R3'
-include 'nms:v1_21_R4'
-include 'nms:v1_21_R5'

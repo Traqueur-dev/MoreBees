@@ -1,5 +1,6 @@
 package fr.traqueur.morebees.api;
 
+import fr.traqueur.morebees.api.settings.Settings;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import org.bukkit.command.CommandSender;
@@ -53,7 +54,7 @@ public enum Messages {
         }
     }
 
-    public record Config(Map<String, String> messages) {
+    public record Config(Map<String, String> messages) implements Settings {
 
         public static Config defaultConfig() {
            Map<String, String> messages = new HashMap<>();
