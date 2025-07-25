@@ -1,11 +1,10 @@
-package fr.traqueur.morebees.hooks;
+package fr.traqueur.morebees.hooks.modelengine;
 
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.animation.handler.AnimationHandler;
 import com.ticxo.modelengine.api.animation.property.IAnimationProperty;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import fr.traqueur.morebees.BeeGrowWatcher;
 import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.Logger;
 import fr.traqueur.morebees.api.hooks.Hook;

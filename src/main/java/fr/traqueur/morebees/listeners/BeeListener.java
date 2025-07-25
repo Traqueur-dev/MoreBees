@@ -1,4 +1,4 @@
-package fr.traqueur.morebees;
+package fr.traqueur.morebees.listeners;
 
 import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.managers.BeeManager;

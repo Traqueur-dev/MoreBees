@@ -9,6 +9,7 @@ import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -31,7 +32,21 @@ public record BeeType(String type, int modelId, String displayName, List<String>
     public ItemStack egg() {
         ItemStack item = new ItemStack(Material.BEE_SPAWN_EGG);
         item.editMeta(meta -> {
-            meta.itemName(MiniMessageHelper.parse(displayName + " Egg"));
+            meta.itemName(MiniMessageHelper.parse(displayName + " Egg<reset>"));
+            PersistentDataContainer container = meta.getPersistentDataContainer();
+            Keys.BEETYPE.set(container, BeeTypeDataType.INSTANCE, this);
+            if(modelId > 0) {
+                meta.setCustomModelData(modelId);
+            }
+        });
+        return item;
+    }
+
+    public ItemStack honey(int amount, boolean block) {
+        Material material = block ? Material.HONEYCOMB_BLOCK : Material.HONEYCOMB;
+        ItemStack item = new ItemStack(material, amount);
+        item.editMeta(meta -> {
+            meta.itemName(MiniMessageHelper.parse(displayName + " Honey<reset>"));
             PersistentDataContainer container = meta.getPersistentDataContainer();
             Keys.BEETYPE.set(container, BeeTypeDataType.INSTANCE, this);
             if(modelId > 0) {

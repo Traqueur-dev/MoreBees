@@ -8,6 +8,7 @@ import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.Logger;
 import fr.traqueur.morebees.api.Messages;
 import fr.traqueur.morebees.api.managers.BeeManager;
+import fr.traqueur.morebees.api.managers.BeehiveManager;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.settings.BreedSettings;
 import fr.traqueur.morebees.api.settings.GlobalSettings;
@@ -15,7 +16,10 @@ import fr.traqueur.morebees.api.settings.Settings;
 import fr.traqueur.morebees.commands.MoreBeesRootCommand;
 import fr.traqueur.morebees.commands.arguments.BeeTypeArgument;
 import fr.traqueur.morebees.hooks.Hooks;
+import fr.traqueur.morebees.managers.BeeManagerImpl;
+import fr.traqueur.morebees.managers.BeehiveManagerImpl;
 import fr.traqueur.morebees.serialization.BeeTypeDataTypeImpl;
+import fr.traqueur.morebees.serialization.BeehiveDataTypeImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -47,8 +51,10 @@ public final class MoreBees extends BeePlugin {
         Hooks.initAll(this);
 
         BeeTypeDataTypeImpl.init(this);
+        BeehiveDataTypeImpl.init(this);
 
         this.registerManager(BeeManager.class, new BeeManagerImpl());
+        this.registerManager(BeehiveManager.class, new BeehiveManagerImpl());
 
         this.commandManager = new CommandManager<>(this);
         commandManager.setDebug(settings.debug());

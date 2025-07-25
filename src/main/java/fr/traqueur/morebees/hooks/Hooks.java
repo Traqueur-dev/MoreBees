@@ -3,6 +3,7 @@ package fr.traqueur.morebees.hooks;
 import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.Logger;
 import fr.traqueur.morebees.api.hooks.Hook;
+import fr.traqueur.morebees.hooks.modelengine.ModelEngineHook;
 import org.bukkit.Bukkit;
 
 import java.util.HashSet;
