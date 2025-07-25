@@ -16,9 +16,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-public class BeePollinateGoal implements Goal<Bee> {
+public class BeePollinateGoal implements Goal<@NotNull Bee> {
 
-    private static final int SEARCH_RADIUS = 10; // Rayon de recherche des fleurs
+    private static final int SEARCH_RADIUS = 10;
 
     private final BeePlugin plugin;
     private final Bee bee;
@@ -112,28 +112,43 @@ public class BeePollinateGoal implements Goal<Bee> {
 
     private Block findNearestFlower() {
         Location beeLoc = bee.getLocation();
-        Block nearestFlower = null;
-        double nearestDistance = Double.MAX_VALUE;
+        for (int radius = 1; radius <= SEARCH_RADIUS; radius++) {
+            Block found = searchAtRadius(beeLoc, radius);
+            if (found != null) {
+                return found;
+            }
+        }
+        return null;
+    }
 
-        // Recherche dans un cube autour de l'abeille
-        for (int x = -SEARCH_RADIUS; x <= SEARCH_RADIUS; x++) {
-            for (int y = -SEARCH_RADIUS/2; y <= SEARCH_RADIUS/2; y++) {
-                for (int z = -SEARCH_RADIUS; z <= SEARCH_RADIUS; z++) {
-                    Block block = beeLoc.clone().add(x, y, z).getBlock();
+    private Block searchAtRadius(Location center, int radius) {
+        // Recherche sur les faces du cube à ce rayon
+        int minY = Math.max(center.getBlockY() - radius/2, center.getWorld().getMinHeight());
+        int maxY = Math.min(center.getBlockY() + radius/2, center.getWorld().getMaxHeight());
 
-                    if (isFlower.test(block)) {
-                        double distance = beeLoc.distance(block.getLocation());
+        for (int y = minY; y <= maxY; y++) {
+            for (int x = -radius; x <= radius; x++) {
+                Block block1 = center.getWorld().getBlockAt(
+                        center.getBlockX() + x, y, center.getBlockZ() + radius);
+                Block block2 = center.getWorld().getBlockAt(
+                        center.getBlockX() + x, y, center.getBlockZ() - radius);
 
-                        if (distance < nearestDistance) {
-                            nearestDistance = distance;
-                            nearestFlower = block;
-                        }
-                    }
-                }
+                if (isFlower.test(block1)) return block1;
+                if (isFlower.test(block2)) return block2;
+            }
+
+            for (int z = -radius + 1; z < radius; z++) {
+                Block block1 = center.getWorld().getBlockAt(
+                        center.getBlockX() + radius, y, center.getBlockZ() + z);
+                Block block2 = center.getWorld().getBlockAt(
+                        center.getBlockX() - radius, y, center.getBlockZ() + z);
+
+                if (isFlower.test(block1)) return block1;
+                if (isFlower.test(block2)) return block2;
             }
         }
 
-        return nearestFlower;
+        return null;
     }
 
     @Override
