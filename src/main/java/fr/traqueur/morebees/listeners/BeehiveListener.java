@@ -43,7 +43,11 @@ public class BeehiveListener implements Listener {
         beehiveManager.getBeehiveFromBlock(event.getBlockState()).ifPresent(beehive -> {
             for (Item item : event.getItems()) {
                 ItemStack itemStack = item.getItemStack();
-                if(itemStack.getItemMeta() instanceof  BlockStateMeta blockStateMeta && blockStateMeta.getBlockState() instanceof Beehive) {
+                if(itemStack.getItemMeta() instanceof BlockStateMeta blockStateMeta && blockStateMeta.getBlockState() instanceof Beehive beehiveState) {
+                    org.bukkit.block.data.type.Beehive beehiveData = (org.bukkit.block.data.type.Beehive) beehiveState.getBlockData();
+                    if (beehiveData.getHoneyLevel() == 0) {
+                        continue;
+                    }
                     item.setItemStack(beehive.patch(itemStack));
                     Logger.debug("Dropped beehive at {}", item.getLocation());
                 }
