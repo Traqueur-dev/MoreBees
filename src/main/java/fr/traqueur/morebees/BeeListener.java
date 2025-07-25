@@ -20,6 +20,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
@@ -99,6 +100,19 @@ public class BeeListener implements Listener {
     }
 
     @EventHandler
+    public void onBeesLoad(EntitiesLoadEvent event) {
+        BeeManager beeManager = plugin.getManager(BeeManager.class);
+        event.getEntities().stream()
+            .filter(entity -> entity.getType() == EntityType.BEE)
+            .map(entity -> (Bee) entity)
+            .forEach(bee -> {
+                beeManager.getBeeTypeFromEntity(bee).ifPresent(beeType -> {
+                    beeManager.patchBee(bee, beeType);
+                });
+            });
+    }
+
+    @EventHandler
     public void onSpawn(CreatureSpawnEvent event) {
         Entity entity = event.getEntity();
         if(entity.getType() != EntityType.BEE) {
@@ -113,8 +127,6 @@ public class BeeListener implements Listener {
             beeManager.patchBee(bee, beeType);
         });
     }
-
-
 
     @EventHandler
     public void onBreed(EntityBreedEvent event) {
