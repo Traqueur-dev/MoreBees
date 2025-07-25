@@ -2,7 +2,6 @@ package fr.traqueur.morebees.managers;
 
 import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.VanillaGoal;
-import fr.traqueur.morebees.listeners.BeeListener;
 import fr.traqueur.morebees.api.managers.BeeManager;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.models.Breed;
@@ -16,6 +15,7 @@ import fr.traqueur.morebees.goals.BeePollinateGoal;
 import fr.traqueur.morebees.goals.BeeTemptGoal;
 import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.hooks.modelengine.ModelEngineHook;
+import fr.traqueur.morebees.listeners.BeeListener;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;

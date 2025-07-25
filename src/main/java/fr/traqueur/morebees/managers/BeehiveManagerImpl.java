@@ -7,6 +7,7 @@ import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.listeners.BeehiveListener;
 import fr.traqueur.morebees.models.BeehiveImpl;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -20,8 +21,8 @@ public class BeehiveManagerImpl implements BeehiveManager {
     }
 
     @Override
-    public Optional<Beehive> getBeehiveFromBlock(Block block) {
-        if(!(block.getState() instanceof org.bukkit.block.Beehive beehive)) {
+    public Optional<Beehive> getBeehiveFromBlock(BlockState block) {
+        if(!(block instanceof org.bukkit.block.Beehive beehive)) {
             return Optional.empty();
         }
         PersistentDataContainer container = beehive.getPersistentDataContainer();
@@ -52,7 +53,7 @@ public class BeehiveManagerImpl implements BeehiveManager {
 
     @Override
     public void editBeehive(Block block, Consumer<Beehive> consumer) {
-        this.getBeehiveFromBlock(block).ifPresent(beehive -> {
+        this.getBeehiveFromBlock(block.getState()).ifPresent(beehive -> {
             consumer.accept(beehive);
             this.saveBeehiveToBlock(block, beehive);
         });

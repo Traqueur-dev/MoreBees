@@ -51,7 +51,7 @@ public final class MoreBees extends BeePlugin {
         Hooks.initAll(this);
 
         BeeTypeDataTypeImpl.init(this);
-        BeehiveDataTypeImpl.init(this);
+        BeehiveDataTypeImpl.init();
 
         this.registerManager(BeeManager.class, new BeeManagerImpl());
         this.registerManager(BeehiveManager.class, new BeehiveManagerImpl());
