@@ -13,6 +13,9 @@ import java.util.function.Supplier;
 public enum Hooks {
 
     MODEL_ENGINE("ModelEngine", ModelEngineHook::new),
+    ITEMS_ADDER("ItemsAdder", ItemsAdderHook::new),
+    ORAXEN("Oraxen", OraxenHook::new),
+    NEXO("Nexo", NexoHook::new),
     ;
 
     private final String pluginName;
@@ -62,6 +65,7 @@ public enum Hooks {
 
     private static void enableHook(String hookName, Hook hook, BeePlugin plugin) {
         try {
+            Hook.HOOKS.add(hook);
             hook.onEnable(plugin);
         } catch (Exception e) {
             Logger.severe("Failed to enable hook for {}",e, hookName);

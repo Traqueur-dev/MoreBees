@@ -10,15 +10,15 @@ import java.util.function.Supplier;
 
 public record GlobalSettings(boolean debug,
                              @Comment("Define the name of the flying animation for all bee model") String flyAnimation,
-                             @Comment("Field \"model\" permits to use a custom model from model engine use \"default\" if you don't want") List<BeeType> bees) implements Settings {
+                             @Comment("Field \"model\" permits to use a custom model from model engine remove it to not use a custom model") List<BeeType> bees) implements Settings {
 
     public static final Supplier<GlobalSettings> DEFAULT = () -> {
         List<BeeType> bees = new ArrayList<>();
-        bees.add(new BeeType("redstone-bee", 1,"<red>Redstone Bee", Material.REDSTONE, Material.REDSTONE_BLOCK, "redstone-bee"));
-        bees.add(new BeeType("emerald-bee", -1, "<green>Emerald Bee", Material.EMERALD, Material.EMERALD_BLOCK, "default"));
-        bees.add(new BeeType("diamond-bee", -1,"<aqua>Diamond Bee",Material.DIAMOND, Material.DIAMOND_BLOCK, "default"));
-        bees.add(new BeeType("gold-bee",-1,"<gold>Gold Bee", Material.GOLD_INGOT, Material.GOLD_BLOCK, "default"));
-        bees.add(new BeeType("iron-bee", -1,"<gray>Iron Bee", Material.IRON_INGOT, Material.IRON_BLOCK, "default"));
+        bees.add(new BeeType("redstone-bee", 1,"<red>Redstone Bee", List.of(Material.REDSTONE.name()), List.of(Material.REDSTONE_BLOCK.name()), "redstone-bee"));
+        bees.add(new BeeType("emerald-bee", 2, "<green>Emerald Bee", List.of(Material.EMERALD.name()), List.of(Material.EMERALD_BLOCK.name()),null));
+        bees.add(new BeeType("diamond-bee", 3,"<aqua>Diamond Bee",List.of(Material.DIAMOND.name()), List.of(Material.DIAMOND_BLOCK.name()), null));
+        bees.add(new BeeType("gold-bee",4,"<gold>Gold Bee", List.of(Material.GOLD_INGOT.name()), List.of(Material.GOLD_BLOCK.name()), null));
+        bees.add(new BeeType("iron-bee", 5,"<gray>Iron Bee", List.of(Material.IRON_INGOT.name()), List.of(Material.IRON_BLOCK.name()), null));
         return new GlobalSettings(true, "flying", bees);
     };
 

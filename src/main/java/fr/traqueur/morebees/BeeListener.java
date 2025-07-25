@@ -6,7 +6,6 @@ import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Entity;

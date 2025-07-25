@@ -30,7 +30,7 @@ public class ModelEngineHook implements Hook {
     }
 
     public boolean overrideModel(Bee entity, BeeType beeType) {
-        if(beeType.model().equalsIgnoreCase("default")) {
+        if(beeType.model() == null) {
             return false;
         }
 
@@ -42,6 +42,10 @@ public class ModelEngineHook implements Hook {
         entity.setInvisible(true);
 
         ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(entity);
+        if(modeledEntity.getModel(beeType.model()).isPresent()) {
+            return true;
+        }
+
         ActiveModel activeModel = ModelEngineAPI.createActiveModel(beeType.model());
 
         AnimationHandler animationHandler = activeModel.getAnimationHandler();
@@ -62,7 +66,7 @@ public class ModelEngineHook implements Hook {
     public void grow(Bee entity) {
         PersistentDataContainer data = entity.getPersistentDataContainer();
         Keys.BEETYPE.get(data, BeeTypeDataType.INSTANCE).ifPresent(beeType -> {
-            if(beeType.model().equalsIgnoreCase("default")) {
+            if(beeType.model() == null) {
                 return;
             }
 

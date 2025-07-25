@@ -3,4 +3,9 @@ version: '${version}'
 main: fr.traqueur.morebees.MoreBees
 api-version: '1.21'
 authors: [Traqueur_]
+soft-depend:
+  - ItemsAdder
+  - ModelEngine
+  - Oraxen
+  - Nexo
 libraries: ${libraries}
