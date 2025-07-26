@@ -7,6 +7,7 @@ import fr.traqueur.morebees.api.serialization.BeeDataDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.serialization.ToolDataType;
 import fr.traqueur.morebees.api.util.Formatter;
+import fr.traqueur.morebees.listeners.ToolsListener;
 import fr.traqueur.morebees.models.BeeDataImpl;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Bee;
@@ -21,6 +22,11 @@ import java.util.Optional;
 
 public class ToolsManagerImpl implements ToolsManager {
 
+    public ToolsManagerImpl() {
+        this.getPlugin().registerListener(new ToolsListener(this.getPlugin()));
+    }
+
+    @Override
     public Optional<Tool> getTool(ItemStack itemStack) {
         if (itemStack == null) {
             return Optional.empty();
@@ -54,8 +60,9 @@ public class ToolsManagerImpl implements ToolsManager {
             return;
         }
         Tool toolType = this.getTool(tool).orElseThrow(() -> new IllegalArgumentException("ItemStack is not a valid tool"));
-        PersistentDataContainer dataContainer = tool.getItemMeta().getPersistentDataContainer();
         List<BeeData> bees = this.getBeesInsideTool(tool);
+
+        System.out.println("Bees before adding: " + bees.size());
 
         if (bees.size() >= toolType.maxBees()) {
             return; // Tool is full
@@ -63,10 +70,13 @@ public class ToolsManagerImpl implements ToolsManager {
 
         bee.remove();
         bees.add(this.toData(bee, beeType));
-        Keys.BEES.set(dataContainer, PersistentDataType.LIST.listTypeFrom(BeeDataDataType.INSTANCE), bees);
+
+        System.out.println("Bees after adding: " + bees.size());
 
         List<Component> newLore = toolType.lore(bees);
         tool.editMeta(meta -> {
+            PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
+            Keys.BEES.set(dataContainer, PersistentDataType.LIST.listTypeFrom(BeeDataDataType.INSTANCE), bees);
             meta.lore(newLore);
         });
     }
@@ -77,7 +87,6 @@ public class ToolsManagerImpl implements ToolsManager {
             return List.of();
         }
         Tool toolType = this.getTool(tool).orElseThrow(() -> new IllegalArgumentException("ItemStack is not a valid tool"));
-        PersistentDataContainer dataContainer = tool.getItemMeta().getPersistentDataContainer();
         List<BeeData> bees = this.getBeesInsideTool(tool);
 
         if (bees.isEmpty()) {
@@ -90,9 +99,11 @@ public class ToolsManagerImpl implements ToolsManager {
         for (int i = 0; i < nbBees && !bees.isEmpty(); i++) {
             releasedBees.add(bees.removeLast());
         }
-        Keys.BEES.set(dataContainer, PersistentDataType.LIST.listTypeFrom(BeeDataDataType.INSTANCE), bees);
+
         List<Component> newLore = toolType.lore(bees);
         tool.editMeta(meta -> {
+            PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
+            Keys.BEES.set(dataContainer, PersistentDataType.LIST.listTypeFrom(BeeDataDataType.INSTANCE), bees);
             meta.lore(newLore);
         });
         return releasedBees;
@@ -103,7 +114,8 @@ public class ToolsManagerImpl implements ToolsManager {
             return List.of();
         }
         PersistentDataContainer dataContainer = tool.getItemMeta().getPersistentDataContainer();
-        return Keys.BEES.get(dataContainer, PersistentDataType.LIST.listTypeFrom(BeeDataDataType.INSTANCE), new ArrayList<>());
+        List<BeeData> bees = Keys.BEES.get(dataContainer, PersistentDataType.LIST.listTypeFrom(BeeDataDataType.INSTANCE), new ArrayList<>());
+        return new ArrayList<>(bees);
     }
 
 

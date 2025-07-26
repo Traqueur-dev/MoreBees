@@ -13,15 +13,15 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Bee;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public interface ToolsManager extends Manager {
+
+    Optional<Tool> getTool(ItemStack itemStack);
 
     boolean isFull(ItemStack itemStack);
 
@@ -37,8 +37,26 @@ public interface ToolsManager extends Manager {
                 "bees",
                 (placeholder, bees) -> {
                     String template = Messages.BEE_BOX_CONTENT.raw();
-                    Map<BeeType, Long> beeCount = bees.stream()
-                            .collect(Collectors.groupingBy(BeeData::type, Collectors.counting()));
+                    Map<BeeType, Long> beeCount = new HashMap<>();
+
+                    boolean find = false;
+                    for (BeeData bee : bees) {
+                        BeeType type = bee.type();
+                        for (Map.Entry<BeeType, Long> beeTypeLongEntry : beeCount.entrySet()) {
+                            BeeType key = beeTypeLongEntry.getKey();
+                            if(key.type().equals(type.type())) {
+                                beeCount.merge(key, 1L, Long::sum);
+                                find = true;
+                                break;
+                            }
+                        }
+
+                        if(!find) {
+                            beeCount.put(type, 1L);
+                        }
+                        find = false;
+                    }
+
                     StringBuilder builder = new StringBuilder();
                     beeCount.forEach((type, count) -> {
                         if (!builder.isEmpty()) {
@@ -92,6 +110,8 @@ public interface ToolsManager extends Manager {
             return lore.stream()
                     .map(line -> Formatter.format(line, this.formatters.apply(this.placeholder, bees)))
                     .filter(Objects::nonNull)
+                    .flatMap(line -> Arrays.stream(line.split("\n")))
+                    .filter(s -> !s.isEmpty())
                     .map(MiniMessageHelper::parse)
                     .map(component -> component.decoration(TextDecoration.ITALIC, false))
                     .toList();
