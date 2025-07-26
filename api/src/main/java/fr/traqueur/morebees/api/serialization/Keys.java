@@ -16,7 +16,7 @@ public enum Keys {
 
     INTERNAL_BEEHIVE_BEETYPES,
     INTERNAL_BEEHIVE_HONEY_COUNTS,
-    HONEY_LEVEL;
+    HONEY_LEVEL, TOOL_ID;
 
     private static final BeePlugin PLUGIN = JavaPlugin.getPlugin(BeePlugin.class);
 

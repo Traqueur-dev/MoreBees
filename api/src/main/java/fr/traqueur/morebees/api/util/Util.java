@@ -4,6 +4,7 @@ import fr.traqueur.morebees.api.hooks.Hook;
 import fr.traqueur.morebees.api.hooks.ItemProviderHook;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +25,15 @@ public class Util {
         Set<ItemProviderHook> hooks = Hook.getByClass(ItemProviderHook.class);
         String itemName = hooks.stream().map(hook -> hook.getBlockName(block)).filter(Objects::nonNull).findFirst().orElse(type.name());
         return validTypes.contains(itemName);
+    }
+
+    public static ItemStack getItemFromId(String id) {
+        Set<ItemProviderHook> hooks = Hook.getByClass(ItemProviderHook.class);
+        return hooks.stream()
+                .map(hook -> hook.getItemFromId(id))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(ItemStack.of(Material.valueOf(id)));
     }
 
 }

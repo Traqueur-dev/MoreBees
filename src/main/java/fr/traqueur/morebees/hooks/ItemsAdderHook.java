@@ -2,7 +2,6 @@ package fr.traqueur.morebees.hooks;
 
 import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.CustomStack;
-import dev.lone.itemsadder.api.ItemsAdder;
 import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.Logger;
 import fr.traqueur.morebees.api.hooks.ItemProviderHook;

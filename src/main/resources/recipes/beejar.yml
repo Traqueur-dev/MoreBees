@@ -1,0 +1,18 @@
+type: CRAFTING_SHAPED
+
+group: beetools
+
+category: MISC
+
+pattern:
+  - " # "
+  - "# #"
+  - "###"
+
+result:
+  item: "morebees:BEE_JAR"
+  amount: 1
+
+ingredients:
+  - item: "material:GLASS_PANE"
+    sign: '#'

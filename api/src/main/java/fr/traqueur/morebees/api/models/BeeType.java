@@ -9,7 +9,6 @@ import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -30,12 +29,7 @@ public record BeeType(String type, int modelId, String displayName, List<String>
     }
 
     public ItemStack productItem() {
-        return Hook.getByClass(ItemProviderHook.class)
-                .stream()
-                .map(hook -> hook.getItemFromId(product))
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(ItemStack.of(Material.valueOf(product)));
+        return Util.getItemFromId(product);
     }
 
     public ItemStack egg() {
