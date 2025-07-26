@@ -60,8 +60,8 @@ public record GlobalSettings(boolean debug,
 
         base.editMeta(meta -> {
             PersistentDataContainer container = meta.getPersistentDataContainer();
-            Keys.MAX_BEES.get(container, PersistentDataType.INTEGER, beeBoxSize);
-            Keys.TOOL_ID.get(container, ToolDataType.INSTANCE, ToolsManager.Tool.BEE_BOX);
+            Keys.MAX_BEES.set(container, PersistentDataType.INTEGER, beeBoxSize);
+            Keys.TOOL_ID.set(container, ToolDataType.INSTANCE, ToolsManager.Tool.BEE_BOX);
             meta.lore(ToolsManager.Tool.BEE_BOX.lore(List.of()));
         });
         return base;
@@ -71,8 +71,8 @@ public record GlobalSettings(boolean debug,
         ItemStack base = beeJar.build();
         base.editMeta(meta -> {
             PersistentDataContainer container = meta.getPersistentDataContainer();
-            Keys.MAX_BEES.get(container, PersistentDataType.INTEGER, 1);
-            Keys.TOOL_ID.get(container, ToolDataType.INSTANCE, ToolsManager.Tool.BEE_JAR);
+            Keys.MAX_BEES.set(container, PersistentDataType.INTEGER, 1);
+            Keys.TOOL_ID.set(container, ToolDataType.INSTANCE, ToolsManager.Tool.BEE_JAR);
             meta.lore(ToolsManager.Tool.BEE_JAR.lore(List.of()));
         });
         return base;
