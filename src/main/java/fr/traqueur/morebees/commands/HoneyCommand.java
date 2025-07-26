@@ -15,19 +15,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public class EggCommand extends Command<@NotNull BeePlugin> {
+public class HoneyCommand extends Command<@NotNull BeePlugin> {
     /**
      * The constructor of the command.
      *
      * @param plugin The plugin that owns the command.
      */
-    public EggCommand(BeePlugin plugin) {
-        super(plugin, "egg");
+    public HoneyCommand(BeePlugin plugin) {
+        super(plugin, "honey");
 
-        this.setPermission("morebees.command.egg");
-        this.setDescription(Messages.EGG_COMMAND_DESC.raw());
+        this.setPermission("morebees.command.honey");
+        this.setDescription(Messages.HONEY_COMMAND_DESC.raw());
 
-        this.addArgs("player", Player.class, "beetype", BeeType.class);
+        this.addArgs("player", Player.class, "beetype", BeeType.class, "block", Boolean.class);
         this.addOptionalArgs("amount", Integer.class, (sender, args) -> List.of("1", "8", "16", "32", "64"));
     }
 
@@ -35,6 +35,7 @@ public class EggCommand extends Command<@NotNull BeePlugin> {
     public void execute(CommandSender sender, Arguments arguments) {
         Player targetPlayer = arguments.get("player");
         BeeType beeType = arguments.get("beetype");
+        boolean block = arguments.get("block");
         Optional<Integer> amountOpt = arguments.getOptional("amount");
         int amount = amountOpt.orElse(1);
 
@@ -43,17 +44,17 @@ public class EggCommand extends Command<@NotNull BeePlugin> {
             return;
         }
 
-        ItemStack egg = beeType.egg();
-        if(amount > egg.getMaxStackSize()) {
-            Messages.COMMAND_AMOUNT_INVALID.send(sender, Formatter.all("amount", amount, "max-amount", egg.getMaxStackSize()));
+        ItemStack honey = beeType.honey(1, block);
+        if(amount > honey.getMaxStackSize()) {
+            Messages.COMMAND_AMOUNT_INVALID.send(sender, Formatter.all("amount", amount, "max-amount", honey.getMaxStackSize()));
             return;
         }
 
-        egg.setAmount(amount);
-        targetPlayer.getInventory().addItem(egg).forEach((slot, item) -> {
+        honey.setAmount(amount);
+        targetPlayer.getInventory().addItem(honey).forEach((slot, item) -> {
             Item dropped = targetPlayer.getWorld().dropItem(targetPlayer.getLocation(), item);
             dropped.setOwner(targetPlayer.getUniqueId());
         });
-        Messages.EGG_COMMAND_SUCCESS.send(sender, Formatter.all("player", targetPlayer.getName(), "amount", amount, "beetype", beeType.displayName()));
+        Messages.HONEY_COMMAND_SUCCESS.send(sender, Formatter.all("player", targetPlayer.getName(), "amount", amount, "beetype", beeType.displayName()));
     }
 }
