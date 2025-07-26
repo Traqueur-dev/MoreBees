@@ -45,6 +45,7 @@ allprojects { subproject ->
         addLibraryDependency(subproject, "de.exlll:configlib-yaml:4.6.1")
         implementation("com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.1")
         implementation("com.github.Traqueur-dev.CommandsAPI:core:4.2.1")
+        implementation("com.github.Traqueur-dev:RecipesAPI:2.0.3")
     }
 
     def targetJavaVersion = 21
@@ -74,6 +75,7 @@ allprojects { subproject ->
         archiveVersion.set(rootProject.version)
         archiveClassifier.set('')
         relocate "fr.traqueur.commands", "fr.traqueur.morebees.api.commands"
+        relocate "fr.traqueur.recipes", "fr.traqueur.morebees.api.recipes"
     }
 }
 

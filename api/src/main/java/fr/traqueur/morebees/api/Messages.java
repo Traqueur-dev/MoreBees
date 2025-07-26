@@ -16,12 +16,16 @@ public enum Messages {
     RELOAD_COMMAND_DESC("<gray>Reloads the plugin configuration."),
     RELOAD_SUCCESS("<green>Configuration reloaded successfully!"),
 
+    COMMAND_AMOUNT_INVALID("<red>Invalid amount for %amount%! Please choose a number between 1 and %max-amount%."),
+
     EGG_COMMAND_DESC("<gray>Gives you a bee egg."),
-    EGG_COMMAND_AMOUNT_INVALID("<red>Invalid amount for %amount%! Please choose a number between 1 and %max-amount%."),
     EGG_COMMAND_SUCCESS("<green>Successfully given %amount% %beetype% egg(s) to %player%!"),
 
     SPAWN_COMMAND_DESC("<gray>Spawn a bee at the player location."),
-    SPAWN_COMMAND_SUCCESS("<green>Successfully spawned a %beetype% bee at your location!"),;
+    SPAWN_COMMAND_SUCCESS("<green>Successfully spawned a %beetype% bee at your location!"),
+
+    HONEY_COMMAND_DESC("<gray>Gives you honey from a bee type."),
+    HONEY_COMMAND_SUCCESS("<green>Successfully given %amount% honey from %beetype% to %player%!"),;
 
     private String message;
 

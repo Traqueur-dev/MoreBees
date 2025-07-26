@@ -16,6 +16,10 @@ import fr.traqueur.morebees.goals.BeeTemptGoal;
 import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.hooks.modelengine.ModelEngineHook;
 import fr.traqueur.morebees.listeners.BeeListener;
+import fr.traqueur.recipes.api.RecipeType;
+import fr.traqueur.recipes.api.RecipesAPI;
+import fr.traqueur.recipes.impl.domains.ItemRecipe;
+import fr.traqueur.recipes.impl.domains.recipes.RecipeBuilder;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -30,8 +34,14 @@ import java.util.Optional;
 
 public class BeeManagerImpl implements BeeManager {
 
+    private final RecipesAPI recipesAPI;
+
     public BeeManagerImpl() {
+        this.recipesAPI = new RecipesAPI(this.getPlugin(), this.getPlugin().getSettings(GlobalSettings.class).debug(), true);
+
         this.getPlugin().registerListener(new BeeListener(this.getPlugin()));
+
+        this.registerRecipes();
 
         Bukkit.getScheduler().runTask(this.getPlugin(), () -> {
             for (World world : Bukkit.getWorlds()) {
@@ -44,9 +54,46 @@ public class BeeManagerImpl implements BeeManager {
         });
     }
 
+    private void registerRecipes() {
+        for (BeeType bee : this.getPlugin().getSettings(GlobalSettings.class).bees()) {
+            String type = bee.type();
+            ItemStack honey = bee.honey(1, false);
+            ItemStack honeyBlock = bee.honey(1, true);
+
+            ItemRecipe honeyToBlock = new RecipeBuilder()
+                    .setType(RecipeType.CRAFTING_SHAPED)
+                    .setName(type + "_honeyblock")
+                    .setResult(honeyBlock)
+                    .setAmount(1)
+                    .setPattern(
+                            "HH ",
+                            "HH ",
+                            "   "
+                    )
+                    .addIngredient(honey, 'H', true)
+                    .build();
+
+            ItemRecipe blockToHoney = new RecipeBuilder()
+                    .setType(RecipeType.CRAFTING_SHAPELESS)
+                    .setName(type + "_block_to_honey")
+                    .setResult(honey)
+                    .setAmount(4)
+                    .addIngredient(honeyBlock, true)
+                    .build();
+
+            this.recipesAPI.addRecipe(blockToHoney);
+            this.recipesAPI.addRecipe(honeyToBlock);
+
+        }
+    }
+
     @Override
     public Optional<BeeType> getBeeTypeFromEgg(ItemStack itemStack) {
         if (itemStack == null || itemStack.getType().isAir()) {
+            return Optional.empty();
+        }
+
+        if(itemStack.getType() != Material.BEE_SPAWN_EGG) {
             return Optional.empty();
         }
 
