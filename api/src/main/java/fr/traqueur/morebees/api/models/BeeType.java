@@ -9,6 +9,7 @@ import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public record BeeType(String type, int modelId, String displayName, List<String> foods, List<String> flowers, @Nullable String model) {
+public record BeeType(String type, int modelId, String displayName, List<String> foods, List<String> flowers, String product, @Nullable String model) {
 
     public BeeType {
         if(foods.isEmpty()) {
@@ -26,6 +27,15 @@ public record BeeType(String type, int modelId, String displayName, List<String>
         if(flowers.isEmpty()) {
             Logger.warning("No flowers defined for the bee type {}", type);
         }
+    }
+
+    public ItemStack productItem() {
+        return Hook.getByClass(ItemProviderHook.class)
+                .stream()
+                .map(hook -> hook.getItemFromId(product))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(ItemStack.of(Material.valueOf(product)));
     }
 
     public ItemStack egg() {
