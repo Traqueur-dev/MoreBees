@@ -32,7 +32,7 @@ public enum Messages {
     BEE_JAR_CONTENT("%beetype%"),
     BEE_BOX_CONTENT("%beetype% x%amount%"),
 
-    ;
+    TOOL_FULL("<red>Your %tool% is already full!"),;
 
     private String message;
 
