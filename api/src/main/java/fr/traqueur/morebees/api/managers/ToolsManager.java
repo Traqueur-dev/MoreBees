@@ -5,6 +5,7 @@ import fr.traqueur.morebees.api.Manager;
 import fr.traqueur.morebees.api.Messages;
 import fr.traqueur.morebees.api.models.BeeData;
 import fr.traqueur.morebees.api.models.BeeType;
+import fr.traqueur.morebees.api.models.ItemStackWrapper;
 import fr.traqueur.morebees.api.settings.GlobalSettings;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
@@ -31,7 +32,7 @@ public interface ToolsManager extends Manager {
 
     enum Tool {
         BEE_BOX(() -> BeePlugin.getPlugin(BeePlugin.class).getSettings(GlobalSettings.class).beeBoxSize(),
-                () ->  BeePlugin.getPlugin(BeePlugin.class).getSettings(GlobalSettings.class).beeBox().lore(),
+                () ->  BeePlugin.getPlugin(BeePlugin.class).getSettings(GlobalSettings.class).beeBox(),
                 "bees",
                 (placeholder, bees) -> {
                     String template = Messages.BEE_BOX_CONTENT.raw();
@@ -71,7 +72,7 @@ public interface ToolsManager extends Manager {
                 }),
 
         BEE_JAR(() -> 1,
-                () ->  BeePlugin.getPlugin(BeePlugin.class).getSettings(GlobalSettings.class).beeJar().lore(),
+                () ->  BeePlugin.getPlugin(BeePlugin.class).getSettings(GlobalSettings.class).beeJar(),
                 "bee",
                 (placeholder, bees) -> {
                     String template = Messages.BEE_JAR_CONTENT.raw();
@@ -85,13 +86,13 @@ public interface ToolsManager extends Manager {
                 });
 
         private final Supplier<Integer> maxBees;
-        private final Supplier<List<String>> lore;
+        private final Supplier<ItemStackWrapper> itemStackSupplier;
         private final BiFunction<String,List<BeeData>, Formatter[]> formatters;
         private final String placeholder;
 
-        Tool(Supplier<Integer> maxBees, Supplier<List<String>> lore, String placeholder, BiFunction<String,List<BeeData>, Formatter[]> formatters) {
+        Tool(Supplier<Integer> maxBees, Supplier<ItemStackWrapper> itemStackSupplier, String placeholder, BiFunction<String,List<BeeData>, Formatter[]> formatters) {
             this.maxBees = maxBees;
-            this.lore = lore;
+            this.itemStackSupplier = itemStackSupplier;
             this.placeholder = placeholder;
             this.formatters = formatters;
         }
@@ -100,8 +101,13 @@ public interface ToolsManager extends Manager {
             return this.maxBees.get();
         }
 
+        public ItemStack itemStack(List<BeeData> bees) {
+            ItemStackWrapper itemStack = itemStackSupplier.get();
+            return itemStack.build(this.formatters.apply(this.placeholder, bees));
+        }
+
         public List<Component> lore(List<BeeData> bees) {
-            List<String> lore = this.lore.get();
+            List<String> lore = this.itemStackSupplier.get().lore();
             if(lore == null) {
                 return List.of();
             }

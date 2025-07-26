@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ public record ItemStackWrapper(String material, @Nullable String name, @Nullable
                 List<Component> formattedLore = lore.stream()
                         .map(line -> Formatter.format(line, formatters))
                         .filter(Objects::nonNull)
+                        .flatMap(line -> Arrays.stream(line.split("\n")))
                         .map(MiniMessageHelper::parse)
                         .toList();
                 meta.lore(formattedLore);

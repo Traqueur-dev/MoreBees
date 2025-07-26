@@ -7,6 +7,8 @@ import fr.traqueur.recipes.api.domains.Ingredient;
 import fr.traqueur.recipes.api.hook.Hook;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 public class MoreBeesHook implements Hook {
 
     private final BeePlugin plugin;
@@ -22,15 +24,12 @@ public class MoreBeesHook implements Hook {
 
     @Override
     public Ingredient getIngredient(String data, Character sign) {
-        return new ToolsIngredient(this.plugin, data, sign);
+        return new ToolsIngredient(data, sign);
     }
 
     @Override
     public ItemStack getItemStack(String resultPart) {
         ToolsManager.Tool tool = ToolsManager.Tool.valueOf(resultPart);
-        return switch (tool) {
-            case BEE_BOX -> this.plugin.getSettings(GlobalSettings.class).emptyBeeBox();
-            case BEE_JAR -> this.plugin.getSettings(GlobalSettings.class).emptyBeeJar();
-        };
+        return tool.itemStack(List.of());
     }
 }

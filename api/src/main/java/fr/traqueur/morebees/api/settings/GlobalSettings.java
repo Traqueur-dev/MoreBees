@@ -27,10 +27,10 @@ public record GlobalSettings(boolean debug,
     public static final Supplier<GlobalSettings> DEFAULT = () -> {
         List<BeeType> bees = new ArrayList<>();
         bees.add(new BeeType("redstone-bee", 1,"<red>Redstone Bee", List.of(Material.REDSTONE.name()), List.of(Material.REDSTONE_BLOCK.name()), Material.REDSTONE_ORE.name(), "redstone-bee"));
-        bees.add(new BeeType("emerald-bee", 2, "<green>Emerald Bee", List.of(Material.EMERALD.name()), List.of(Material.EMERALD_BLOCK.name()), Material.EMERALD_ORE.name(), null));
-        bees.add(new BeeType("diamond-bee", 3,"<aqua>Diamond Bee",List.of(Material.DIAMOND.name()), List.of(Material.DIAMOND_BLOCK.name()), Material.DIAMOND_ORE.name(),null));
-        bees.add(new BeeType("gold-bee",4,"<gold>Gold Bee", List.of(Material.GOLD_INGOT.name()), List.of(Material.GOLD_BLOCK.name()), Material.GOLD_ORE.name(), null));
-        bees.add(new BeeType("iron-bee", 5,"<gray>Iron Bee", List.of(Material.IRON_INGOT.name()), List.of(Material.IRON_BLOCK.name()), Material.IRON_ORE.name(), null));
+        bees.add(new BeeType("emerald-bee", null, "<green>Emerald Bee", List.of(Material.EMERALD.name()), List.of(Material.EMERALD_BLOCK.name()), Material.EMERALD_ORE.name(), null));
+        bees.add(new BeeType("diamond-bee", null,"<aqua>Diamond Bee",List.of(Material.DIAMOND.name()), List.of(Material.DIAMOND_BLOCK.name()), Material.DIAMOND_ORE.name(),null));
+        bees.add(new BeeType("gold-bee",null,"<gold>Gold Bee", List.of(Material.GOLD_INGOT.name()), List.of(Material.GOLD_BLOCK.name()), Material.GOLD_ORE.name(), null));
+        bees.add(new BeeType("iron-bee", null,"<gray>Iron Bee", List.of(Material.IRON_INGOT.name()), List.of(Material.IRON_BLOCK.name()), Material.IRON_ORE.name(), null));
 
         ItemStackWrapper beeBox = new ItemStackWrapper(Material.PAPER.name(), "Bee box", List.of("This is a beebox", "%bees%"));
         ItemStackWrapper beeJar = new ItemStackWrapper(Material.GLASS_BOTTLE.name(), "Bee jar", List.of("This is a bee jar", "%bee%"));
@@ -51,29 +51,6 @@ public record GlobalSettings(boolean debug,
             }
         }
         return true;
-    }
-
-    public ItemStack emptyBeeBox() {
-        ItemStack base = beeBox.build();
-
-        base.editMeta(meta -> {
-            PersistentDataContainer container = meta.getPersistentDataContainer();
-            Keys.MAX_BEES.set(container, PersistentDataType.INTEGER, beeBoxSize);
-            Keys.TOOL_ID.set(container, ToolDataType.INSTANCE, ToolsManager.Tool.BEE_BOX);
-            meta.lore(ToolsManager.Tool.BEE_BOX.lore(List.of()));
-        });
-        return base;
-    }
-
-    public ItemStack emptyBeeJar() {
-        ItemStack base = beeJar.build();
-        base.editMeta(meta -> {
-            PersistentDataContainer container = meta.getPersistentDataContainer();
-            Keys.MAX_BEES.set(container, PersistentDataType.INTEGER, 1);
-            Keys.TOOL_ID.set(container, ToolDataType.INSTANCE, ToolsManager.Tool.BEE_JAR);
-            meta.lore(ToolsManager.Tool.BEE_JAR.lore(List.of()));
-        });
-        return base;
     }
 
 }

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public record BeeType(String type, int modelId, String displayName, List<String> foods, List<String> flowers, String product, @Nullable String model) {
+public record BeeType(String type, @Nullable Integer modelId, String displayName, List<String> foods, List<String> flowers, String product, @Nullable String model) {
 
     public BeeType {
         if(foods.isEmpty()) {
@@ -38,7 +38,7 @@ public record BeeType(String type, int modelId, String displayName, List<String>
             meta.itemName(MiniMessageHelper.parse(displayName + " Egg<reset>"));
             PersistentDataContainer container = meta.getPersistentDataContainer();
             Keys.BEE_TYPE.set(container, BeeTypeDataType.INSTANCE, this);
-            if(modelId > 0) {
+            if(modelId != null && modelId > 0) {
                 meta.setCustomModelData(modelId);
             }
         });
@@ -52,7 +52,7 @@ public record BeeType(String type, int modelId, String displayName, List<String>
             meta.itemName(MiniMessageHelper.parse(displayName + " Honey<reset>"));
             PersistentDataContainer container = meta.getPersistentDataContainer();
             Keys.BEE_TYPE.set(container, BeeTypeDataType.INSTANCE, this);
-            if(modelId > 0) {
+            if(modelId != null && modelId > 0) {
                 meta.setCustomModelData(modelId);
             }
         });
