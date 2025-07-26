@@ -11,4 +11,5 @@ public interface ItemProviderHook extends Hook {
 
     @Nullable String getBlockName(Block block);
 
+    ItemStack getItemFromId(String product);
 }

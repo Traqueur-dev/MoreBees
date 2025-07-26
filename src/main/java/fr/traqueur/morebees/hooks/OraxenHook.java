@@ -5,6 +5,7 @@ import fr.traqueur.morebees.api.Logger;
 import fr.traqueur.morebees.api.hooks.ItemProviderHook;
 import io.th0rgal.oraxen.api.OraxenBlocks;
 import io.th0rgal.oraxen.api.OraxenItems;
+import io.th0rgal.oraxen.items.ItemBuilder;
 import io.th0rgal.oraxen.mechanics.provided.gameplay.block.BlockMechanic;
 import io.th0rgal.oraxen.mechanics.provided.gameplay.noteblock.NoteBlockMechanic;
 import org.bukkit.block.Block;
@@ -28,6 +29,15 @@ public class OraxenHook implements ItemProviderHook {
             return noteBlockMechanic.getItemID();
         }
         return null;
+    }
+
+    @Override
+    public ItemStack getItemFromId(String product) {
+        ItemBuilder builder = OraxenItems.getItemById(product);
+        if (builder == null) {
+            return null;
+        }
+        return builder.build();
     }
 
     @Override

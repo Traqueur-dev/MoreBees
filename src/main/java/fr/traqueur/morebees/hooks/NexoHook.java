@@ -1,6 +1,7 @@
 package fr.traqueur.morebees.hooks;
 
 import com.nexomc.nexo.api.NexoItems;
+import com.nexomc.nexo.items.ItemBuilder;
 import com.nexomc.nexo.mechanics.custom_block.CustomBlockMechanic;
 import com.nexomc.nexo.mechanics.custom_block.CustomBlockRegistry;
 import fr.traqueur.morebees.api.BeePlugin;
@@ -23,6 +24,15 @@ public class NexoHook implements ItemProviderHook {
             return blockMechanic.getItemID();
         }
         return null;
+    }
+
+    @Override
+    public ItemStack getItemFromId(String product) {
+        ItemBuilder builder = NexoItems.itemFromId(product);
+        if (builder == null) {
+            return null;
+        }
+        return builder.build();
     }
 
     @Override

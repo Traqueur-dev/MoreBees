@@ -15,11 +15,11 @@ public record GlobalSettings(boolean debug,
 
     public static final Supplier<GlobalSettings> DEFAULT = () -> {
         List<BeeType> bees = new ArrayList<>();
-        bees.add(new BeeType("redstone-bee", 1,"<red>Redstone Bee", List.of(Material.REDSTONE.name()), List.of(Material.REDSTONE_BLOCK.name()), "redstone-bee"));
-        bees.add(new BeeType("emerald-bee", 2, "<green>Emerald Bee", List.of(Material.EMERALD.name()), List.of(Material.EMERALD_BLOCK.name()),null));
-        bees.add(new BeeType("diamond-bee", 3,"<aqua>Diamond Bee",List.of(Material.DIAMOND.name()), List.of(Material.DIAMOND_BLOCK.name()), null));
-        bees.add(new BeeType("gold-bee",4,"<gold>Gold Bee", List.of(Material.GOLD_INGOT.name()), List.of(Material.GOLD_BLOCK.name()), null));
-        bees.add(new BeeType("iron-bee", 5,"<gray>Iron Bee", List.of(Material.IRON_INGOT.name()), List.of(Material.IRON_BLOCK.name()), null));
+        bees.add(new BeeType("redstone-bee", 1,"<red>Redstone Bee", List.of(Material.REDSTONE.name()), List.of(Material.REDSTONE_BLOCK.name()), Material.REDSTONE_ORE.name(), "redstone-bee"));
+        bees.add(new BeeType("emerald-bee", 2, "<green>Emerald Bee", List.of(Material.EMERALD.name()), List.of(Material.EMERALD_BLOCK.name()), Material.EMERALD_ORE.name(), null));
+        bees.add(new BeeType("diamond-bee", 3,"<aqua>Diamond Bee",List.of(Material.DIAMOND.name()), List.of(Material.DIAMOND_BLOCK.name()), Material.DIAMOND_ORE.name(),null));
+        bees.add(new BeeType("gold-bee",4,"<gold>Gold Bee", List.of(Material.GOLD_INGOT.name()), List.of(Material.GOLD_BLOCK.name()), Material.GOLD_ORE.name(), null));
+        bees.add(new BeeType("iron-bee", 5,"<gray>Iron Bee", List.of(Material.IRON_INGOT.name()), List.of(Material.IRON_BLOCK.name()), Material.IRON_ORE.name(), null));
         return new GlobalSettings(true, "flying", bees);
     };
 

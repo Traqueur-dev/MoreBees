@@ -41,9 +41,10 @@ public class BeeManagerImpl implements BeeManager {
 
         this.getPlugin().registerListener(new BeeListener(this.getPlugin()));
 
-        this.registerRecipes();
-
         Bukkit.getScheduler().runTask(this.getPlugin(), () -> {
+
+            this.registerRecipes();
+
             for (World world : Bukkit.getWorlds()) {
                 for (Bee bee : world.getEntitiesByClass(Bee.class)) {
                     this.getBeeTypeFromEntity(bee).ifPresent(beeType -> {
@@ -81,6 +82,15 @@ public class BeeManagerImpl implements BeeManager {
                     .addIngredient(honeyBlock, true)
                     .build();
 
+            ItemRecipe honeyToResource = new RecipeBuilder()
+                    .setType(RecipeType.CRAFTING_SHAPELESS)
+                    .setName(type + "_honey_to_resource")
+                    .setResult(bee.productItem())
+                    .setAmount(1)
+                    .addIngredient(honey, true)
+                    .build();
+
+            this.recipesAPI.addRecipe(honeyToResource);
             this.recipesAPI.addRecipe(blockToHoney);
             this.recipesAPI.addRecipe(honeyToBlock);
 
