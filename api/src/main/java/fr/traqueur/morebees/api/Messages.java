@@ -25,7 +25,12 @@ public enum Messages {
     SPAWN_COMMAND_SUCCESS("<green>Successfully spawned a %beetype% bee at your location!"),
 
     HONEY_COMMAND_DESC("<gray>Gives you honey from a bee type."),
-    HONEY_COMMAND_SUCCESS("<green>Successfully given %amount% honey from %beetype% to %player%!"),;
+    HONEY_COMMAND_SUCCESS("<green>Successfully given %amount% honey from %beetype% to %player%!"),
+
+    EMPTY_BEE_JAR("<red>Empty"),
+    EMPTY_BEE_BOX("<red>Empty"),
+
+    ;
 
     private String message;
 
