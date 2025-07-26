@@ -1,8 +1,7 @@
 package fr.traqueur.morebees.recipes;
 
 import fr.traqueur.morebees.api.BeePlugin;
-import fr.traqueur.morebees.api.managers.ToolsManager;
-import fr.traqueur.morebees.api.settings.GlobalSettings;
+import fr.traqueur.morebees.api.models.Tool;
 import fr.traqueur.recipes.api.domains.Ingredient;
 import fr.traqueur.recipes.api.hook.Hook;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +28,7 @@ public class MoreBeesHook implements Hook {
 
     @Override
     public ItemStack getItemStack(String resultPart) {
-        ToolsManager.Tool tool = ToolsManager.Tool.valueOf(resultPart);
+        Tool tool = Tool.valueOf(resultPart);
         return tool.itemStack(List.of());
     }
 }

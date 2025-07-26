@@ -11,11 +11,13 @@ import fr.traqueur.morebees.api.managers.BeeManager;
 import fr.traqueur.morebees.api.managers.BeehiveManager;
 import fr.traqueur.morebees.api.managers.ToolsManager;
 import fr.traqueur.morebees.api.models.BeeType;
+import fr.traqueur.morebees.api.models.Tool;
 import fr.traqueur.morebees.api.settings.BreedSettings;
 import fr.traqueur.morebees.api.settings.GlobalSettings;
 import fr.traqueur.morebees.api.settings.Settings;
 import fr.traqueur.morebees.commands.MoreBeesRootCommand;
 import fr.traqueur.morebees.commands.arguments.BeeTypeArgument;
+import fr.traqueur.morebees.commands.arguments.ToolsArgument;
 import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.managers.BeeManagerImpl;
 import fr.traqueur.morebees.managers.BeehiveManagerImpl;
@@ -88,6 +90,7 @@ public final class MoreBees extends BeePlugin {
         });
 
         commandManager.registerConverter(BeeType.class, new BeeTypeArgument(this));
+        commandManager.registerConverter(Tool.class, new ToolsArgument());
 
         commandManager.registerCommand(new MoreBeesRootCommand(this));
 
