@@ -1,6 +1,5 @@
 package fr.traqueur.morebees.api.models;
 
-import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;

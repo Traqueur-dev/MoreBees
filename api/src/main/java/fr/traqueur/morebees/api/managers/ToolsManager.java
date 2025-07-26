@@ -15,9 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public interface ToolsManager extends Manager {
 

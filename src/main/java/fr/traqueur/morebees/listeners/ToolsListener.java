@@ -9,9 +9,9 @@ import fr.traqueur.morebees.api.models.BeeData;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Bee;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -19,7 +19,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.RayTraceResult;
 
 import java.util.*;
 
@@ -40,7 +39,6 @@ public class ToolsListener implements Listener {
         }
 
         if(this.catchers.contains(event.getPlayer().getUniqueId())) {
-            this.catchers.remove(event.getPlayer().getUniqueId());
             return;
         }
 
@@ -99,6 +97,8 @@ public class ToolsListener implements Listener {
         Util.ifBothPresent(beeManager.getBeeTypeFromEntity(bee), toolOpt, (beeType, tool) -> {
             toolsManager.catchBee(toolItem, bee, beeType);
             this.catchers.add(event.getPlayer().getUniqueId());
+            Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.catchers.remove(event.getPlayer().getUniqueId()), 5L);
+            event.setCancelled(true);
             Logger.debug("Caught bee {} of type {} with tool {}",
                     bee.getUniqueId(),
                     beeType.type(),

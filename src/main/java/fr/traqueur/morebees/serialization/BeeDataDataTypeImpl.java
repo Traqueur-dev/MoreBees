@@ -2,17 +2,14 @@ package fr.traqueur.morebees.serialization;
 
 import fr.traqueur.morebees.api.models.BeeData;
 import fr.traqueur.morebees.api.models.BeeType;
-import fr.traqueur.morebees.api.models.Beehive;
-import fr.traqueur.morebees.api.serialization.*;
+import fr.traqueur.morebees.api.serialization.BeeDataDataType;
+import fr.traqueur.morebees.api.serialization.BeeTypeDataType;
+import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.models.BeeDataImpl;
-import fr.traqueur.morebees.models.BeehiveImpl;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class BeeDataDataTypeImpl extends BeeDataDataType {
 
