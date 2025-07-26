@@ -1,5 +1,6 @@
 package fr.traqueur.morebees.api.util;
 
+import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.hooks.Hook;
 import fr.traqueur.morebees.api.hooks.ItemProviderHook;
 import org.bukkit.Material;

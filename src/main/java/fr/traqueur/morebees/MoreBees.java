@@ -21,6 +21,7 @@ import fr.traqueur.morebees.managers.BeeManagerImpl;
 import fr.traqueur.morebees.managers.BeehiveManagerImpl;
 import fr.traqueur.morebees.managers.ToolsManagerImpl;
 import fr.traqueur.morebees.recipes.MoreBeesHook;
+import fr.traqueur.morebees.serialization.BeeDataDataTypeImpl;
 import fr.traqueur.morebees.serialization.BeeTypeDataTypeImpl;
 import fr.traqueur.morebees.serialization.BeehiveDataTypeImpl;
 import fr.traqueur.morebees.serialization.ToolDataTypeImpl;
@@ -66,6 +67,7 @@ public final class MoreBees extends BeePlugin {
         BeeTypeDataTypeImpl.init(this);
         BeehiveDataTypeImpl.init();
         ToolDataTypeImpl.init();
+        BeeDataDataTypeImpl.init();
 
         this.registerManager(BeeManager.class, new BeeManagerImpl());
         this.registerManager(BeehiveManager.class, new BeehiveManagerImpl());

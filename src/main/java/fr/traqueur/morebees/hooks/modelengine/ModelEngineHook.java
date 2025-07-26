@@ -60,7 +60,7 @@ public class ModelEngineHook implements Hook {
 
     public void grow(Bee entity) {
         PersistentDataContainer data = entity.getPersistentDataContainer();
-        Keys.BEETYPE.get(data, BeeTypeDataType.INSTANCE).ifPresent(beeType -> {
+        Keys.BEE_TYPE.get(data, BeeTypeDataType.INSTANCE).ifPresent(beeType -> {
             if(beeType.model() == null) {
                 return;
             }

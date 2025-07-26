@@ -37,7 +37,7 @@ public record BeeType(String type, int modelId, String displayName, List<String>
         item.editMeta(meta -> {
             meta.itemName(MiniMessageHelper.parse(displayName + " Egg<reset>"));
             PersistentDataContainer container = meta.getPersistentDataContainer();
-            Keys.BEETYPE.set(container, BeeTypeDataType.INSTANCE, this);
+            Keys.BEE_TYPE.set(container, BeeTypeDataType.INSTANCE, this);
             if(modelId > 0) {
                 meta.setCustomModelData(modelId);
             }
@@ -51,7 +51,7 @@ public record BeeType(String type, int modelId, String displayName, List<String>
         item.editMeta(meta -> {
             meta.itemName(MiniMessageHelper.parse(displayName + " Honey<reset>"));
             PersistentDataContainer container = meta.getPersistentDataContainer();
-            Keys.BEETYPE.set(container, BeeTypeDataType.INSTANCE, this);
+            Keys.BEE_TYPE.set(container, BeeTypeDataType.INSTANCE, this);
             if(modelId > 0) {
                 meta.setCustomModelData(modelId);
             }

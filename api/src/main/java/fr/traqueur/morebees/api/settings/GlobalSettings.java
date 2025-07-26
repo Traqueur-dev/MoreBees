@@ -1,9 +1,17 @@
 package fr.traqueur.morebees.api.settings;
 
 import de.exlll.configlib.Comment;
+import fr.traqueur.morebees.api.Messages;
+import fr.traqueur.morebees.api.managers.ToolsManager;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.models.ItemStackWrapper;
+import fr.traqueur.morebees.api.serialization.Keys;
+import fr.traqueur.morebees.api.serialization.ToolDataType;
+import fr.traqueur.morebees.api.util.Formatter;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +53,29 @@ public record GlobalSettings(boolean debug,
             }
         }
         return true;
+    }
+
+    public ItemStack emptyBeeBox() {
+        ItemStack base = beeBox.build();
+
+        base.editMeta(meta -> {
+            PersistentDataContainer container = meta.getPersistentDataContainer();
+            Keys.MAX_BEES.get(container, PersistentDataType.INTEGER, beeBoxSize);
+            Keys.TOOL_ID.get(container, ToolDataType.INSTANCE, ToolsManager.Tool.BEE_BOX);
+            meta.lore(ToolsManager.Tool.BEE_BOX.lore(List.of()));
+        });
+        return base;
+    }
+
+    public ItemStack emptyBeeJar() {
+        ItemStack base = beeJar.build();
+        base.editMeta(meta -> {
+            PersistentDataContainer container = meta.getPersistentDataContainer();
+            Keys.MAX_BEES.get(container, PersistentDataType.INTEGER, 1);
+            Keys.TOOL_ID.get(container, ToolDataType.INSTANCE, ToolsManager.Tool.BEE_JAR);
+            meta.lore(ToolsManager.Tool.BEE_JAR.lore(List.of()));
+        });
+        return base;
     }
 
 }

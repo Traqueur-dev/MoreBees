@@ -29,6 +29,8 @@ public enum Messages {
 
     EMPTY_BEE_JAR("<red>Empty"),
     EMPTY_BEE_BOX("<red>Empty"),
+    BEE_JAR_CONTENT("%beetype%"),
+    BEE_BOX_CONTENT("%beetype% x%amount%"),
 
     ;
 

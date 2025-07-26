@@ -25,13 +25,13 @@ public class BeehiveDataTypeImpl extends BeehiveDataType {
     @Override
     public @NotNull PersistentDataContainer toPrimitive(@NotNull Beehive complex, @NotNull PersistentDataAdapterContext context) {
         PersistentDataContainer container = context.newPersistentDataContainer();
-        Keys.INTERNAL_BEEHIVE_BEETYPES.set(container, TYPE, complex.getHoneyCombCounts());
+        Keys.INTERNAL_BEEHIVE_BEE_TYPES.set(container, TYPE, complex.getHoneyCombCounts());
         return container;
     }
 
     @Override
     public @NotNull Beehive fromPrimitive(@NotNull PersistentDataContainer primitive, @NotNull PersistentDataAdapterContext context) {
-        Map<BeeType, Integer> honeyCombCounts = Keys.INTERNAL_BEEHIVE_BEETYPES.get(primitive, TYPE, new HashMap<>());
+        Map<BeeType, Integer> honeyCombCounts = Keys.INTERNAL_BEEHIVE_BEE_TYPES.get(primitive, TYPE, new HashMap<>());
         return new BeehiveImpl(honeyCombCounts);
     }
 }

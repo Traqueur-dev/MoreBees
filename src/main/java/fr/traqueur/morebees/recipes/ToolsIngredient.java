@@ -34,8 +34,8 @@ public class ToolsIngredient extends Ingredient {
     @Override
     public RecipeChoice choice() {
         return switch (this.tool) {
-            case BEE_BOX -> new RecipeChoice.MaterialChoice(this.plugin.getSettings(GlobalSettings.class).beeBox().build().getType());
-            case BEE_JAR -> new RecipeChoice.MaterialChoice(this.plugin.getSettings(GlobalSettings.class).beeJar().build().getType());
+            case BEE_BOX -> new RecipeChoice.MaterialChoice(this.plugin.getSettings(GlobalSettings.class).emptyBeeBox().getType());
+            case BEE_JAR -> new RecipeChoice.MaterialChoice(this.plugin.getSettings(GlobalSettings.class).emptyBeeJar().getType());
         };
     }
 

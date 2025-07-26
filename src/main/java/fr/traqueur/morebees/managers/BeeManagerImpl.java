@@ -17,7 +17,6 @@ import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.hooks.modelengine.ModelEngineHook;
 import fr.traqueur.morebees.listeners.BeeListener;
 import fr.traqueur.recipes.api.RecipeType;
-import fr.traqueur.recipes.api.RecipesAPI;
 import fr.traqueur.recipes.impl.domains.ItemRecipe;
 import fr.traqueur.recipes.impl.domains.recipes.RecipeBuilder;
 import org.bukkit.*;
@@ -33,8 +32,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class BeeManagerImpl implements BeeManager {
-
-
 
     public BeeManagerImpl() {
 
@@ -112,7 +109,7 @@ public class BeeManagerImpl implements BeeManager {
         }
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        return  Keys.BEETYPE.get(container, BeeTypeDataType.INSTANCE);
+        return  Keys.BEE_TYPE.get(container, BeeTypeDataType.INSTANCE);
     }
 
     @Override
@@ -121,15 +118,17 @@ public class BeeManagerImpl implements BeeManager {
             return Optional.empty();
         }
         PersistentDataContainer data = entity.getPersistentDataContainer();
-        return Keys.BEETYPE.get(data, BeeTypeDataType.INSTANCE);
+        return Keys.BEE_TYPE.get(data, BeeTypeDataType.INSTANCE);
     }
 
     @Override
-    public void spawnBee(Location location, BeeType beeType, CreatureSpawnEvent.SpawnReason reason, boolean baby) {
+    public void spawnBee(Location location, BeeType beeType, CreatureSpawnEvent.SpawnReason reason, boolean baby, boolean nectar) {
         Bee bee = location.getWorld().createEntity(location, Bee.class);
 
         if(baby)
             bee.setBaby();
+
+        bee.setHasNectar(nectar);
 
         this.patchBee(bee, beeType);
 
@@ -140,7 +139,7 @@ public class BeeManagerImpl implements BeeManager {
     public void patchBee(Bee bee, BeeType beeType) {
 
         PersistentDataContainer data = bee.getPersistentDataContainer();
-        Keys.BEETYPE.set(data, BeeTypeDataType.INSTANCE, beeType);
+        Keys.BEE_TYPE.set(data, BeeTypeDataType.INSTANCE, beeType);
 
         Optional<ModelEngineHook> hookOptional = Hooks.MODEL_ENGINE.get();
         boolean textured = hookOptional.map(hook -> hook.overrideModel(bee, beeType)).orElse(false);
