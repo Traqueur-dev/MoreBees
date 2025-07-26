@@ -61,16 +61,12 @@ public class ToolsManagerImpl implements ToolsManager {
         Tool toolType = this.getTool(tool).orElseThrow(() -> new IllegalArgumentException("ItemStack is not a valid tool"));
         List<BeeData> bees = this.getBeesInsideTool(tool);
 
-        System.out.println("Bees before adding: " + bees.size());
-
         if (bees.size() >= toolType.maxBees()) {
             return; // Tool is full
         }
 
         bee.remove();
         bees.add(this.toData(bee, beeType));
-
-        System.out.println("Bees after adding: " + bees.size());
 
         List<Component> newLore = toolType.lore(bees);
         tool.editMeta(meta -> {

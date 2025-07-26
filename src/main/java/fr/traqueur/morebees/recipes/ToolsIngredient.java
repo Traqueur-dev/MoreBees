@@ -4,21 +4,21 @@ import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.managers.ToolsManager;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.serialization.ToolDataType;
-import fr.traqueur.morebees.api.settings.GlobalSettings;
 import fr.traqueur.recipes.api.domains.Ingredient;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
+import java.util.List;
+
 public class ToolsIngredient extends Ingredient {
 
-    private final BeePlugin plugin;
     private final ToolsManager.Tool tool;
 
-    public ToolsIngredient(BeePlugin plugin, String data, Character sign) {
+    public ToolsIngredient(String data, Character sign) {
         super(sign);
-        this.plugin = plugin;
         this.tool = ToolsManager.Tool.valueOf(data);
     }
 
@@ -33,10 +33,8 @@ public class ToolsIngredient extends Ingredient {
 
     @Override
     public RecipeChoice choice() {
-        return switch (this.tool) {
-            case BEE_BOX -> new RecipeChoice.MaterialChoice(this.plugin.getSettings(GlobalSettings.class).emptyBeeBox().getType());
-            case BEE_JAR -> new RecipeChoice.MaterialChoice(this.plugin.getSettings(GlobalSettings.class).emptyBeeJar().getType());
-        };
+        Material material = this.tool.itemStack(List.of()).getType();
+        return new RecipeChoice.MaterialChoice(material);
     }
 
 }
