@@ -19,7 +19,7 @@ public interface BeeManager extends Manager {
 
     Optional<BeeType> getBeeTypeFromEntity(LivingEntity entity);
 
-    void spawnBee(Location location, BeeType beeType, CreatureSpawnEvent.SpawnReason reason, boolean baby);
+    void spawnBee(Location location, BeeType beeType, CreatureSpawnEvent.SpawnReason reason, boolean baby, boolean nectar);
 
     void patchBee(Bee bee, BeeType beeType);
 

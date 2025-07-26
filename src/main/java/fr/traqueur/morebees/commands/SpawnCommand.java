@@ -36,7 +36,7 @@ public class SpawnCommand extends Command<@NotNull BeePlugin> {
 
         BeeManager beeManager = getPlugin().getManager(BeeManager.class);
 
-        beeManager.spawnBee(player.getLocation(), beeType, CreatureSpawnEvent.SpawnReason.COMMAND, baby);
+        beeManager.spawnBee(player.getLocation(), beeType, CreatureSpawnEvent.SpawnReason.COMMAND, baby, false);
         Messages.SPAWN_COMMAND_SUCCESS.send(sender, Formatter.format("beetype", beeType.displayName()));
     }
 }

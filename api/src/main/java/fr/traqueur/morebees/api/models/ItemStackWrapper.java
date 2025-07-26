@@ -17,11 +17,11 @@ public record ItemStackWrapper(String material, @Nullable String name, @Nullable
         ItemStack base = Util.getItemFromId(material);
         base.editMeta(meta -> {
             if (name != null)
-                meta.itemName(MiniMessageHelper.parse(format(name, formatters)));
+                meta.itemName(MiniMessageHelper.parse(Formatter.format(name, formatters)));
 
             if (lore != null && !lore.isEmpty()) {
                 List<Component> formattedLore = lore.stream()
-                        .map(line -> format(line, formatters))
+                        .map(line -> Formatter.format(line, formatters))
                         .filter(Objects::nonNull)
                         .map(MiniMessageHelper::parse)
                         .toList();
@@ -31,12 +31,6 @@ public record ItemStackWrapper(String material, @Nullable String name, @Nullable
         return base;
     }
 
-    private String format(String text, Formatter... formatters) {
-        if (text == null) return null;
-        for (Formatter formatter : formatters) {
-            text = formatter.handle(BeePlugin.getPlugin(BeePlugin.class), text);
-        }
-        return text;
-    }
+
 
 }

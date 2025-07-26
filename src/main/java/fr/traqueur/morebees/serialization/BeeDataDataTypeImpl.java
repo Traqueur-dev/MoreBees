@@ -1,0 +1,40 @@
+package fr.traqueur.morebees.serialization;
+
+import fr.traqueur.morebees.api.models.BeeData;
+import fr.traqueur.morebees.api.models.BeeType;
+import fr.traqueur.morebees.api.models.Beehive;
+import fr.traqueur.morebees.api.serialization.*;
+import fr.traqueur.morebees.models.BeeDataImpl;
+import fr.traqueur.morebees.models.BeehiveImpl;
+import org.bukkit.persistence.PersistentDataAdapterContext;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class BeeDataDataTypeImpl extends BeeDataDataType {
+
+    public static void init() {
+        BeeDataDataType.INSTANCE = new BeeDataDataTypeImpl();
+    }
+
+    @Override
+    public @NotNull PersistentDataContainer toPrimitive(@NotNull BeeData complex, @NotNull PersistentDataAdapterContext context) {
+        PersistentDataContainer container = context.newPersistentDataContainer();
+        Keys.INTERNAL_BEE_DATA_BEE_TYPE.set(container, BeeTypeDataType.INSTANCE, complex.type());
+        Keys.INTERNAL_BEE_DATA_HAS_NECTAR.set(container, PersistentDataType.BOOLEAN, complex.hasNectar());
+        Keys.INTERNAL_BEE_DATA_IS_ADULT.set(container, PersistentDataType.BOOLEAN, complex.isAdult());
+        return container;
+    }
+
+    @Override
+    public @NotNull BeeData fromPrimitive(@NotNull PersistentDataContainer primitive, @NotNull PersistentDataAdapterContext context) {
+        BeeType beeType = Keys.INTERNAL_BEE_DATA_BEE_TYPE.get(primitive, BeeTypeDataType.INSTANCE).orElseThrow();
+        boolean hasNectar = Keys.INTERNAL_BEE_DATA_HAS_NECTAR.get(primitive, PersistentDataType.BOOLEAN).orElseThrow();
+        boolean isAdult = Keys.INTERNAL_BEE_DATA_IS_ADULT.get(primitive, PersistentDataType.BOOLEAN).orElseThrow();
+
+        return new BeeDataImpl(beeType, hasNectar, isAdult);
+    }
+}

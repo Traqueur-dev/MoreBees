@@ -92,7 +92,7 @@ public class BeeListener implements Listener {
 
         if (beeType.isPresent()) {
             event.setCancelled(true);
-            beeManager.spawnBee(spawnLocation, beeType.get(), CreatureSpawnEvent.SpawnReason.SPAWNER_EGG, baby);
+            beeManager.spawnBee(spawnLocation, beeType.get(), CreatureSpawnEvent.SpawnReason.SPAWNER_EGG, baby, false);
 
             if (player.getGameMode() != GameMode.CREATIVE) {
                 item.setAmount(item.getAmount() - 1);

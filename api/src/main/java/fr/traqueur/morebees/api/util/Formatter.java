@@ -9,6 +9,14 @@ public class Formatter {
     private final String pattern;
     private final Function<BeePlugin, String> supplier;
 
+    public static String format(String text, Formatter... formatters) {
+        if (text == null) return null;
+        for (Formatter formatter : formatters) {
+            text = formatter.handle(BeePlugin.getPlugin(BeePlugin.class), text);
+        }
+        return text;
+    }
+
     public static Formatter[] all(Object... objects) {
         if(objects.length % 2 != 0) {
             throw new IllegalArgumentException("You must provide an even number of arguments (pattern, supplier) pairs.");
