@@ -6,7 +6,6 @@ import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.serialization.BeeDataDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.serialization.ToolDataType;
-import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.listeners.ToolsListener;
 import fr.traqueur.morebees.models.BeeDataImpl;
 import net.kyori.adventure.text.Component;
