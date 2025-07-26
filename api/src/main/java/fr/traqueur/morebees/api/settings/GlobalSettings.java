@@ -1,15 +1,8 @@
 package fr.traqueur.morebees.api.settings;
 
 import de.exlll.configlib.Comment;
-import fr.traqueur.morebees.api.managers.ToolsManager;
 import fr.traqueur.morebees.api.models.BeeType;
-import fr.traqueur.morebees.api.models.ItemStackWrapper;
-import fr.traqueur.morebees.api.serialization.Keys;
-import fr.traqueur.morebees.api.serialization.ToolDataType;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;

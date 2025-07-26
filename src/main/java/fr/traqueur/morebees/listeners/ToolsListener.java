@@ -6,6 +6,7 @@ import fr.traqueur.morebees.api.Messages;
 import fr.traqueur.morebees.api.managers.BeeManager;
 import fr.traqueur.morebees.api.managers.ToolsManager;
 import fr.traqueur.morebees.api.models.BeeData;
+import fr.traqueur.morebees.api.models.Tool;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
@@ -84,7 +85,7 @@ public class ToolsListener implements Listener {
         }
 
         ItemStack toolItem = event.getPlayer().getInventory().getItemInMainHand();
-        Optional<ToolsManager.Tool> toolOpt = toolsManager.getTool(toolItem);
+        Optional<Tool> toolOpt = toolsManager.getTool(toolItem);
          if (toolOpt.isEmpty()) {
              return;
         }

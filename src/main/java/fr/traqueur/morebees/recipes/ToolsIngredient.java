@@ -1,7 +1,6 @@
 package fr.traqueur.morebees.recipes;
 
-import fr.traqueur.morebees.api.BeePlugin;
-import fr.traqueur.morebees.api.managers.ToolsManager;
+import fr.traqueur.morebees.api.models.Tool;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.serialization.ToolDataType;
 import fr.traqueur.recipes.api.domains.Ingredient;
@@ -15,11 +14,11 @@ import java.util.List;
 
 public class ToolsIngredient extends Ingredient {
 
-    private final ToolsManager.Tool tool;
+    private final Tool tool;
 
     public ToolsIngredient(String data, Character sign) {
         super(sign);
-        this.tool = ToolsManager.Tool.valueOf(data);
+        this.tool = Tool.valueOf(data);
     }
 
     @Override

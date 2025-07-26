@@ -3,6 +3,7 @@ package fr.traqueur.morebees.managers;
 import fr.traqueur.morebees.api.managers.ToolsManager;
 import fr.traqueur.morebees.api.models.BeeData;
 import fr.traqueur.morebees.api.models.BeeType;
+import fr.traqueur.morebees.api.models.Tool;
 import fr.traqueur.morebees.api.serialization.BeeDataDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.serialization.ToolDataType;

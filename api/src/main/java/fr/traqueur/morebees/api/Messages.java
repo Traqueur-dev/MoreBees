@@ -32,7 +32,10 @@ public enum Messages {
     BEE_JAR_CONTENT("%beetype%"),
     BEE_BOX_CONTENT("%beetype% x%amount%"),
 
-    TOOL_FULL("<red>Your %tool% is already full!"),;
+    TOOL_FULL("<red>Your %tool% is already full!"),
+
+    TOOL_COMMAND_DESC("<gray>Gives a tool to a player."),
+    TOOL_COMMAND_SUCCESS("<green>Successfully given %tool% to %player%!"),;
 
     private String message;
 

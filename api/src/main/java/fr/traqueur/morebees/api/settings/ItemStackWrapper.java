@@ -1,9 +1,10 @@
-package fr.traqueur.morebees.api.models;
+package fr.traqueur.morebees.api.settings;
 
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
@@ -25,6 +26,7 @@ public record ItemStackWrapper(String material, @Nullable String name, @Nullable
                         .filter(Objects::nonNull)
                         .flatMap(line -> Arrays.stream(line.split("\n")))
                         .map(MiniMessageHelper::parse)
+                        .map(component -> component.decoration(TextDecoration.ITALIC, false))
                         .toList();
                 meta.lore(formattedLore);
             }
