@@ -20,7 +20,7 @@ public class BeeTypeArgument implements ArgumentConverter<BeeType>, TabCompleter
 
     @Override
     public BeeType apply(String s) {
-        return this.plugin.getSettings(GlobalSettings.class).bees().stream().filter(beeType -> beeType.type().equalsIgnoreCase(s)).findFirst().orElse(null);
+        return this.plugin.getSettings(GlobalSettings.class).getBeeType(s).orElse(null);
     }
 
     @Override
