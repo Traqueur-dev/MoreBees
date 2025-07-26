@@ -1,0 +1,20 @@
+type: CRAFTING_SHAPED
+
+group: beetools
+
+category: MISC
+
+pattern:
+  - "###"
+  - "#H#"
+  - "###"
+
+result:
+  item: "morebees:BEE_BOX"
+  amount: 1
+
+ingredients:
+  - item: "tag:PLANKS"
+    sign: '#'
+  - item: "material:HONEYCOMB"
+    sign: 'H'

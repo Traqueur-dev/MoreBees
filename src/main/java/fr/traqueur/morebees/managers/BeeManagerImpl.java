@@ -34,10 +34,9 @@ import java.util.Optional;
 
 public class BeeManagerImpl implements BeeManager {
 
-    private final RecipesAPI recipesAPI;
+
 
     public BeeManagerImpl() {
-        this.recipesAPI = new RecipesAPI(this.getPlugin(), this.getPlugin().getSettings(GlobalSettings.class).debug(), true);
 
         this.getPlugin().registerListener(new BeeListener(this.getPlugin()));
 
@@ -90,9 +89,9 @@ public class BeeManagerImpl implements BeeManager {
                     .addIngredient(honey, true)
                     .build();
 
-            this.recipesAPI.addRecipe(honeyToResource);
-            this.recipesAPI.addRecipe(blockToHoney);
-            this.recipesAPI.addRecipe(honeyToBlock);
+            this.getPlugin().getRecipesAPI().addRecipe(honeyToResource);
+            this.getPlugin().getRecipesAPI().addRecipe(blockToHoney);
+            this.getPlugin().getRecipesAPI().addRecipe(honeyToBlock);
 
         }
     }

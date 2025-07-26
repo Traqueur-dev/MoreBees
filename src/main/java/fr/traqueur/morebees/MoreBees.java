@@ -9,6 +9,7 @@ import fr.traqueur.morebees.api.Logger;
 import fr.traqueur.morebees.api.Messages;
 import fr.traqueur.morebees.api.managers.BeeManager;
 import fr.traqueur.morebees.api.managers.BeehiveManager;
+import fr.traqueur.morebees.api.managers.ToolsManager;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.settings.BreedSettings;
 import fr.traqueur.morebees.api.settings.GlobalSettings;
@@ -18,8 +19,14 @@ import fr.traqueur.morebees.commands.arguments.BeeTypeArgument;
 import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.managers.BeeManagerImpl;
 import fr.traqueur.morebees.managers.BeehiveManagerImpl;
+import fr.traqueur.morebees.managers.ToolsManagerImpl;
+import fr.traqueur.morebees.recipes.MoreBeesHook;
 import fr.traqueur.morebees.serialization.BeeTypeDataTypeImpl;
 import fr.traqueur.morebees.serialization.BeehiveDataTypeImpl;
+import fr.traqueur.morebees.serialization.ToolDataTypeImpl;
+import fr.traqueur.recipes.api.RecipesAPI;
+import fr.traqueur.recipes.api.hook.Hook;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -33,6 +40,7 @@ public final class MoreBees extends BeePlugin {
 
     private final Map<Class<? extends Settings>, Settings> settings = new HashMap<>();
 
+    private RecipesAPI recipesAPI;
     private CommandManager<@NotNull BeePlugin> commandManager;
 
     public void onEnable() {
@@ -50,11 +58,18 @@ public final class MoreBees extends BeePlugin {
 
         Hooks.initAll(this);
 
+        Hook.addHook(new MoreBeesHook(this));
+        Bukkit.getScheduler().runTask(this, () -> {
+            this.recipesAPI = new RecipesAPI(this, this.getSettings(GlobalSettings.class).debug(), true);
+        });
+
         BeeTypeDataTypeImpl.init(this);
         BeehiveDataTypeImpl.init();
+        ToolDataTypeImpl.init();
 
         this.registerManager(BeeManager.class, new BeeManagerImpl());
         this.registerManager(BeehiveManager.class, new BeehiveManagerImpl());
+        this.registerManager(ToolsManager.class, new ToolsManagerImpl());
 
         this.commandManager = new CommandManager<>(this);
         commandManager.setDebug(settings.debug());
@@ -106,6 +121,11 @@ public final class MoreBees extends BeePlugin {
         if (!this.getDataPath().resolve(path).toFile().exists()) {
             YamlConfigurations.save(this.getDataPath().resolve(path), clazz, instance, CONFIGURATION_PROPERTIES);
         }
+    }
+
+    @Override
+    public RecipesAPI getRecipesAPI() {
+        return recipesAPI;
     }
 
     @Override

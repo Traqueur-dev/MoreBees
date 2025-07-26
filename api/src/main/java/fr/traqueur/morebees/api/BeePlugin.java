@@ -2,6 +2,7 @@ package fr.traqueur.morebees.api;
 
 import fr.traqueur.commands.spigot.CommandManager;
 import fr.traqueur.morebees.api.settings.Settings;
+import fr.traqueur.recipes.api.RecipesAPI;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
@@ -35,4 +36,5 @@ public abstract class BeePlugin extends JavaPlugin {
     }
 
 
+    public abstract RecipesAPI getRecipesAPI();
 }

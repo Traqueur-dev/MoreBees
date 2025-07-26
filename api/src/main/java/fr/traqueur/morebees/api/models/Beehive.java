@@ -1,6 +1,5 @@
 package fr.traqueur.morebees.api.models;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
