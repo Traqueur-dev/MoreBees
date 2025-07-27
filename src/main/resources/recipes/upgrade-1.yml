@@ -1,0 +1,20 @@
+type: CRAFTING_SHAPED
+
+group: beeupgrade
+
+category: MISC
+
+pattern:
+  - "###"
+  - "#H#"
+  - "###"
+
+result:
+  item: "morebees:level-1"
+  amount: 1
+
+ingredients:
+  - item: "material:SHORT_GRASS"
+    sign: '#'
+  - item: "material:BEEHIVE"
+    sign: 'H'

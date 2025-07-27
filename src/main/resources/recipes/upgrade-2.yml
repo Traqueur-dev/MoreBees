@@ -1,0 +1,20 @@
+type: CRAFTING_SHAPED
+
+group: beeupgrade
+
+category: MISC
+
+pattern:
+  - "###"
+  - "#H#"
+  - "###"
+
+result:
+  item: "morebees:level-2"
+  amount: 1
+
+ingredients:
+  - item: "material:IRON_INGOT"
+    sign: '#'
+  - item: "morebees:level-1"
+    sign: 'H'
