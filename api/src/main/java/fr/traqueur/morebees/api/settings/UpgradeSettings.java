@@ -8,8 +8,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+/**
+ * Represents the settings for upgrades in the More Bees API.
+ * This class contains a list of available upgrades and provides methods to access them.
+ */
 public record UpgradeSettings(List<Upgrade> upgrades) implements Settings {
 
+    /**
+     * A default supplier for UpgradeSettings that provides a predefined list of upgrades.
+     * This can be used to initialize the settings with some default values.
+     */
     public static Supplier<UpgradeSettings> DEFAULT = () -> {
         List<Upgrade> upgrades = new ArrayList<>();
 
@@ -50,6 +58,12 @@ public record UpgradeSettings(List<Upgrade> upgrades) implements Settings {
         return new UpgradeSettings(upgrades);
     };
 
+    /**
+     * Retrieves an upgrade by its ID.
+     *
+     * @param id the ID of the upgrade to retrieve
+     * @return an Optional containing the Upgrade if found, or empty if not found
+     */
     public Optional<Upgrade> getUpgrade(String id) {
         return upgrades.stream().filter(upgrade -> upgrade.id().equals(id)).findFirst();
     }

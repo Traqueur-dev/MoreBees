@@ -9,8 +9,10 @@ import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -28,12 +30,12 @@ public record BeeType(String type, @Nullable Integer modelId, String displayName
         }
     }
 
-    public ItemStack productItem() {
+    public @NotNull ItemStack productItem() {
         return Util.getItemFromId(product);
     }
 
-    public ItemStack egg() {
-        ItemStack item = new ItemStack(Material.BEE_SPAWN_EGG);
+    public @NotNull ItemStack egg() {
+        ItemStack item = ItemStack.of(Material.BEE_SPAWN_EGG);
         item.editMeta(meta -> {
             meta.itemName(MiniMessageHelper.parse(displayName + " Egg<reset>"));
             PersistentDataContainer container = meta.getPersistentDataContainer();
@@ -45,9 +47,9 @@ public record BeeType(String type, @Nullable Integer modelId, String displayName
         return item;
     }
 
-    public ItemStack honey(int amount, boolean block) {
+    public @NotNull ItemStack honey(int amount, boolean block) {
         Material material = block ? Material.HONEYCOMB_BLOCK : Material.HONEYCOMB;
-        ItemStack item = new ItemStack(material, amount);
+        ItemStack item = ItemStack.of(material, amount);
         item.editMeta(meta -> {
             meta.itemName(MiniMessageHelper.parse(displayName + " Honey<reset>"));
             PersistentDataContainer container = meta.getPersistentDataContainer();
@@ -59,7 +61,7 @@ public record BeeType(String type, @Nullable Integer modelId, String displayName
         return item;
     }
 
-    public boolean isFood(ItemStack item) {
+    public boolean isFood(@NotNull ItemStack item) {
         Material type = item.getType();
         Set<ItemProviderHook> hooks = Hook.getByClass(ItemProviderHook.class);
         String itemName = hooks.stream().map(hook -> hook.getItemName(item)).filter(Objects::nonNull).findFirst().orElse(type.name());

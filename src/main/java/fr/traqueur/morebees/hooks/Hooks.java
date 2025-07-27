@@ -47,7 +47,7 @@ public enum Hooks {
     public static void initAll(BeePlugin plugin) {
         for (Hooks hooks : Hooks.values()) {
             if (hooks.init()) {
-                hooks.get().ifPresent(hook -> enableHook(hooks.pluginName, hook, plugin));
+                hooks.get().ifPresent(hook -> enableHook(hooks.pluginName, hook));
             } else {
                 TO_RETRY.add(hooks);
             }
@@ -55,7 +55,7 @@ public enum Hooks {
         Bukkit.getScheduler().runTask(plugin, () -> {
             for (Hooks hooks : TO_RETRY) {
                 if (hooks.init()) {
-                    hooks.get().ifPresent(hook -> enableHook(hooks.pluginName, hook, plugin));
+                    hooks.get().ifPresent(hook -> enableHook(hooks.pluginName, hook));
                 } else {
                     Logger.debug("{} hook failed to initialize...", hooks.pluginName);
                 }
@@ -64,10 +64,9 @@ public enum Hooks {
         });
     }
 
-    private static void enableHook(String hookName, Hook hook, BeePlugin plugin) {
+    private static void enableHook(String hookName, Hook hook) {
         try {
-            Hook.HOOKS.add(hook);
-            hook.onEnable(plugin);
+            Hook.register(hook);
         } catch (Exception e) {
             Logger.severe("Failed to enable hook for {}",e, hookName);
         }

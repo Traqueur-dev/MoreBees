@@ -8,6 +8,10 @@ import org.bukkit.command.CommandSender;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Enum representing various messages used in the MoreBees plugin.
+ * Each message can be formatted and sent to a CommandSender.
+ */
 public enum Messages {
 
     COMMAND_HELP_TITLE("<green>%plugin% %version% <gray>by <gold>%authors%<gray> - Commands List"),
@@ -43,16 +47,33 @@ public enum Messages {
     UPGRADE_COMMAND_DESC("<gray>Gives an upgrade to a player."),
     UPGRADE_COMMAND_SUCCESS("<green>Successfully given %upgrade% to %player%!"),;
 
+    /** The raw message string for this enum constant. */
     private String message;
 
+    /**
+     * Constructs a Messages enum with the specified message.
+     *
+     * @param message The raw message string.
+     */
     Messages(String message) {
         this.message = message;
     }
 
+    /**
+     * Returns the raw message string for this enum constant.
+     *
+     * @return The raw message string.
+     */
     public String raw() {
         return this.message;
     }
 
+    /**
+     * Sends the formatted message to the specified CommandSender.
+     *
+     * @param sender The CommandSender to send the message to.
+     * @param formatters Optional formatters to apply to the message.
+     */
     public void send(CommandSender sender, Formatter... formatters) {
        String formattedMessage = this.message;
         for (Formatter formatter : formatters) {
@@ -61,8 +82,19 @@ public enum Messages {
         sender.sendMessage(MiniMessageHelper.parse(formattedMessage));
     }
 
+    /**
+     * Retrieves the default configuration for messages.
+     * @return The default configuration containing all messages.
+     * @see Config#defaultConfig()
+     */
     public static final Config DEFAULT = Config.defaultConfig();
 
+    /**
+     * Initializes the messages from the provided configuration.
+     * If a message key is missing, it logs a warning and uses the default message.
+     *
+     * @param config The configuration containing custom messages.
+     */
     public static void init(Config config) {
         for (Messages value : Messages.values()) {
             String key = Messages.snakeToLowerKebab(value.name());
@@ -74,8 +106,17 @@ public enum Messages {
         }
     }
 
+    /**
+     * Record representing the configuration for messages.
+     * Contains a map of message keys to their corresponding strings.
+     */
     public record Config(Map<String, String> messages) implements Settings {
 
+        /**
+         * Creates a default configuration with all messages initialized.
+         *
+         * @return A Config instance containing all default messages.
+         */
         public static Config defaultConfig() {
            Map<String, String> messages = new HashMap<>();
             for (Messages value : Messages.values()) {
@@ -85,6 +126,13 @@ public enum Messages {
         }
     }
 
+/**
+     * Converts a snake_case string to lower-kebab-case.
+     * For example, "example_string" becomes "example-string".
+     *
+     * @param str The snake_case string to convert.
+     * @return The converted lower-kebab-case string.
+     */
     private static String snakeToLowerKebab(String str) {
         return str.replace('_', '-').toLowerCase();
     }

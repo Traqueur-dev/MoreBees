@@ -61,17 +61,17 @@ public class BeehiveImpl implements Beehive {
     }
 
     @Override
-    public int getHoneyCombCount(BeeType beeType) {
+    public int getHoneyCombCount(@NotNull BeeType beeType) {
         return honeyCombCounts.getOrDefault(beeType, 0);
     }
 
     @Override
-    public void addHoney(BeeType beeType, int i) {
+    public void addHoney(@NotNull BeeType beeType, int i) {
         honeyCombCounts.merge(beeType, 1, Integer::sum);
     }
 
     @Override
-    public void removeHoney(BeeType beeType, int i) {
+    public void removeHoney(@NotNull BeeType beeType, int i) {
         honeyCombCounts.merge(beeType, -i, Integer::sum);
         if (honeyCombCounts.get(beeType) <= 0) {
             honeyCombCounts.remove(beeType);
@@ -79,8 +79,8 @@ public class BeehiveImpl implements Beehive {
     }
 
     @Override
-    public ItemStack patch(ItemStack item) {
-        if (item == null || item.getType().isAir()) {
+    public @NotNull ItemStack patch(@NotNull ItemStack item) {
+        if (item.getType().isAir()) {
             return item;
         }
 
