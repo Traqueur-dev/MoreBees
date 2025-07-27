@@ -2,10 +2,12 @@ package fr.traqueur.morebees.serialization;
 
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.models.Beehive;
+import fr.traqueur.morebees.api.models.Upgrade;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.serialization.MapDataType;
 import fr.traqueur.morebees.api.serialization.datas.BeeTypeDataType;
 import fr.traqueur.morebees.api.serialization.datas.BeehiveDataType;
+import fr.traqueur.morebees.api.serialization.datas.UpgradeDataType;
 import fr.traqueur.morebees.models.BeehiveImpl;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -26,12 +28,15 @@ public class BeehiveDataTypeImpl extends BeehiveDataType {
     public @NotNull PersistentDataContainer toPrimitive(@NotNull Beehive complex, @NotNull PersistentDataAdapterContext context) {
         PersistentDataContainer container = context.newPersistentDataContainer();
         Keys.INTERNAL_BEEHIVE_BEE_TYPES.set(container, TYPE, complex.getHoneyCombCounts());
+        Keys.INTERNAL_BEEHIVE_UPGRADE.set(container, UpgradeDataType.INSTANCE, complex.getUpgrade());
+
         return container;
     }
 
     @Override
     public @NotNull Beehive fromPrimitive(@NotNull PersistentDataContainer primitive, @NotNull PersistentDataAdapterContext context) {
         Map<BeeType, Integer> honeyCombCounts = Keys.INTERNAL_BEEHIVE_BEE_TYPES.get(primitive, TYPE, new HashMap<>());
-        return new BeehiveImpl(honeyCombCounts);
+        Upgrade upgrade = Keys.INTERNAL_BEEHIVE_UPGRADE.get(primitive, UpgradeDataType.INSTANCE, Upgrade.NONE);
+        return new BeehiveImpl(honeyCombCounts, upgrade);
     }
 }

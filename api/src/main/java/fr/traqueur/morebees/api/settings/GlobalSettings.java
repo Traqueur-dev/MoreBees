@@ -4,6 +4,7 @@ import de.exlll.configlib.Comment;
 import fr.traqueur.morebees.api.models.BeeType;
 import org.bukkit.Material;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,8 @@ public record GlobalSettings(boolean debug,
                              @Comment("Field \"model\" permits to use a custom model from model engine remove it to not use a custom model") List<BeeType> bees,
                              @Comment("This key represent the beebox tool to get bees inside") ItemStackWrapper beeBox,
                              int beeBoxSize,
-                             @Comment("This key represent the bee jar tool to get one bee inside") ItemStackWrapper beeJar
+                             @Comment("This key represent the bee jar tool to get one bee inside") ItemStackWrapper beeJar,
+                             @Comment("This key represent the additonal lore for beehive patch") @Nullable List<String> beehiveLore
                              ) implements Settings {
 
     public static final Supplier<GlobalSettings> DEFAULT = () -> {
@@ -28,7 +30,16 @@ public record GlobalSettings(boolean debug,
         ItemStackWrapper beeBox = new ItemStackWrapper(Material.PAPER.name(), "Bee box", List.of("This is a beebox", "%bees%"));
         ItemStackWrapper beeJar = new ItemStackWrapper(Material.GLASS_BOTTLE.name(), "Bee jar", List.of("This is a bee jar", "%bee%"));
 
-        return new GlobalSettings(true, "flying", bees, beeBox, 10, beeJar);
+        List<String> beehiveLore = List.of(
+                "This is a beehive patch",
+                "You can use it to patch your beehive",
+                "It will add a new lore to your beehive",
+                "production multiplier: %production-multiplier%",
+                "produce-blocks: %produce-blocks%",
+                "max-bees: %max-bees%"
+        );
+
+        return new GlobalSettings(true, "flying", bees, beeBox, 10, beeJar, beehiveLore);
     };
 
     public Optional<BeeType> getBeeType(String type) {

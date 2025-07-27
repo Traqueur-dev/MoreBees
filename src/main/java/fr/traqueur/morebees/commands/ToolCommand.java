@@ -6,6 +6,7 @@ import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.Messages;
 import fr.traqueur.morebees.api.models.Tool;
 import fr.traqueur.morebees.api.util.Formatter;
+import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -36,10 +37,7 @@ public class ToolCommand extends Command<@NotNull BeePlugin> {
         Tool tool = arguments.get("tool");
         ItemStack stack = tool.itemStack(List.of());
 
-        targetPlayer.getInventory().addItem(stack).forEach((slot, item) -> {
-            Item dropped = targetPlayer.getWorld().dropItem(targetPlayer.getLocation(), item);
-            dropped.setOwner(targetPlayer.getUniqueId());
-        });
+        Util.giveItem(targetPlayer, stack);
 
         Messages.TOOL_COMMAND_SUCCESS.send(sender, Formatter.all("player", targetPlayer.getName(), "tool", tool.name()));
     }

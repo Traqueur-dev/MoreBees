@@ -12,13 +12,16 @@ public record Upgrade(String id, ItemStackWrapper item, int maxBees, double prod
 
     public static Upgrade NONE = new Upgrade("none", ItemStackWrapper.EMPTY, 3, 1.0, false);
 
-    public ItemStack build() {
-        Formatter[] formatters = Formatter.all(
+    public Formatter[] formatters() {
+        return Formatter.all(
                 "max-bees", maxBees,
                 "production-multiplier", productionMultiplier,
                 "produce-blocks", produceBlocks ? Messages.PRODUCE_BLOCKS_YES.raw() : Messages.PRODUCE_BLOCKS_NO.raw()
-                );
-        ItemStack itemStack = item.build(formatters);
+        );
+    }
+
+    public ItemStack build() {
+        ItemStack itemStack = item.build(this.formatters());
         itemStack.editMeta(meta -> {
             PersistentDataContainer container = meta.getPersistentDataContainer();
             Keys.UPGRADE_ID.set(container, UpgradeDataType.INSTANCE, this);
