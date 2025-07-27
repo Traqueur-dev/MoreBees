@@ -15,20 +15,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class BeehiveImpl implements Beehive {
 
     private final Map<BeeType, Integer> honeyCombCounts;
     private @NotNull Upgrade upgrade;
+    private UUID upgradeId;
 
     public BeehiveImpl() {
         this.honeyCombCounts = new HashMap<>();
         this.upgrade = Upgrade.NONE;
+        this.upgradeId = null;
     }
 
     public BeehiveImpl(Map<BeeType, Integer> honeyCombCounts, @NotNull Upgrade upgrade) {
         this.honeyCombCounts = honeyCombCounts;
         this.upgrade = upgrade;
+        this.upgradeId = null;
     }
 
     @Override
@@ -39,6 +43,16 @@ public class BeehiveImpl implements Beehive {
     @Override
     public void setUpgrade(@NotNull Upgrade upgrade) {
         this.upgrade = upgrade;
+    }
+
+    @Override
+    public UUID getUpgradeId() {
+        return upgradeId;
+    }
+
+    @Override
+    public void setUpgradeId(UUID upgradeId) {
+        this.upgradeId = upgradeId;
     }
 
     @Override
