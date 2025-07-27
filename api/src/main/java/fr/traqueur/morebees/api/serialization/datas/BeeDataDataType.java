@@ -1,4 +1,4 @@
-package fr.traqueur.morebees.api.serialization;
+package fr.traqueur.morebees.api.serialization.datas;
 
 import fr.traqueur.morebees.api.models.BeeData;
 import org.bukkit.persistence.PersistentDataContainer;

@@ -1,8 +1,7 @@
 package fr.traqueur.morebees.serialization;
 
-import fr.traqueur.morebees.api.managers.ToolsManager;
 import fr.traqueur.morebees.api.models.Tool;
-import fr.traqueur.morebees.api.serialization.ToolDataType;
+import fr.traqueur.morebees.api.serialization.datas.ToolDataType;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.jetbrains.annotations.NotNull;
 

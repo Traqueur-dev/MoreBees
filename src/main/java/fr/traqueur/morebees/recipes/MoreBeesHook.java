@@ -2,6 +2,8 @@ package fr.traqueur.morebees.recipes;
 
 import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.models.Tool;
+import fr.traqueur.morebees.api.models.Upgrade;
+import fr.traqueur.morebees.api.settings.UpgradeSettings;
 import fr.traqueur.recipes.api.domains.Ingredient;
 import fr.traqueur.recipes.api.hook.Hook;
 import org.bukkit.inventory.ItemStack;
@@ -23,12 +25,16 @@ public class MoreBeesHook implements Hook {
 
     @Override
     public Ingredient getIngredient(String data, Character sign) {
-        return new ToolsIngredient(data, sign);
+        return new ToolsIngredient(this.plugin, data, sign);
     }
 
     @Override
     public ItemStack getItemStack(String resultPart) {
-        Tool tool = Tool.valueOf(resultPart);
-        return tool.itemStack(List.of());
+        try {
+            Tool tool = Tool.valueOf(resultPart.toUpperCase());
+            return tool.itemStack(List.of());
+        } catch (Exception e) {
+            return this.plugin.getSettings(UpgradeSettings.class).getUpgrade(resultPart).map(Upgrade::build).orElseThrow();
+        }
     }
 }

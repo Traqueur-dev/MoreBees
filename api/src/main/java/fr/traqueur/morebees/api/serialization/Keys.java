@@ -24,7 +24,7 @@ public enum Keys {
     INTERNAL_BEE_DATA_BEE_TYPE,
     INTERNAL_BEE_DATA_HAS_NECTAR,
     INTERNAL_BEE_DATA_IS_ADULT,
-    ;
+    UPGRADE_ID;
 
     private static final BeePlugin PLUGIN = JavaPlugin.getPlugin(BeePlugin.class);
 

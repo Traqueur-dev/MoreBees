@@ -2,8 +2,8 @@ package fr.traqueur.morebees.models;
 
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.models.Beehive;
-import fr.traqueur.morebees.api.serialization.BeehiveDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
+import fr.traqueur.morebees.api.serialization.datas.BeehiveDataType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 

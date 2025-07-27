@@ -2,9 +2,9 @@ package fr.traqueur.morebees.serialization;
 
 import fr.traqueur.morebees.api.models.BeeData;
 import fr.traqueur.morebees.api.models.BeeType;
-import fr.traqueur.morebees.api.serialization.BeeDataDataType;
-import fr.traqueur.morebees.api.serialization.BeeTypeDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
+import fr.traqueur.morebees.api.serialization.datas.BeeDataDataType;
+import fr.traqueur.morebees.api.serialization.datas.BeeTypeDataType;
 import fr.traqueur.morebees.models.BeeDataImpl;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;

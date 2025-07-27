@@ -12,21 +12,21 @@ import fr.traqueur.morebees.api.managers.BeehiveManager;
 import fr.traqueur.morebees.api.managers.ToolsManager;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.models.Tool;
+import fr.traqueur.morebees.api.models.Upgrade;
 import fr.traqueur.morebees.api.settings.BreedSettings;
 import fr.traqueur.morebees.api.settings.GlobalSettings;
 import fr.traqueur.morebees.api.settings.Settings;
+import fr.traqueur.morebees.api.settings.UpgradeSettings;
 import fr.traqueur.morebees.commands.MoreBeesRootCommand;
 import fr.traqueur.morebees.commands.arguments.BeeTypeArgument;
 import fr.traqueur.morebees.commands.arguments.ToolsArgument;
+import fr.traqueur.morebees.commands.arguments.UpgradeArgument;
 import fr.traqueur.morebees.hooks.Hooks;
 import fr.traqueur.morebees.managers.BeeManagerImpl;
 import fr.traqueur.morebees.managers.BeehiveManagerImpl;
 import fr.traqueur.morebees.managers.ToolsManagerImpl;
 import fr.traqueur.morebees.recipes.MoreBeesHook;
-import fr.traqueur.morebees.serialization.BeeDataDataTypeImpl;
-import fr.traqueur.morebees.serialization.BeeTypeDataTypeImpl;
-import fr.traqueur.morebees.serialization.BeehiveDataTypeImpl;
-import fr.traqueur.morebees.serialization.ToolDataTypeImpl;
+import fr.traqueur.morebees.serialization.*;
 import fr.traqueur.recipes.api.RecipesAPI;
 import fr.traqueur.recipes.api.hook.Hook;
 import org.bukkit.Bukkit;
@@ -66,6 +66,7 @@ public final class MoreBees extends BeePlugin {
             this.recipesAPI = new RecipesAPI(this, this.getSettings(GlobalSettings.class).debug(), true);
         });
 
+        UpgradeDataTypeImpl.init(this);
         BeeTypeDataTypeImpl.init(this);
         BeehiveDataTypeImpl.init();
         ToolDataTypeImpl.init();
@@ -91,6 +92,7 @@ public final class MoreBees extends BeePlugin {
 
         commandManager.registerConverter(BeeType.class, new BeeTypeArgument(this));
         commandManager.registerConverter(Tool.class, new ToolsArgument());
+        commandManager.registerConverter(Upgrade.class, new UpgradeArgument(this));
 
         commandManager.registerCommand(new MoreBeesRootCommand(this));
 
@@ -120,6 +122,22 @@ public final class MoreBees extends BeePlugin {
     public void saveDefaultConfig() {
         this.saveDefault("messages.yml", Messages.Config.class, Messages.DEFAULT);
         this.saveDefault("breeds.yml", BreedSettings.class, BreedSettings.DEFAULT.get());
+        this.saveDefault("upgrades.yml", UpgradeSettings.class, UpgradeSettings.DEFAULT.get());
+    }
+
+    @Override
+    public void reloadConfig() {
+        super.reloadConfig();
+        this.reloadConfig("config.yml", GlobalSettings.class);
+        this.reloadConfig("breeds.yml", BreedSettings.class);
+        this.reloadConfig("upgrades.yml", UpgradeSettings.class);
+        Messages.Config messages = this.reloadConfig("messages.yml", Messages.Config.class);
+        Messages.init(messages);
+    }
+
+    @Override
+    public RecipesAPI getRecipesAPI() {
+        return recipesAPI;
     }
 
     private <T extends Settings> void saveDefault(String path, Class<T> clazz, T instance) {
@@ -128,19 +146,9 @@ public final class MoreBees extends BeePlugin {
         }
     }
 
-    @Override
-    public RecipesAPI getRecipesAPI() {
-        return recipesAPI;
-    }
-
-    @Override
-    public void reloadConfig() {
-        super.reloadConfig();
-        this.settings.put(GlobalSettings.class, YamlConfigurations.load(this.getDataPath().resolve("config.yml"), GlobalSettings.class, CONFIGURATION_PROPERTIES));
-        this.settings.put(BreedSettings.class, YamlConfigurations.load(this.getDataPath().resolve("breeds.yml"), BreedSettings.class, CONFIGURATION_PROPERTIES));
-
-        Messages.Config messages = YamlConfigurations.load(this.getDataPath().resolve("messages.yml"), Messages.Config.class, CONFIGURATION_PROPERTIES);
-        this.settings.put(Messages.Config.class, messages);
-        Messages.init(messages);
+    private <T extends Settings> T reloadConfig(String path, Class<T> clazz) {
+        T instance = YamlConfigurations.load(this.getDataPath().resolve(path), clazz, CONFIGURATION_PROPERTIES);
+        this.settings.put(clazz, instance);
+        return instance;
     }
 }
