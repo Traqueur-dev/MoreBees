@@ -48,6 +48,7 @@ public class BeehiveManagerImpl implements BeehiveManager {
         }
         PersistentDataContainer container = beehiveState.getPersistentDataContainer();
         Keys.BEEHIVE.set(container, BeehiveDataType.INSTANCE, beehive);
+        beehiveState.setMaxEntities(beehive.getUpgrade().maxBees());
         beehiveState.update();
     }
 

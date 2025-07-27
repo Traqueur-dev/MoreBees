@@ -6,6 +6,7 @@ import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.Messages;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.util.Formatter;
+import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -51,10 +52,7 @@ public class HoneyCommand extends Command<@NotNull BeePlugin> {
         }
 
         honey.setAmount(amount);
-        targetPlayer.getInventory().addItem(honey).forEach((slot, item) -> {
-            Item dropped = targetPlayer.getWorld().dropItem(targetPlayer.getLocation(), item);
-            dropped.setOwner(targetPlayer.getUniqueId());
-        });
+        Util.giveItem(targetPlayer, honey);
         Messages.HONEY_COMMAND_SUCCESS.send(sender, Formatter.all("player", targetPlayer.getName(), "amount", amount, "beetype", beeType.displayName()));
     }
 }

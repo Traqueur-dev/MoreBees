@@ -16,6 +16,7 @@ public enum Keys {
     BEEHIVE,
 
     INTERNAL_BEEHIVE_BEE_TYPES,
+    INTERNAL_BEEHIVE_UPGRADE,
 
     TOOL_ID,
     MAX_BEES,

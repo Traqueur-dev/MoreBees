@@ -23,14 +23,7 @@ public record ItemStackWrapper(String material, @Nullable String name, @Nullable
                 meta.itemName(MiniMessageHelper.parse(Formatter.format(name, formatters)));
 
             if (lore != null && !lore.isEmpty()) {
-                List<Component> formattedLore = lore.stream()
-                        .map(line -> Formatter.format(line, formatters))
-                        .filter(Objects::nonNull)
-                        .flatMap(line -> Arrays.stream(line.split("\n")))
-                        .map(MiniMessageHelper::parse)
-                        .map(component -> component.decoration(TextDecoration.ITALIC, false))
-                        .toList();
-                meta.lore(formattedLore);
+                meta.lore(Util.parseLore(lore, formatters));
             }
         });
         return base;

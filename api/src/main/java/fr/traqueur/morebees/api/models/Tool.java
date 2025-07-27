@@ -6,6 +6,7 @@ import fr.traqueur.morebees.api.settings.GlobalSettings;
 import fr.traqueur.morebees.api.settings.ItemStackWrapper;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
+import fr.traqueur.morebees.api.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.inventory.ItemStack;
@@ -95,13 +96,6 @@ public enum Tool {
             if(lore == null) {
                 return List.of();
             }
-            return lore.stream()
-                    .map(line -> Formatter.format(line, this.formatters.apply(this.placeholder, bees)))
-                    .filter(Objects::nonNull)
-                    .flatMap(line -> Arrays.stream(line.split("\n")))
-                    .filter(s -> !s.isEmpty())
-                    .map(MiniMessageHelper::parse)
-                    .map(component -> component.decoration(TextDecoration.ITALIC, false))
-                    .toList();
+            return Util.parseLore(lore, this.formatters.apply(this.placeholder, bees));
         }
     }

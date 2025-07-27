@@ -40,11 +40,7 @@ public class BeehiveListener implements Listener {
         beehiveManager.getBeehiveFromBlock(event.getBlockState()).ifPresent(beehive -> {
             for (Item item : event.getItems()) {
                 ItemStack itemStack = item.getItemStack();
-                if(itemStack.getItemMeta() instanceof BlockStateMeta blockStateMeta && blockStateMeta.getBlockState() instanceof Beehive beehiveState) {
-                    org.bukkit.block.data.type.Beehive beehiveData = (org.bukkit.block.data.type.Beehive) beehiveState.getBlockData();
-                    if (beehiveData.getHoneyLevel() == 0) {
-                        continue;
-                    }
+                if(itemStack.getItemMeta() instanceof BlockStateMeta blockStateMeta && blockStateMeta.getBlockState() instanceof Beehive) {
                     item.setItemStack(beehive.patch(itemStack));
                     Logger.debug("Dropped beehive at {}", item.getLocation());
                 }
@@ -116,13 +112,14 @@ public class BeehiveListener implements Listener {
             Map<BeeType, Integer> honeyCombCounts = new HashMap<>(beehive.getHoneyCombCounts());
             honeyCombCounts.forEach((beeType, count) -> {
                 ItemStack template = beeType.honey(1, false);
-                Logger.debug("Dropping honey combs for bee type {}: {}", beeType.type(), count);
-                while(count > 0) {
+                int realAmount = (int) Math.floor(count * beehive.getUpgrade().productionMultiplier());
+                Logger.debug("Dropping honey combs for bee type {}: {}", beeType.type(), realAmount);
+                while(realAmount > 0) {
                     int amount = Math.min(count, template.getMaxStackSize());
-                    ItemStack honeyComb = beeType.honey(amount, false);
+                    ItemStack honeyComb = beeType.honey(amount, beehive.getUpgrade().produceBlocks());
                     beehive.removeHoney(beeType, amount);
                     event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), honeyComb);
-                    count -= amount;
+                    realAmount -= amount;
                 }
             });
         });
