@@ -8,6 +8,7 @@ import fr.traqueur.morebees.api.models.Beehive;
 import fr.traqueur.morebees.api.models.Upgrade;
 import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
