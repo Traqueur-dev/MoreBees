@@ -39,7 +39,9 @@ public enum Messages {
 
     PRODUCE_BLOCKS_NO("<red>No"),
     PRODUCE_BLOCKS_YES("<green>Yes"),
-    ;
+
+    UPGRADE_COMMAND_DESC("<gray>Gives an upgrade to a player."),
+    UPGRADE_COMMAND_SUCCESS("<green>Successfully given %upgrade% to %player%!"),;
 
     private String message;
 

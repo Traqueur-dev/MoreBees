@@ -26,6 +26,6 @@ public class UpgradeDataTypeImpl extends UpgradeDataType {
 
     @Override
     public @NotNull Upgrade fromPrimitive(@NotNull String primitive, @NotNull PersistentDataAdapterContext context) {
-        return this.plugin.getSettings(UpgradeSettings.class).getUpgrade(primitive).orElseThrow(() -> new IllegalArgumentException("Unknown upgrade ID: " + primitive));
+        return this.plugin.getSettings(UpgradeSettings.class).getUpgrade(primitive).orElse(Upgrade.NONE);
     }
 }

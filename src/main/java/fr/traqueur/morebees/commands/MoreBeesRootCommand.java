@@ -20,7 +20,8 @@ public class MoreBeesRootCommand extends Command<@NotNull BeePlugin> {
                 new HoneyCommand(plugin),
                 new ReloadCommand(plugin),
                 new SpawnCommand(plugin),
-                new ToolCommand(plugin)
+                new ToolCommand(plugin),
+                new UpgradeCommand(plugin)
         );
     }
 
