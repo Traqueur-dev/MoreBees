@@ -4,13 +4,16 @@ import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.Logger;
 import fr.traqueur.morebees.api.managers.BeeManager;
 import fr.traqueur.morebees.api.managers.BeehiveManager;
+import fr.traqueur.morebees.api.managers.UpgradesManager;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Beehive;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,6 +28,7 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class BeehiveListener implements Listener {
 
@@ -51,11 +55,21 @@ public class BeehiveListener implements Listener {
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
         BeehiveManager beehiveManager = this.plugin.getManager(BeehiveManager.class);
+        UpgradesManager upgradesManager = this.plugin.getManager(UpgradesManager.class);
         ItemStack itemInHand = event.getItemInHand();
 
+        Block block = event.getBlockPlaced();
+
         beehiveManager.getBeehiveFromItem(itemInHand).ifPresent(beehive -> {
-            beehiveManager.saveBeehiveToBlock(event.getBlockPlaced(), beehive);
-            Logger.debug("Placed beehive at {}", event.getBlockPlaced().getLocation());
+            beehiveManager.saveBeehiveToBlock(block, beehive);
+
+            ItemDisplay display = upgradesManager.createUpgradeDisplay(block, beehive.getUpgrade());
+            UUID displayUUID = display == null ? null : display.getUniqueId();
+            beehiveManager.editBeehive(block, beehiveToEdit -> {
+                beehiveToEdit.setUpgradeId(displayUUID);
+            });
+
+            Logger.debug("Placed beehive at {}", block.getLocation());
         });
     }
 

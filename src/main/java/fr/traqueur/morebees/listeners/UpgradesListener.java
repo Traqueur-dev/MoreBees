@@ -65,8 +65,6 @@ public class UpgradesListener implements Listener {
         Upgrade upgrade = beehive.getUpgrade();
         UUID currentDisplayUUID = beehive.getUpgradeId();
 
-        System.out.println("Current upgrade: " + upgrade.id() + ", Display UUID: " + currentDisplayUUID);
-
         if(player.isSneaking() && !upgrade.equals(Upgrade.NONE)) {
             event.setCancelled(true);
             //only remove upgrade if player is sneaking
@@ -121,23 +119,6 @@ public class UpgradesListener implements Listener {
         beehiveManager.getBeehiveFromBlock(block.getState()).ifPresent(beehive -> {
             UUID currentDisplayUUID = beehive.getUpgradeId();
             upgradesManager.removeUpgradeDisplay(currentDisplayUUID);
-        });
-    }
-
-    @EventHandler
-    public void onPlace(BlockPlaceEvent event) {
-        UpgradesManager upgradesManager = this.plugin.getManager(UpgradesManager.class);
-        BeehiveManager beehiveManager = this.plugin.getManager(BeehiveManager.class);
-        Block block = event.getBlockPlaced();
-
-        beehiveManager.getBeehiveFromItem(event.getItemInHand()).ifPresent(beehive -> {
-            ItemDisplay display = upgradesManager.createUpgradeDisplay(block, beehive.getUpgrade());
-            UUID displayUUID = display == null ? null : display.getUniqueId();
-            Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-                beehiveManager.editBeehive(block, beehiveToEdit -> {
-                    beehiveToEdit.setUpgradeId(displayUUID);
-                });
-            }, 1L);
         });
     }
 
