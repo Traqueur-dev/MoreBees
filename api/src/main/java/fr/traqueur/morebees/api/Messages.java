@@ -35,7 +35,11 @@ public enum Messages {
     TOOL_FULL("<red>Your %tool% is already full!"),
 
     TOOL_COMMAND_DESC("<gray>Gives a tool to a player."),
-    TOOL_COMMAND_SUCCESS("<green>Successfully given %tool% to %player%!"),;
+    TOOL_COMMAND_SUCCESS("<green>Successfully given %tool% to %player%!"),
+
+    PRODUCE_BLOCKS_NO("<red>No"),
+    PRODUCE_BLOCKS_YES("<green>Yes"),
+    ;
 
     private String message;
 

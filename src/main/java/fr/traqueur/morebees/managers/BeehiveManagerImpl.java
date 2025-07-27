@@ -2,8 +2,8 @@ package fr.traqueur.morebees.managers;
 
 import fr.traqueur.morebees.api.managers.BeehiveManager;
 import fr.traqueur.morebees.api.models.Beehive;
-import fr.traqueur.morebees.api.serialization.BeehiveDataType;
 import fr.traqueur.morebees.api.serialization.Keys;
+import fr.traqueur.morebees.api.serialization.datas.BeehiveDataType;
 import fr.traqueur.morebees.listeners.BeehiveListener;
 import fr.traqueur.morebees.models.BeehiveImpl;
 import org.bukkit.block.Block;

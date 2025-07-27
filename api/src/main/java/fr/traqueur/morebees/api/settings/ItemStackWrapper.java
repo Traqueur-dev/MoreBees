@@ -14,6 +14,8 @@ import java.util.Objects;
 
 public record ItemStackWrapper(String material, @Nullable String name, @Nullable List<String> lore) {
 
+    public static final ItemStackWrapper EMPTY = new ItemStackWrapper("AIR", null, null);
+
     public ItemStack build(Formatter... formatters) {
         ItemStack base = Util.getItemFromId(material);
         base.editMeta(meta -> {
