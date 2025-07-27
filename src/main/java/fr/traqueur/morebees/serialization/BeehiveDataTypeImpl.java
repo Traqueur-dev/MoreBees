@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class BeehiveDataTypeImpl extends BeehiveDataType {
 
@@ -29,6 +30,9 @@ public class BeehiveDataTypeImpl extends BeehiveDataType {
         PersistentDataContainer container = context.newPersistentDataContainer();
         Keys.INTERNAL_BEEHIVE_BEE_TYPES.set(container, TYPE, complex.getHoneyCombCounts());
         Keys.INTERNAL_BEEHIVE_UPGRADE.set(container, UpgradeDataType.INSTANCE, complex.getUpgrade());
+        if( complex.getUpgradeId() != null) {
+            Keys.INTERNAL_BEEHIVE_DISPLAY_ID.set(container, PersistentDataType.STRING, complex.getUpgradeId().toString());
+        }
 
         return container;
     }
@@ -37,6 +41,13 @@ public class BeehiveDataTypeImpl extends BeehiveDataType {
     public @NotNull Beehive fromPrimitive(@NotNull PersistentDataContainer primitive, @NotNull PersistentDataAdapterContext context) {
         Map<BeeType, Integer> honeyCombCounts = Keys.INTERNAL_BEEHIVE_BEE_TYPES.get(primitive, TYPE, new HashMap<>());
         Upgrade upgrade = Keys.INTERNAL_BEEHIVE_UPGRADE.get(primitive, UpgradeDataType.INSTANCE, Upgrade.NONE);
-        return new BeehiveImpl(honeyCombCounts, upgrade);
+
+        Beehive beehive = new BeehiveImpl(honeyCombCounts, upgrade);
+
+        Keys.INTERNAL_BEEHIVE_DISPLAY_ID.get(primitive, PersistentDataType.STRING).ifPresent(displayId -> {
+            UUID upgradeId = UUID.fromString(displayId);
+            beehive.setUpgradeId(upgradeId);
+        });
+        return beehive;
     }
 }
