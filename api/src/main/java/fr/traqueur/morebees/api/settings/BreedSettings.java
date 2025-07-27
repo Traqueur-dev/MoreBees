@@ -10,8 +10,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+/**
+ * Represents the settings for breeding bees, including the breeds and mutations available.
+ * This class provides methods to retrieve mutations based on parent bee types and blocks.
+ */
 public record BreedSettings(List<Breed> breeds, List<Mutation> mutations) implements Settings {
 
+    /**
+     * Default breed settings supplier that initializes with predefined breeds and mutations.
+     * This supplier can be used to obtain the default breed settings for the application.
+     */
     public static final Supplier<BreedSettings> DEFAULT = () -> {
         List<Breed> breeds = new ArrayList<>();
 
@@ -24,6 +32,13 @@ public record BreedSettings(List<Breed> breeds, List<Mutation> mutations) implem
         return new BreedSettings(breeds, mutations);
     };
 
+    /**
+     * Retrieves the mutation for a given parent bee type and block.
+     *
+     * @param parent the parent bee type
+     * @param block  the block to check for mutation compatibility
+     * @return an Optional containing the Mutation if found, otherwise empty
+     */
     public Optional<Mutation> getMutation(BeeType parent, Block block) {
         return this.mutations.stream()
                 .filter(mutation -> mutation.parent().equals(parent.type()) && mutation.canMutate(block))

@@ -7,6 +7,7 @@ import fr.traqueur.morebees.api.settings.ItemStackWrapper;
 import fr.traqueur.morebees.api.util.Formatter;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.jetbrains.annotations.NotNull;
 
 public record Upgrade(String id, ItemStackWrapper item, int maxBees, double productionMultiplier, boolean produceBlocks) {
 
@@ -20,7 +21,7 @@ public record Upgrade(String id, ItemStackWrapper item, int maxBees, double prod
         );
     }
 
-    public ItemStack build() {
+    public @NotNull ItemStack build() {
         ItemStack itemStack = item.build(this.formatters());
         itemStack.editMeta(meta -> {
             PersistentDataContainer container = meta.getPersistentDataContainer();

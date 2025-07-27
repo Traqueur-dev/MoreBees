@@ -10,6 +10,8 @@ import fr.traqueur.morebees.api.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.units.qual.N;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -86,12 +88,12 @@ public enum Tool {
             return this.maxBees.get();
         }
 
-        public ItemStack itemStack(List<BeeData> bees) {
+        public @NotNull ItemStack itemStack(List<BeeData> bees) {
             ItemStackWrapper itemStack = itemStackSupplier.get();
             return itemStack.build(this.formatters.apply(this.placeholder, bees));
         }
 
-        public List<Component> lore(List<BeeData> bees) {
+        public @NotNull List<Component> lore(List<BeeData> bees) {
             List<String> lore = this.itemStackSupplier.get().lore();
             if(lore == null) {
                 return List.of();

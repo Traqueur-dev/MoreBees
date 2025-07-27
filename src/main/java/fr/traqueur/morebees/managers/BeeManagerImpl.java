@@ -122,7 +122,7 @@ public class BeeManagerImpl implements BeeManager {
     }
 
     @Override
-    public void spawnBee(Location location, BeeType beeType, CreatureSpawnEvent.SpawnReason reason, boolean baby, boolean nectar) {
+    public void spawnBee(Location location, @NotNull BeeType beeType, CreatureSpawnEvent.SpawnReason reason, boolean baby, boolean nectar) {
         Bee bee = location.getWorld().createEntity(location, Bee.class);
 
         if(baby)
@@ -136,7 +136,7 @@ public class BeeManagerImpl implements BeeManager {
     }
 
     @Override
-    public void patchBee(Bee bee, BeeType beeType) {
+    public void patchBee(Bee bee, @NotNull BeeType beeType) {
 
         PersistentDataContainer data = bee.getPersistentDataContainer();
         Keys.BEE_TYPE.set(data, BeeTypeDataType.INSTANCE, beeType);
@@ -162,7 +162,7 @@ public class BeeManagerImpl implements BeeManager {
     }
 
     @Override
-    public BeeType computeChildType(BeeType mother, BeeType father) {
+    public @NotNull BeeType computeChildType(@NotNull BeeType mother, @NotNull BeeType father) {
         List<String> parentsIds = new ArrayList<>();
         parentsIds.add(mother.type());
         parentsIds.add(father.type());
@@ -180,7 +180,7 @@ public class BeeManagerImpl implements BeeManager {
                 .orElse(null);
 
         if (breed != null && Math.random() < breed.chance()) {
-            return this.getPlugin().getSettings(GlobalSettings.class).getBeeType(breed.child()).orElse(null);
+            return this.getPlugin().getSettings(GlobalSettings.class).getBeeType(breed.child()).orElseThrow();
         }
 
         return Math.random() < 0.5 ? mother : father;
