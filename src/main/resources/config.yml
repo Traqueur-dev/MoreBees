@@ -1,0 +1,65 @@
+debug: true
+# Define the name of the flying animation for all bee model
+fly-animation: flying
+# Field "model" permits to use a custom model from model engine remove it to not use a custom model
+bees:
+- type: redstone-bee
+  model-id: 1
+  display-name: <red>Redstone Bee
+  foods:
+  - REDSTONE
+  flowers:
+  - REDSTONE_BLOCK
+  product: REDSTONE_ORE
+  model: redstone-bee
+- type: emerald-bee
+  display-name: <green>Emerald Bee
+  foods:
+  - EMERALD
+  flowers:
+  - EMERALD_BLOCK
+  product: EMERALD_ORE
+- type: diamond-bee
+  display-name: <aqua>Diamond Bee
+  foods:
+  - DIAMOND
+  flowers:
+  - DIAMOND_BLOCK
+  product: DIAMOND_ORE
+- type: gold-bee
+  display-name: <gold>Gold Bee
+  foods:
+  - GOLD_INGOT
+  flowers:
+  - GOLD_BLOCK
+  product: GOLD_ORE
+- type: iron-bee
+  display-name: <gray>Iron Bee
+  foods:
+  - IRON_INGOT
+  flowers:
+  - IRON_BLOCK
+  product: IRON_ORE
+# This key represent the beebox tool to get bees inside
+bee-box:
+  material: PAPER
+  name: Bee box
+  lore:
+  - This is a beebox
+  - '%bees%'
+bee-box-size: 10
+# This key represent the bee jar tool to get one bee inside
+bee-jar:
+  material: GLASS_BOTTLE
+  name: Bee jar
+  lore:
+  - This is a bee jar
+  - '%bee%'
+# This key represent the additonal lore for beehive patch
+beehive-lore:
+- This is a beehive patch
+- You can use it to patch your beehive
+- It will add a new lore to your beehive
+- 'production multiplier: %production-multiplier%'
+- 'produce-blocks: %produce-blocks%'
+- 'max-bees: %max-bees%'

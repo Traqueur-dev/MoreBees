@@ -1,8 +1,5 @@
 package fr.traqueur.morebees;
 
-import de.exlll.configlib.NameFormatters;
-import de.exlll.configlib.YamlConfigurationProperties;
-import de.exlll.configlib.YamlConfigurations;
 import fr.traqueur.commands.spigot.CommandManager;
 import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.Logger;
@@ -31,6 +28,8 @@ import fr.traqueur.morebees.recipes.MoreBeesHook;
 import fr.traqueur.morebees.serialization.*;
 import fr.traqueur.recipes.api.RecipesAPI;
 import fr.traqueur.recipes.api.hook.Hook;
+import fr.traqueur.structura.api.Structura;
+import fr.traqueur.structura.exceptions.StructuraException;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,10 +37,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class MoreBees extends BeePlugin {
-
-    private static final YamlConfigurationProperties CONFIGURATION_PROPERTIES =  YamlConfigurationProperties.newBuilder()
-            .setNameFormatter(NameFormatters.LOWER_KEBAB_CASE)
-            .build();
 
     private final Map<Class<? extends Settings>, Settings> settings = new HashMap<>();
 
@@ -52,8 +47,8 @@ public final class MoreBees extends BeePlugin {
 
         long startTime = System.currentTimeMillis();
 
-        this.saveDefault("config.yml", GlobalSettings.class, GlobalSettings.DEFAULT.get());
-        GlobalSettings settings = YamlConfigurations.load(this.getDataPath().resolve("config.yml"), GlobalSettings.class, CONFIGURATION_PROPERTIES);
+        this.saveDefault("config.yml");
+        GlobalSettings settings = Structura.load(this.getDataPath().resolve("config.yml"), GlobalSettings.class);
         this.settings.put(GlobalSettings.class, settings);
 
         Logger.init(this.getSLF4JLogger(), settings.debug());
@@ -123,9 +118,9 @@ public final class MoreBees extends BeePlugin {
 
     @Override
     public void saveDefaultConfig() {
-        this.saveDefault("messages.yml", Messages.Config.class, Messages.DEFAULT);
-        this.saveDefault("breeds.yml", BreedSettings.class, BreedSettings.DEFAULT.get());
-        this.saveDefault("upgrades.yml", UpgradeSettings.class, UpgradeSettings.DEFAULT.get());
+        this.saveDefault("messages.yml");
+        this.saveDefault("breeds.yml");
+        this.saveDefault("upgrades.yml");
     }
 
     @Override
@@ -134,8 +129,11 @@ public final class MoreBees extends BeePlugin {
         this.reloadConfig("config.yml", GlobalSettings.class);
         this.reloadConfig("breeds.yml", BreedSettings.class);
         this.reloadConfig("upgrades.yml", UpgradeSettings.class);
-        Messages.Config messages = this.reloadConfig("messages.yml", Messages.Config.class);
-        Messages.init(messages);
+        try {
+            Structura.loadEnum(this.getDataPath().resolve("messages.yml"), Messages.class);
+        } catch (StructuraException e) {
+            Logger.severe("Failed to load messages.yml, some messages will be by default", e);
+        }
     }
 
     @Override
@@ -143,14 +141,14 @@ public final class MoreBees extends BeePlugin {
         return recipesAPI;
     }
 
-    private <T extends Settings> void saveDefault(String path, Class<T> clazz, T instance) {
+    private <T extends Settings> void saveDefault(String path) {
         if (!this.getDataPath().resolve(path).toFile().exists()) {
-            YamlConfigurations.save(this.getDataPath().resolve(path), clazz, instance, CONFIGURATION_PROPERTIES);
+            this.saveResource(path, false);
         }
     }
 
     private <T extends Settings> T reloadConfig(String path, Class<T> clazz) {
-        T instance = YamlConfigurations.load(this.getDataPath().resolve(path), clazz, CONFIGURATION_PROPERTIES);
+        T instance = Structura.load(this.getDataPath().resolve(path), clazz);
         this.settings.put(clazz, instance);
         return instance;
     }

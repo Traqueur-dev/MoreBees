@@ -1,0 +1,32 @@
+command-help-title: "<green>%plugin% %version% <gray>by <gold>%authors%<gray> - Commands List"
+command-syntax: "<white>%usage% <gray>► <gold>%description%"
+
+reload-command-desc: "<gray>Reloads the plugin configuration."
+reload-success: "<green>Configuration reloaded successfully!"
+
+command-amount-invalid: "<red>Invalid amount for %amount%! Please choose a number between 1 and %max-amount%."
+
+egg-command-desc: "<gray>Gives you a bee egg."
+egg-command-success: "<green>Successfully given %amount% %beetype% egg(s) to %player%!"
+
+spawn-command-desc: "<gray>Spawn a bee at the player location."
+spawn-command-success: "<green>Successfully spawned a %beetype% bee at your location!"
+
+honey-command-desc: "<gray>Gives you honey from a bee type."
+honey-command-success: "<green>Successfully given %amount% honey from %beetype% to %player%!"
+
+empty-bee-jar: "<red>Empty"
+empty-bee-box: "<red>Empty"
+bee-jar-content: "%beetype%"
+bee-box-content: "%beetype% x%amount%"
+
+tool-full: "<red>Your %tool% is already full!"
+
+tool-command-desc: "<gray>Gives a tool to a player."
+tool-command-success: "<green>Successfully given %tool% to %player%!"
+
+produce-blocks-no: "<red>No"
+produce-blocks-yes: "<green>Yes"
+
+upgrade-command-desc: "<gray>Gives an upgrade to a player."
+upgrade-command-success: "<green>Successfully given %upgrade% to %player%!"

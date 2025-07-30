@@ -1,0 +1,37 @@
+upgrades:
+- id: level-1
+  item:
+    material: COPPER_INGOT
+    name: Level 1 Upgrade
+    lore:
+    - This is level 1 beehive upgrade
+    - 'max bees: %max-bees%'
+    - 'production-multiplier: %production-multiplier%'
+    - 'produce-blocks: %produce-blocks%'
+  max-bees: 3
+  production-multiplier: 1.5
+  produce-blocks: false
+- id: level-2
+  item:
+    material: IRON_INGOT
+    name: Level 2 Upgrade
+    lore:
+    - This is level 2 beehive upgrade
+    - 'max bees: %max-bees%'
+    - 'production-multiplier: %production-multiplier%'
+    - 'produce-blocks: %produce-blocks%'
+  max-bees: 6
+  production-multiplier: 2.0
+  produce-blocks: false
+- id: level-3
+  item:
+    material: GOLD_INGOT
+    name: Level 3 Upgrade
+    lore:
+    - This is level 3 beehive upgrade
+    - 'max bees: %max-bees%'
+    - 'production-multiplier: %production-multiplier%'
+    - 'produce-blocks: %produce-blocks%'
+  max-bees: 6
+  production-multiplier: 1.0
+  produce-blocks: true

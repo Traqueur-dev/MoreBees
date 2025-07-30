@@ -3,21 +3,18 @@ package fr.traqueur.morebees.api.settings;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
+import fr.traqueur.structura.api.Loadable;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Represents a wrapper for an ItemStack with material, name, and lore.
  * This class is used to create ItemStacks with formatted names and lore.
  * It provides a method to build the ItemStack with the specified properties.
  */
-public record ItemStackWrapper(String material, @Nullable String name, @Nullable List<String> lore) {
+public record ItemStackWrapper(String material, @Nullable String name, @Nullable List<String> lore) implements Loadable {
 
     /**
      * Get the Wrapper for the AIR item.

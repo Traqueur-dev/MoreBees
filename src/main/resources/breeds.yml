@@ -1,0 +1,11 @@
+breeds:
+- parents:
+  - redstone-bee
+  - diamond-bee
+  child: emerald-bee
+  chance: 1.0
+mutations:
+- parent: redstone-bee
+  child: emerald-bee
+  blocks:
+  - REDSTONE_ORE
