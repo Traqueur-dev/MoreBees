@@ -37,7 +37,7 @@ allprojects { subproject ->
         implementation("com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.1")
         implementation("com.github.Traqueur-dev.CommandsAPI:core:4.2.1")
         implementation("com.github.Traqueur-dev:RecipesAPI:2.0.3")
-        implementation 'com.github.Traqueur-dev:Structura:1.0.0'
+        implementation("com.github.Traqueur-dev:Structura:1.0.2")
     }
 
     def targetJavaVersion = 21
