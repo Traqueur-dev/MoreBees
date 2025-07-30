@@ -1,18 +1,15 @@
 package fr.traqueur.morebees.api;
 
-import fr.traqueur.morebees.api.settings.Settings;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
+import fr.traqueur.structura.api.Loadable;
 import org.bukkit.command.CommandSender;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Enum representing various messages used in the MoreBees plugin.
  * Each message can be formatted and sent to a CommandSender.
  */
-public enum Messages {
+public enum Messages implements Loadable {
 
     COMMAND_HELP_TITLE("<green>%plugin% %version% <gray>by <gold>%authors%<gray> - Commands List"),
     COMMAND_SYNTAX("<white>%usage% <gray>► <gold>%description%"),
@@ -48,7 +45,7 @@ public enum Messages {
     UPGRADE_COMMAND_SUCCESS("<green>Successfully given %upgrade% to %player%!"),;
 
     /** The raw message string for this enum constant. */
-    private String message;
+    private final String message;
 
     /**
      * Constructs a Messages enum with the specified message.
@@ -80,61 +77,6 @@ public enum Messages {
             formattedMessage = formatter.handle(BeePlugin.getPlugin(BeePlugin.class), formattedMessage);
         }
         sender.sendMessage(MiniMessageHelper.parse(formattedMessage));
-    }
-
-    /**
-     * Retrieves the default configuration for messages.
-     * @return The default configuration containing all messages.
-     * @see Config#defaultConfig()
-     */
-    public static final Config DEFAULT = Config.defaultConfig();
-
-    /**
-     * Initializes the messages from the provided configuration.
-     * If a message key is missing, it logs a warning and uses the default message.
-     *
-     * @param config The configuration containing custom messages.
-     */
-    public static void init(Config config) {
-        for (Messages value : Messages.values()) {
-            String key = Messages.snakeToLowerKebab(value.name());
-            if (config.messages.containsKey(key)) {
-                value.message = config.messages.get(key);
-            } else {
-                Logger.warning("Missing message for key: " + key + ", using default: " + value.message);
-            }
-        }
-    }
-
-    /**
-     * Record representing the configuration for messages.
-     * Contains a map of message keys to their corresponding strings.
-     */
-    public record Config(Map<String, String> messages) implements Settings {
-
-        /**
-         * Creates a default configuration with all messages initialized.
-         *
-         * @return A Config instance containing all default messages.
-         */
-        public static Config defaultConfig() {
-           Map<String, String> messages = new HashMap<>();
-            for (Messages value : Messages.values()) {
-                messages.put(Messages.snakeToLowerKebab(value.name()), value.message);
-            }
-            return new Config(messages);
-        }
-    }
-
-/**
-     * Converts a snake_case string to lower-kebab-case.
-     * For example, "example_string" becomes "example-string".
-     *
-     * @param str The snake_case string to convert.
-     * @return The converted lower-kebab-case string.
-     */
-    private static String snakeToLowerKebab(String str) {
-        return str.replace('_', '-').toLowerCase();
     }
 
 }

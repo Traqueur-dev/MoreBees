@@ -3,9 +3,7 @@ package fr.traqueur.morebees.commands.arguments;
 import fr.traqueur.commands.api.arguments.ArgumentConverter;
 import fr.traqueur.commands.api.arguments.TabCompleter;
 import fr.traqueur.morebees.api.BeePlugin;
-import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.models.Upgrade;
-import fr.traqueur.morebees.api.settings.GlobalSettings;
 import fr.traqueur.morebees.api.settings.UpgradeSettings;
 import org.bukkit.command.CommandSender;
 

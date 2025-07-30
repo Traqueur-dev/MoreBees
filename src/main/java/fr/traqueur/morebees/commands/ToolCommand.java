@@ -8,7 +8,6 @@ import fr.traqueur.morebees.api.models.Tool;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

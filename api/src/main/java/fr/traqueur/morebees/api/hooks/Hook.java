@@ -1,7 +1,6 @@
 package fr.traqueur.morebees.api.hooks;
 
 import fr.traqueur.morebees.api.BeePlugin;
-import org.bukkit.entity.Bee;
 
 import java.util.HashSet;
 import java.util.Set;

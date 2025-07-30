@@ -4,17 +4,13 @@ import fr.traqueur.commands.api.arguments.Arguments;
 import fr.traqueur.commands.spigot.Command;
 import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.Messages;
-import fr.traqueur.morebees.api.models.Tool;
 import fr.traqueur.morebees.api.models.Upgrade;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.Util;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class UpgradeCommand extends Command<@NotNull BeePlugin> {
     /**

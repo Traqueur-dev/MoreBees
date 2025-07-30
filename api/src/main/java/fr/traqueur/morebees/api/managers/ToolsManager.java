@@ -4,9 +4,7 @@ import fr.traqueur.morebees.api.Manager;
 import fr.traqueur.morebees.api.models.BeeData;
 import fr.traqueur.morebees.api.models.BeeType;
 import fr.traqueur.morebees.api.models.Tool;
-import org.bukkit.Location;
 import org.bukkit.entity.Bee;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;

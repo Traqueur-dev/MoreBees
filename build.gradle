@@ -11,14 +11,6 @@ project.ext {
     apiFolder = file("target-api")
     libraries = []
 }
-subprojects { subproject ->
-    apply from: rootProject.file('gradle/add-library-dependency.gradle')
-    apply plugin: 'java'
-    dependencies {
-        addLibraryDependency(subproject, "de.exlll:configlib-yaml:4.6.1")
-    }
-}
-
 
 allprojects { subproject ->
     version = rootProject.property('version')
@@ -42,10 +34,10 @@ allprojects { subproject ->
     }
 
     dependencies {
-        addLibraryDependency(subproject, "de.exlll:configlib-yaml:4.6.1")
         implementation("com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.1")
         implementation("com.github.Traqueur-dev.CommandsAPI:core:4.2.1")
         implementation("com.github.Traqueur-dev:RecipesAPI:2.0.3")
+        implementation 'com.github.Traqueur-dev:Structura:1.0.0'
     }
 
     def targetJavaVersion = 21
@@ -76,6 +68,7 @@ allprojects { subproject ->
         archiveClassifier.set('')
         relocate "fr.traqueur.commands", "fr.traqueur.morebees.api.commands"
         relocate "fr.traqueur.recipes", "fr.traqueur.morebees.api.recipes"
+        relocate "fr.traqueur.structura", "fr.traqueur.morebees.api.structura"
     }
 }
 

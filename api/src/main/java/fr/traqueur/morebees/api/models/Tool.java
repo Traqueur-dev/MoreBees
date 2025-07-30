@@ -5,15 +5,14 @@ import fr.traqueur.morebees.api.Messages;
 import fr.traqueur.morebees.api.settings.GlobalSettings;
 import fr.traqueur.morebees.api.settings.ItemStackWrapper;
 import fr.traqueur.morebees.api.util.Formatter;
-import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 

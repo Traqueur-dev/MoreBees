@@ -7,9 +7,10 @@ import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.serialization.datas.BeeTypeDataType;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
+import fr.traqueur.structura.annotations.Options;
+import fr.traqueur.structura.api.Loadable;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public record BeeType(String type, @Nullable Integer modelId, String displayName, List<String> foods, List<String> flowers, String product, @Nullable String model) {
+public record BeeType(String type,
+                      @Options(optional = true) Integer modelId,
+                      String displayName,
+                      List<String> foods,
+                      List<String> flowers,
+                      String product,
+                      @Options(optional = true) String model) implements Loadable {
 
     public BeeType {
         if(foods.isEmpty()) {
