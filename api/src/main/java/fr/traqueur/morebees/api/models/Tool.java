@@ -2,12 +2,15 @@ package fr.traqueur.morebees.api.models;
 
 import fr.traqueur.morebees.api.BeePlugin;
 import fr.traqueur.morebees.api.Messages;
+import fr.traqueur.morebees.api.serialization.Keys;
+import fr.traqueur.morebees.api.serialization.datas.ToolDataType;
 import fr.traqueur.morebees.api.settings.GlobalSettings;
 import fr.traqueur.morebees.api.settings.ItemStackWrapper;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -88,8 +91,13 @@ public enum Tool {
         }
 
         public @NotNull ItemStack itemStack(List<BeeData> bees) {
-            ItemStackWrapper itemStack = itemStackSupplier.get();
-            return itemStack.build(this.formatters.apply(this.placeholder, bees));
+            ItemStackWrapper itemStackWrapper = itemStackSupplier.get();
+            ItemStack itemStack = itemStackWrapper.build(this.formatters.apply(this.placeholder, bees));
+            itemStack.editMeta(meta -> {
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                Keys.TOOL_ID.set(container, ToolDataType.INSTANCE, this);
+            });
+            return itemStack;
         }
 
         public @NotNull List<Component> lore(List<BeeData> bees) {
