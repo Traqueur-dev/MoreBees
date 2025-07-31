@@ -24,6 +24,7 @@ public class SpawnCommand extends Command<@NotNull BeePlugin> {
 
         this.addArgs("beetype", BeeType.class);
         this.addOptionalArgs("baby", Boolean.class);
+        this.addOptionalArgs("nectar", Boolean.class);
         this.setGameOnly(true);
     }
 
@@ -32,11 +33,13 @@ public class SpawnCommand extends Command<@NotNull BeePlugin> {
         BeeType beeType = arguments.get("beetype");
         Player player = (Player) sender;
         Optional<Boolean> babyOptional = arguments.getOptional("baby");
+        Optional<Boolean> nectarOptional = arguments.getOptional("nectar");
+        boolean nectar = nectarOptional.orElse(false);
         boolean baby = babyOptional.orElse(false);
 
         BeeManager beeManager = getPlugin().getManager(BeeManager.class);
 
-        beeManager.spawnBee(player.getLocation(), beeType, CreatureSpawnEvent.SpawnReason.COMMAND, baby, false);
+        beeManager.spawnBee(player.getLocation(), beeType, CreatureSpawnEvent.SpawnReason.COMMAND, baby, nectar);
         Messages.SPAWN_COMMAND_SUCCESS.send(sender, Formatter.format("beetype", beeType.displayName()));
     }
 }
