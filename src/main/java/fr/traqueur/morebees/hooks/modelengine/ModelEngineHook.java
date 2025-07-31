@@ -29,6 +29,10 @@ public class ModelEngineHook implements Hook {
     }
 
     public boolean overrideModel(Bee entity, BeeType beeType) {
+        if(beeType.equals(BeeType.NORMAL)) {
+            Logger.warning("Cannot override model for the normal bee type, skipping entity {}", entity.getUniqueId());
+            return false;
+        }
         if(beeType.model() == null) {
             return false;
         }
