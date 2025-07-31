@@ -48,8 +48,7 @@ public final class MoreBees extends BeePlugin {
         long startTime = System.currentTimeMillis();
 
         this.saveDefault("config.yml");
-        GlobalSettings settings = Structura.load(this.getDataPath().resolve("config.yml"), GlobalSettings.class);
-        this.settings.put(GlobalSettings.class, settings);
+        GlobalSettings settings = this.reloadConfig("config.yml", GlobalSettings.class);
 
         Logger.init(this.getSLF4JLogger(), settings.debug());
 
