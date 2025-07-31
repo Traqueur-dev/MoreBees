@@ -155,18 +155,18 @@ public class BeeManagerImpl implements BeeManager {
                 bee.setCustomNameVisible(true);
                 bee.customName(MiniMessageHelper.parse(beeType.displayName()));
             }
-
-            Goal<@NotNull Creature> temptGoal = Bukkit.getMobGoals().getGoal(bee, VanillaGoal.TEMPT);
-            if (temptGoal != null) {
-                Bukkit.getMobGoals().removeGoal(bee, temptGoal);
-            }
-            Goal<@NotNull Bee> pollinateGoal = Bukkit.getMobGoals().getGoal(bee, VanillaGoal.BEE_POLLINATE);
-            if (pollinateGoal != null) {
-                Bukkit.getMobGoals().removeGoal(bee, pollinateGoal);
-            }
-            Bukkit.getMobGoals().addGoal(bee, 4, new BeePollinateGoal(this.getPlugin(), bee, beeType::isFlower));
-            Bukkit.getMobGoals().addGoal(bee,3, new BeeTemptGoal(this.getPlugin(), bee, 1.25F, beeType::isFood));
         }
+
+        Goal<@NotNull Creature> temptGoal = Bukkit.getMobGoals().getGoal(bee, VanillaGoal.TEMPT);
+        if (temptGoal != null) {
+            Bukkit.getMobGoals().removeGoal(bee, temptGoal);
+        }
+        Goal<@NotNull Bee> pollinateGoal = Bukkit.getMobGoals().getGoal(bee, VanillaGoal.BEE_POLLINATE);
+        if (pollinateGoal != null) {
+            Bukkit.getMobGoals().removeGoal(bee, pollinateGoal);
+        }
+        Bukkit.getMobGoals().addGoal(bee, 4, new BeePollinateGoal(this.getPlugin(), bee, beeType::isFlower));
+        Bukkit.getMobGoals().addGoal(bee,3, new BeeTemptGoal(this.getPlugin(), bee, 1.25F, beeType::isFood));
     }
 
     @Override
