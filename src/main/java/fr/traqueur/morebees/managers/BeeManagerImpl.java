@@ -27,6 +27,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,8 @@ public class BeeManagerImpl implements BeeManager {
     public BeeManagerImpl() {
 
         this.getPlugin().registerListener(new BeeListener(this.getPlugin()));
+
+        this.getPlugin().getSettings(GlobalSettings.class).bees().add(BeeType.NORMAL);
 
         Bukkit.getScheduler().runTask(this.getPlugin(), () -> {
 
@@ -53,6 +56,9 @@ public class BeeManagerImpl implements BeeManager {
 
     private void registerRecipes() {
         for (BeeType bee : this.getPlugin().getSettings(GlobalSettings.class).bees()) {
+            if(bee == BeeType.NORMAL) {
+                continue; // Skip the normal bee type
+            }
             String type = bee.type();
             ItemStack honey = bee.honey(1, false);
             ItemStack honeyBlock = bee.honey(1, true);
@@ -109,7 +115,7 @@ public class BeeManagerImpl implements BeeManager {
         }
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        return  Keys.BEE_TYPE.get(container, BeeTypeDataType.INSTANCE);
+        return Optional.of(Keys.BEE_TYPE.get(container, BeeTypeDataType.INSTANCE, BeeType.NORMAL));
     }
 
     @Override
@@ -118,7 +124,7 @@ public class BeeManagerImpl implements BeeManager {
             return Optional.empty();
         }
         PersistentDataContainer data = entity.getPersistentDataContainer();
-        return Keys.BEE_TYPE.get(data, BeeTypeDataType.INSTANCE);
+        return Optional.of(Keys.BEE_TYPE.get(data, BeeTypeDataType.INSTANCE, BeeType.NORMAL));
     }
 
     @Override
@@ -141,24 +147,26 @@ public class BeeManagerImpl implements BeeManager {
         PersistentDataContainer data = bee.getPersistentDataContainer();
         Keys.BEE_TYPE.set(data, BeeTypeDataType.INSTANCE, beeType);
 
-        Optional<ModelEngineHook> hookOptional = Hooks.MODEL_ENGINE.get();
-        boolean textured = hookOptional.map(hook -> hook.overrideModel(bee, beeType)).orElse(false);
+        if(!beeType.equals(BeeType.NORMAL)) {
+            Optional<ModelEngineHook> hookOptional = Hooks.MODEL_ENGINE.get();
+            boolean textured = hookOptional.map(hook -> hook.overrideModel(bee, beeType)).orElse(false);
 
-        if(!textured) {
-            bee.setCustomNameVisible(true);
-            bee.customName(MiniMessageHelper.parse(beeType.displayName()));
-        }
+            if(!textured) {
+                bee.setCustomNameVisible(true);
+                bee.customName(MiniMessageHelper.parse(beeType.displayName()));
+            }
 
-        Goal<@NotNull Creature> temptGoal = Bukkit.getMobGoals().getGoal(bee, VanillaGoal.TEMPT);
-        if (temptGoal != null) {
-            Bukkit.getMobGoals().removeGoal(bee, temptGoal);
+            Goal<@NotNull Creature> temptGoal = Bukkit.getMobGoals().getGoal(bee, VanillaGoal.TEMPT);
+            if (temptGoal != null) {
+                Bukkit.getMobGoals().removeGoal(bee, temptGoal);
+            }
+            Goal<@NotNull Bee> pollinateGoal = Bukkit.getMobGoals().getGoal(bee, VanillaGoal.BEE_POLLINATE);
+            if (pollinateGoal != null) {
+                Bukkit.getMobGoals().removeGoal(bee, pollinateGoal);
+            }
+            Bukkit.getMobGoals().addGoal(bee, 4, new BeePollinateGoal(this.getPlugin(), bee, beeType::isFlower));
+            Bukkit.getMobGoals().addGoal(bee,3, new BeeTemptGoal(this.getPlugin(), bee, 1.25F, beeType::isFood));
         }
-        Goal<@NotNull Bee> pollinateGoal = Bukkit.getMobGoals().getGoal(bee, VanillaGoal.BEE_POLLINATE);
-        if (pollinateGoal != null) {
-            Bukkit.getMobGoals().removeGoal(bee, pollinateGoal);
-        }
-        Bukkit.getMobGoals().addGoal(bee, 4, new BeePollinateGoal(this.getPlugin(), bee, beeType::isFlower));
-        Bukkit.getMobGoals().addGoal(bee,3, new BeeTemptGoal(this.getPlugin(), bee, 1.25F, beeType::isFood));
     }
 
     @Override
