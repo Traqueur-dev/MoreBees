@@ -20,6 +20,8 @@ import java.util.Optional;
  */
 public interface BeeManager extends Manager {
 
+    void registerRecipes();
+
     /**
      * Retrieves the BeeType from an ItemStack if it contains a bee egg.
      *
