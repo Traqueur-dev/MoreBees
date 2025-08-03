@@ -8,4 +8,6 @@ soft-depend:
   - ModelEngine
   - Oraxen
   - Nexo
+paper-skip-libraries: true
+paper-plugin-loader: fr.traqueur.morebees.MoreBeesLoader
 libraries: ${libraries}
