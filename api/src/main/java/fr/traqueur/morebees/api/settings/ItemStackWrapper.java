@@ -3,6 +3,7 @@ package fr.traqueur.morebees.api.settings;
 import fr.traqueur.morebees.api.util.Formatter;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
+import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.api.Loadable;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,14 +15,14 @@ import java.util.List;
  * This class is used to create ItemStacks with formatted names and lore.
  * It provides a method to build the ItemStack with the specified properties.
  */
-public record ItemStackWrapper(String material, @Nullable String name, @Nullable List<String> lore) implements Loadable {
+public record ItemStackWrapper(String material, @Options(optional = true) @Nullable String name, @Nullable @Options(optional = true) List<String> lore, @Options(optional = true) @Nullable Integer modelId) implements Loadable {
 
     /**
      * Get the Wrapper for the AIR item.
      * This is a static instance representing an empty ItemStack.
      * It can be used when no specific item is needed.
      */
-    public static final ItemStackWrapper EMPTY = new ItemStackWrapper("AIR", null, null);
+    public static final ItemStackWrapper EMPTY = new ItemStackWrapper("AIR", null, null, null);
 
     /**
      * Constructs an ItemStack with formatters applied to the name and lore.
@@ -38,6 +39,9 @@ public record ItemStackWrapper(String material, @Nullable String name, @Nullable
 
             if (lore != null && !lore.isEmpty()) {
                 meta.lore(Util.parseLore(lore, formatters));
+            }
+            if (modelId != null && modelId > 0) {
+                meta.setCustomModelData(modelId);
             }
         });
         return base;

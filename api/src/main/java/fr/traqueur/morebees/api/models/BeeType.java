@@ -5,6 +5,7 @@ import fr.traqueur.morebees.api.hooks.Hook;
 import fr.traqueur.morebees.api.hooks.ItemProviderHook;
 import fr.traqueur.morebees.api.serialization.Keys;
 import fr.traqueur.morebees.api.serialization.datas.BeeTypeDataType;
+import fr.traqueur.morebees.api.settings.ItemStackWrapper;
 import fr.traqueur.morebees.api.util.MiniMessageHelper;
 import fr.traqueur.morebees.api.util.Util;
 import fr.traqueur.structura.annotations.Options;
@@ -25,11 +26,13 @@ public record BeeType(String type,
                       String displayName,
                       List<String> foods,
                       List<String> flowers,
-                      String product,
+                      Product product,
                       @Options(optional = true) String model) implements Loadable {
 
 
-    public static final BeeType NORMAL = new BeeType("normal", null, "Bee", List.of(), List.of(), "", null);
+    public record Product(ItemStackWrapper honey, ItemStackWrapper honeyBlock, ItemStackWrapper additional) implements Loadable {}
+
+    public static final BeeType NORMAL = new BeeType("normal", null, "Bee", List.of(), List.of(), null, null);
 
     public BeeType {
         if(foods.isEmpty() && !type.equalsIgnoreCase("normal")) {
@@ -41,12 +44,7 @@ public record BeeType(String type,
     }
 
     public @NotNull ItemStack productItem() {
-        if(product == null || product.isEmpty()) {
-            Logger.warning("No product defined for the bee type {}", type);
-            return ItemStack.of(Material.AIR);
-        }
-
-        return Util.getItemFromId(product);
+        return product.additional().build();
     }
 
     public @NotNull ItemStack egg() {
@@ -67,21 +65,17 @@ public record BeeType(String type,
     }
 
     public @NotNull ItemStack honey(int amount, boolean block) {
-
-        Material material = block ? Material.HONEYCOMB_BLOCK : Material.HONEYCOMB;
-        ItemStack item = ItemStack.of(material, amount);
-
         if(this.equals(NORMAL)) {
-            return item;
+            Material material = block ? Material.HONEYCOMB_BLOCK : Material.HONEYCOMB;
+            return ItemStack.of(material, amount);
         }
 
+        ItemStackWrapper honeyItem = block ? product.honeyBlock() : product.honey();
+        ItemStack item = honeyItem.build();
+        item.setAmount(amount);
         item.editMeta(meta -> {
-            meta.itemName(MiniMessageHelper.parse(displayName + " Honey<reset>"));
             PersistentDataContainer container = meta.getPersistentDataContainer();
             Keys.BEE_TYPE.set(container, BeeTypeDataType.INSTANCE, this);
-            if(modelId != null && modelId > 0) {
-                meta.setCustomModelData(modelId);
-            }
         });
         return item;
     }

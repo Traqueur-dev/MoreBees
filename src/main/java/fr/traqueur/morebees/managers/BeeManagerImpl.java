@@ -53,7 +53,8 @@ public class BeeManagerImpl implements BeeManager {
         });
     }
 
-    private void registerRecipes() {
+    @Override
+    public void registerRecipes() {
         for (BeeType bee : this.getPlugin().getSettings(GlobalSettings.class).bees()) {
             if(bee == BeeType.NORMAL) {
                 continue; // Skip the normal bee type
