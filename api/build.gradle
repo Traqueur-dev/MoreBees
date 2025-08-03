@@ -1,3 +1,7 @@
+plugins {
+    id 'maven-publish'
+}
+
 group 'api'
 
 dependencies {
@@ -7,4 +11,15 @@ dependencies {
 shadowJar {
     destinationDirectory = rootProject.apiFolder
     archiveFileName = rootProject.name + "-API-" + rootProject.version + ".jar"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            groupId = project.group
+            artifactId = 'api'
+            version = project.version
+        }
+    }
 }
