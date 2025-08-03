@@ -44,6 +44,19 @@
 
 ## ⚙️ Configuration
 
+### ItemStackWrapper 
+
+When you want to configure an itemstack in the plugin, you can use the `ItemStackWrapper` class. This class allows you to define items with custom names, lore, and other properties in a clean and structured way.
+```yaml
+<key>:
+  material: #any material from Material enum or id from depend plugins
+  name: # a custom name for the item [Optional]
+  lore: # a list of strings for the item's lore [Optional]
+  model-id: # Custom model ID to link with other textures [Optional]
+```
+
+In some place, custom internal placeholders will provide dynamic values.
+
 ### Main Configuration (`config.yml`)
 
 ```yaml
@@ -55,9 +68,46 @@ bees:
     display-name: <red>Redstone Bee
     foods: [REDSTONE]
     flowers: [REDSTONE_BLOCK]
-    product: REDSTONE_ORE
+    product:
+      additional:
+        material: REDSTONE_ORE
+      honey:
+        material: HONEYCOMB
+        name: Redstone Honeycomb
+        lore:
+          - This is a redstone honeycomb
+      honey-block:
+        material: HONEYCOMB_BLOCK
+        name: Redstone Honey Block
+        lore:
+          - This is a redstone honey block
     model: redstone-bee  # Optional: ModelEngine model
   # ... more bee types
+
+bee-box:
+  material: PAPER
+  name: Bee box
+  lore:
+    - This is a beebox
+    - '%bees%' # List of bees in the box
+
+bee-box-size: 10 # Maximum number of bees in a bee box
+
+bee-jar:
+  material: GLASS_BOTTLE
+  name: Bee jar
+  lore:
+    - This is a bee jar
+    - '%bee%' # The bee inside the jar
+
+beehive-lore:
+  - This is a beehive patch
+  - You can use it to patch your beehive
+  - It will add a new lore to your beehive
+  - 'production multiplier: %production-multiplier%' # production multiplier from upgrades
+  - 'produce-blocks: %produce-blocks%' # whether the beehive produces blocks return the value from messages.yml
+  - 'max-bees: %max-bees%' # maximum number of bees in the beehive
+
 ```
 
 ### Breeding Configuration (`breeds.yml`)
@@ -85,6 +135,11 @@ upgrades:
     item:
       material: COPPER_INGOT
       name: Level 1 Upgrade
+      lore:
+        - Upgrade your beehive to level 1
+        - 'Max bees: %max-bees%' # Maximum number of bees
+        - 'Production multiplier: %production-multiplier%' # Production multiplier
+        - 'Produce blocks: %produce-blocks%' # Whether the beehive produces blocks return messages from messages.yml
 ```
 
 ## 🎮 Commands
