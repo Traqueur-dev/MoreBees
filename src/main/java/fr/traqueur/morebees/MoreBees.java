@@ -30,10 +30,17 @@ import fr.traqueur.recipes.api.RecipesAPI;
 import fr.traqueur.recipes.api.hook.Hook;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
+import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.graph.Dependency;
+import org.eclipse.aether.repository.RemoteRepository;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class MoreBees extends BeePlugin {

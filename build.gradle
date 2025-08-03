@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id("xyz.jpenilla.run-paper") version "2.3.1"
     id("com.gradleup.shadow") version "9.0.0-beta10"
+    id 'idea'
 }
 
 group = 'fr.traqueur'
@@ -12,9 +13,10 @@ project.ext {
     libraries = []
 }
 
-allprojects { subproject ->
+allprojects { proj ->
     version = rootProject.property('version')
 
+    apply plugin: "idea"
     apply from: rootProject.file('gradle/add-library-dependency.gradle')
     apply plugin: 'java'
     apply plugin: 'com.gradleup.shadow'
@@ -34,11 +36,13 @@ allprojects { subproject ->
     }
 
     dependencies {
-        implementation("com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.1")
-        implementation("com.github.Traqueur-dev.CommandsAPI:core:4.2.1")
-        implementation("com.github.Traqueur-dev:RecipesAPI:2.0.3")
-        implementation("com.github.Traqueur-dev:Structura:1.0.2")
+        compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     }
+
+    addLibraryDependency(proj, "com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.1")
+    addLibraryDependency(proj, "com.github.Traqueur-dev.CommandsAPI:core:4.2.1")
+    addLibraryDependency(proj, "com.github.Traqueur-dev:RecipesAPI:2.0.3")
+    addLibraryDependency(proj, "com.github.Traqueur-dev:Structura:1.0.2")
 
     def targetJavaVersion = 21
     java {
@@ -66,9 +70,6 @@ allprojects { subproject ->
         archiveBaseName.set(rootProject.name)
         archiveVersion.set(rootProject.version)
         archiveClassifier.set('')
-        relocate "fr.traqueur.commands", "fr.traqueur.morebees.api.commands"
-        relocate "fr.traqueur.recipes", "fr.traqueur.morebees.api.recipes"
-        relocate "fr.traqueur.structura", "fr.traqueur.morebees.api.structura"
     }
 }
 
@@ -79,7 +80,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     implementation(project(":api"))
 
     compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.8")
@@ -89,7 +89,6 @@ dependencies {
 }
 
 shadowJar {
-    mergeServiceFiles()
     destinationDirectory.set(rootProject.targetFolder)
 }
 

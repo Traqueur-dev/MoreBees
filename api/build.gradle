@@ -4,10 +4,6 @@ plugins {
 
 group 'api'
 
-dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-}
-
 shadowJar {
     destinationDirectory = rootProject.apiFolder
     archiveFileName = rootProject.name + "-API-" + rootProject.version + ".jar"
@@ -16,10 +12,10 @@ shadowJar {
 publishing {
     publications {
         maven(MavenPublication) {
-            from components.java
-            groupId = project.group
+            artifact shadowJar
+            groupId = rootProject.group
             artifactId = 'api'
-            version = project.version
+            version = rootProject.version
         }
     }
 }
