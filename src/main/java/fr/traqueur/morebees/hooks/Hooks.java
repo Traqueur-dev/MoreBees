@@ -13,10 +13,10 @@ import java.util.function.Supplier;
 
 public enum Hooks {
 
-    MODEL_ENGINE("ModelEngine", ModelEngineHook::new),
-    ITEMS_ADDER("ItemsAdder", ItemsAdderHook::new),
-    ORAXEN("Oraxen", OraxenHook::new),
-    NEXO("Nexo", NexoHook::new),
+    MODEL_ENGINE("ModelEngine", () -> new ModelEngineHook()),
+    ITEMS_ADDER("ItemsAdder", () -> new ItemsAdderHook()),
+    ORAXEN("Oraxen", () -> new OraxenHook()),
+    NEXO("Nexo", () -> new NexoHook()),
     ;
 
     private final String pluginName;

@@ -37,7 +37,7 @@ public class MoreBeesRootCommand extends Command<@NotNull BeePlugin> {
             if(subcommand.getPermission().isEmpty() || sender.hasPermission(subcommand.getPermission())) {
                 String usage = subcommand.getUsage();
                 if (usage.isEmpty()) {
-                    usage = subcommand.generateDefaultUsage(this.getPlugin().getCommandManager().getPlatform(), sender, this.getName());
+                    usage = subcommand.generateDefaultUsage(sender, this.getName());
                 }
                 String formattedSyntax = Messages.COMMAND_SYNTAX.raw().replace("%usage%", usage).replace("%description%", subcommand.getDescription());
                 message.append(formattedSyntax).append("\n");

@@ -26,6 +26,9 @@ public class BeeTypeDataTypeImpl extends BeeTypeDataType {
 
     @Override
     public @NotNull BeeType fromPrimitive(@NotNull String primitive, @NotNull PersistentDataAdapterContext context) {
-        return plugin.getSettings(GlobalSettings.class).bees().stream().filter(beeType -> beeType.type().equals(primitive)).findFirst().orElseThrow();
+        return plugin.getSettings(GlobalSettings.class).bees().stream()
+                .filter(beeType -> beeType.type().equals(primitive))
+                .findFirst()
+                .orElse(BeeType.NORMAL);
     }
 }

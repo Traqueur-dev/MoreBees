@@ -30,6 +30,7 @@ import fr.traqueur.recipes.api.RecipesAPI;
 import fr.traqueur.recipes.api.hook.Hook;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +48,8 @@ public final class MoreBees extends BeePlugin {
 
         long startTime = System.currentTimeMillis();
 
+        Metrics metrics = new Metrics(this, 28733);
+
         this.saveDefault("config.yml");
         GlobalSettings settings = this.reloadConfig("config.yml", GlobalSettings.class);
 
@@ -59,7 +62,7 @@ public final class MoreBees extends BeePlugin {
 
         Hook.addHook(new MoreBeesHook(this));
         Bukkit.getScheduler().runTask(this, () -> {
-            this.recipesAPI = new RecipesAPI(this, this.getSettings(GlobalSettings.class).debug(), true);
+            this.recipesAPI = new RecipesAPI(this, this.getSettings(GlobalSettings.class).debug());
         });
 
         UpgradeDataTypeImpl.init(this);
