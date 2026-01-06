@@ -28,7 +28,7 @@ public class EggCommand extends Command<@NotNull BeePlugin> {
         this.setDescription(Messages.EGG_COMMAND_DESC.raw());
 
         this.addArgs("player", Player.class, "beetype", BeeType.class);
-        this.addOptionalArgs("amount", Integer.class, (sender, args) -> List.of("1", "8", "16", "32", "64"));
+        this.addOptionalArg("amount", Integer.class, (sender, args) -> List.of("1", "8", "16", "32", "64"));
     }
 
     @Override

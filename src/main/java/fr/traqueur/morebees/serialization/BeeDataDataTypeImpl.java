@@ -28,9 +28,9 @@ public class BeeDataDataTypeImpl extends BeeDataDataType {
 
     @Override
     public @NotNull BeeData fromPrimitive(@NotNull PersistentDataContainer primitive, @NotNull PersistentDataAdapterContext context) {
-        BeeType beeType = Keys.INTERNAL_BEE_DATA_BEE_TYPE.get(primitive, BeeTypeDataType.INSTANCE).orElseThrow();
-        boolean hasNectar = Keys.INTERNAL_BEE_DATA_HAS_NECTAR.get(primitive, PersistentDataType.BOOLEAN).orElseThrow();
-        boolean isAdult = Keys.INTERNAL_BEE_DATA_IS_ADULT.get(primitive, PersistentDataType.BOOLEAN).orElseThrow();
+        BeeType beeType = Keys.INTERNAL_BEE_DATA_BEE_TYPE.get(primitive, BeeTypeDataType.INSTANCE).orElse(BeeType.NORMAL);
+        boolean hasNectar = Keys.INTERNAL_BEE_DATA_HAS_NECTAR.get(primitive, PersistentDataType.BOOLEAN).orElse(false);
+        boolean isAdult = Keys.INTERNAL_BEE_DATA_IS_ADULT.get(primitive, PersistentDataType.BOOLEAN).orElse(true);
 
         return new BeeDataImpl(beeType, hasNectar, isAdult);
     }

@@ -6,17 +6,12 @@ import fr.traqueur.morebees.api.models.Upgrade;
 import fr.traqueur.morebees.api.settings.UpgradeSettings;
 import fr.traqueur.recipes.api.domains.Ingredient;
 import fr.traqueur.recipes.api.hook.Hook;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class MoreBeesHook implements Hook {
-
-    private final BeePlugin plugin;
-
-    public MoreBeesHook(BeePlugin plugin) {
-        this.plugin = plugin;
-    }
+public record MoreBeesHook(BeePlugin plugin) implements Hook {
 
     @Override
     public String getPluginName() {
@@ -29,12 +24,14 @@ public class MoreBeesHook implements Hook {
     }
 
     @Override
-    public ItemStack getItemStack(String resultPart) {
+    public ItemStack getItemStack(Player player, String resultPart) {
         try {
             Tool tool = Tool.valueOf(resultPart.toUpperCase());
             return tool.itemStack(List.of());
         } catch (Exception e) {
-            return this.plugin.getSettings(UpgradeSettings.class).getUpgrade(resultPart).map(Upgrade::build).orElseThrow();
+            return this.plugin.getSettings(UpgradeSettings.class).getUpgrade(resultPart)
+                    .map(Upgrade::build)
+                    .orElse(null);
         }
     }
 }

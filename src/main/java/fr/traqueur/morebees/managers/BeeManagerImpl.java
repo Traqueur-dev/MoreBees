@@ -188,7 +188,8 @@ public class BeeManagerImpl implements BeeManager {
                 .orElse(null);
 
         if (breed != null && Math.random() < breed.chance()) {
-            return this.getPlugin().getSettings(GlobalSettings.class).getBeeType(breed.child()).orElseThrow();
+            return this.getPlugin().getSettings(GlobalSettings.class).getBeeType(breed.child())
+                    .orElse(Math.random() < 0.5 ? mother : father);
         }
 
         return Math.random() < 0.5 ? mother : father;
