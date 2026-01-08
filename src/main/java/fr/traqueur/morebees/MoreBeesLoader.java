@@ -26,6 +26,12 @@ public class MoreBeesLoader implements PluginLoader {
         resolver.addRepository(new RemoteRepository.Builder(
                 "jitpack", "default", "https://jitpack.io"
         ).build());
+        resolver.addRepository(new RemoteRepository.Builder(
+                "groupezReleases", "default", "https://repo.groupez.dev/releases"
+        ).build());
+        resolver.addRepository(new RemoteRepository.Builder(
+                "groupezSnapshots", "default", "https://repo.groupez.dev/snapshots"
+        ).build());
 
 
         InputStream stream = getClass().getClassLoader().getResourceAsStream("plugin.yml");
