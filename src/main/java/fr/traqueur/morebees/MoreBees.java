@@ -26,6 +26,7 @@ import fr.traqueur.morebees.managers.ToolsManagerImpl;
 import fr.traqueur.morebees.managers.UpgradesManagerImpl;
 import fr.traqueur.morebees.recipes.MoreBeesHook;
 import fr.traqueur.morebees.serialization.*;
+import fr.traqueur.recipes.api.RecipeLoader;
 import fr.traqueur.recipes.api.RecipesAPI;
 import fr.traqueur.recipes.api.hook.Hook;
 import fr.traqueur.structura.api.Structura;
@@ -34,36 +35,25 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public final class MoreBees extends BeePlugin {
 
-    private final Map<Class<? extends Settings>, Settings> settings = new HashMap<>();
+    private static final int BSTATS_PLUGIN_ID = 28733;
 
     private RecipesAPI recipesAPI;
+    private RecipeLoader recipeLoader;
     private CommandManager<@NotNull BeePlugin> commandManager;
 
+    @Override
     public void onEnable() {
-
         long startTime = System.currentTimeMillis();
 
-        Metrics metrics = new Metrics(this, 28733);
-
-        this.saveDefault("config.yml");
-        GlobalSettings settings = this.reloadConfig("config.yml", GlobalSettings.class);
-
-        Logger.init(this.getSLF4JLogger(), settings.debug());
+        new Metrics(this, BSTATS_PLUGIN_ID);
 
         this.saveDefaultConfig();
         this.reloadConfig();
 
-        Hooks.initAll(this);
-
-        Hook.addHook(new MoreBeesHook(this));
-        Bukkit.getScheduler().runTask(this, () -> {
-            this.recipesAPI = new RecipesAPI(this, this.getSettings(GlobalSettings.class).debug());
-        });
+        GlobalSettings settings = this.getSettings(GlobalSettings.class);
+        Logger.init(this.getSLF4JLogger(), settings.debug());
 
         UpgradeDataTypeImpl.init(this);
         BeeTypeDataTypeImpl.init(this);
@@ -76,6 +66,62 @@ public final class MoreBees extends BeePlugin {
         this.registerManager(BeehiveManager.class, new BeehiveManagerImpl());
         this.registerManager(ToolsManager.class, new ToolsManagerImpl());
 
+        Hooks.initAll(this);
+
+        // RecipesAPI must be created on the first tick, once the recipe registries are ready.
+        Hook.addHook(new MoreBeesHook(this));
+        this.recipesAPI = new RecipesAPI(this, settings.debug());
+        this.recipeLoader = this.recipesAPI.createLoader().addFolder("recipes");
+        this.recipeLoader.load();
+
+        this.registerCommands(settings);
+
+        Logger.success("MoreBees has been enabled in <yellow>{}ms", (System.currentTimeMillis() - startTime));
+    }
+
+    @Override
+    public void onDisable() {
+        long startTime = System.currentTimeMillis();
+
+        Logger.success("MoreBees has been disabled in <yellow>{}ms", (System.currentTimeMillis() - startTime));
+    }
+
+    @Override
+    public CommandManager<@NotNull BeePlugin> getCommandManager() {
+        return commandManager;
+    }
+
+    @Override
+    public RecipesAPI getRecipesAPI() {
+        return recipesAPI;
+    }
+
+    @Override
+    public RecipeLoader getRecipeLoader() {
+        return recipeLoader;
+    }
+
+    @Override
+    public void saveDefaultConfig() {
+        this.saveDefault("config.yml");
+        this.saveDefault("messages.yml");
+        this.saveDefault("breeds.yml");
+        this.saveDefault("upgrades.yml");
+    }
+
+    @Override
+    public void reloadConfig() {
+        this.loadSettings("config.yml", GlobalSettings.class);
+        this.loadSettings("breeds.yml", BreedSettings.class);
+        this.loadSettings("upgrades.yml", UpgradeSettings.class);
+        try {
+            Structura.loadEnum(this.getDataPath().resolve("messages.yml"), Messages.class);
+        } catch (StructuraException e) {
+            Logger.severe("Failed to load messages.yml, some messages will be by default", e);
+        }
+    }
+
+    private void registerCommands(GlobalSettings settings) {
         this.commandManager = new CommandManager<>(this);
         commandManager.setDebug(settings.debug());
         commandManager.setLogger(new fr.traqueur.commands.api.logging.Logger() {
@@ -95,63 +141,16 @@ public final class MoreBees extends BeePlugin {
         commandManager.registerConverter(Upgrade.class, new UpgradeArgument(this));
 
         commandManager.registerCommand(new MoreBeesRootCommand(this));
-
-        Logger.success("MoreBees has been enabled in <yellow>{}ms", (System.currentTimeMillis() - startTime));
     }
 
-    public void onDisable() {
-        long startTime = System.currentTimeMillis();
-
-        Logger.success("MoreBees has been disabled in <yellow>{}ms", (System.currentTimeMillis() - startTime));
+    private <T extends Settings> void loadSettings(String path, Class<T> clazz) {
+        T instance = Structura.load(this.getDataPath().resolve(path), clazz);
+        Settings.register(clazz, instance);
     }
 
-    @Override
-    public CommandManager<@NotNull BeePlugin> getCommandManager() {
-        return commandManager;
-    }
-
-    @Override
-    public <T extends Settings> T getSettings(Class<T> clazz) {
-        if (settings.containsKey(clazz)) {
-            return clazz.cast(settings.get(clazz));
-        }
-        throw new IllegalArgumentException("Class " + clazz.getName() + " does not exist");
-    }
-
-    @Override
-    public void saveDefaultConfig() {
-        this.saveDefault("messages.yml");
-        this.saveDefault("breeds.yml");
-        this.saveDefault("upgrades.yml");
-    }
-
-    @Override
-    public void reloadConfig() {
-        super.reloadConfig();
-        this.reloadConfig("config.yml", GlobalSettings.class);
-        this.reloadConfig("breeds.yml", BreedSettings.class);
-        this.reloadConfig("upgrades.yml", UpgradeSettings.class);
-        try {
-            Structura.loadEnum(this.getDataPath().resolve("messages.yml"), Messages.class);
-        } catch (StructuraException e) {
-            Logger.severe("Failed to load messages.yml, some messages will be by default", e);
-        }
-    }
-
-    @Override
-    public RecipesAPI getRecipesAPI() {
-        return recipesAPI;
-    }
-
-    private <T extends Settings> void saveDefault(String path) {
+    private void saveDefault(String path) {
         if (!this.getDataPath().resolve(path).toFile().exists()) {
             this.saveResource(path, false);
         }
-    }
-
-    private <T extends Settings> T reloadConfig(String path, Class<T> clazz) {
-        T instance = Structura.load(this.getDataPath().resolve(path), clazz);
-        this.settings.put(clazz, instance);
-        return instance;
     }
 }

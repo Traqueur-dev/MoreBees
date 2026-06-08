@@ -14,7 +14,7 @@ result:
   amount: 1
 
 ingredients:
-  - item: "tag:PLANKS"
+  - item: "tag:planks"
     sign: '#'
   - item: "material:HONEYCOMB"
     sign: 'H'
