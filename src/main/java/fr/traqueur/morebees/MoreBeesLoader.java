@@ -20,11 +20,9 @@ public class MoreBeesLoader implements PluginLoader {
     @Override
     public void classloader(PluginClasspathBuilder pluginClasspathBuilder) {
         MavenLibraryResolver resolver = new MavenLibraryResolver();
-        /*resolver.addRepository(new RemoteRepository.Builder(
-                "central", "default", "https://maven-central.storage-download.googleapis.com/maven2"
-        ).build());*/ // Uncomment if you want to use Maven Central
+        // Maven Central is required to resolve transitive dependencies (e.g. SnakeYAML pulled by Structura).
         resolver.addRepository(new RemoteRepository.Builder(
-                "jitpack", "default", "https://jitpack.io"
+                "central", "default", "https://maven-central.storage-download.googleapis.com/maven2"
         ).build());
         resolver.addRepository(new RemoteRepository.Builder(
                 "groupezReleases", "default", "https://repo.groupez.dev/releases"

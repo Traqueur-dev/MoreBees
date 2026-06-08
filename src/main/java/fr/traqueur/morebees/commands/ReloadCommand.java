@@ -20,9 +20,13 @@ public class ReloadCommand extends Command<@NotNull BeePlugin> {
     @Override
     public void execute(CommandSender sender, Arguments arguments) {
         this.getPlugin().reloadConfig();
+
+        // Unregisters every recipe and reloads the recipe files from the "recipes" folder.
+        this.getPlugin().getRecipeLoader().reload();
+
+        // Re-register the per-bee-type recipes generated from the config (cleared by the reload above).
         BeeManager beeManager = this.getPlugin().getManager(BeeManager.class);
         if (beeManager != null) {
-            this.getPlugin().getRecipesAPI().unregisterRecipes();
             beeManager.registerRecipes();
         }
         Messages.RELOAD_SUCCESS.send(sender);

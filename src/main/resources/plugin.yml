@@ -1,13 +1,16 @@
-name: ${name}
+name: MoreBees
 version: '${version}'
 main: fr.traqueur.morebees.MoreBees
 api-version: '1.21'
 authors: [Traqueur_]
-soft-depend:
+softdepend:
   - ItemsAdder
   - ModelEngine
   - Oraxen
   - Nexo
 paper-skip-libraries: true
 paper-plugin-loader: fr.traqueur.morebees.MoreBeesLoader
-libraries: ${libraries}
+libraries:
+  - "fr.traqueur.commands:platform-spigot:5.1.1"
+  - "fr.traqueur:recipesapi:3.2.1"
+  - "fr.traqueur.structura:structura-core:2.0.0"

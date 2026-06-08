@@ -4,11 +4,14 @@ pluginManagement {
             name = "groupezReleases"
             url = uri("https://repo.groupez.dev/releases")
         }
+        maven {
+            name = "groupezSnapshots"
+            url = uri("https://repo.groupez.dev/snapshots")
+        }
         gradlePluginPortal()
     }
 }
 
+rootProject.name = "MoreBees"
 
-rootProject.name = 'MoreBees'
-
-include 'api'
+include("api")
